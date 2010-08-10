@@ -1,0 +1,71 @@
+// $Id: CHANGELOG.txt,v 1.31 2010/06/26 17:36:18 anon Exp $
+Linkit x.x-x.x, xxxx-xx-xx
+
+Linkit 6.x-1.4, 2010-06-26
+------------------------------
+by anon: Added node created- and changed time to result list.
+#831786 by anon: Changed dependencys, either Pathfilter module OR Pathologic
+  module should be installed to install linkit module.
+#831688 by anon: Added support for search styled link in edit mode 
+  (Title [path:internal:node/1])
+by anon: Fixed separated settings for node status and show unpublished nodes, 
+  now its possible to see status but not unpublished nodes. 
+by anon: Added uninstall hook
+#824500, #822236 by anon: Added settings to allow users to configurate the 
+  search results for nodes with nid, content type, language, status.
+by anon: Changed how the hooks works to make them more configurable.
+#837280 by anon: Fixed the commands for tinymce button so that it dont override the 
+  original link button.
+#807974 by anon, grendzy: linkit should not override theme's form styles.
+
+Linkit 6.x-1.3, 2010-04-03
+------------------------------
+by anon: Changed linkit.info, WYSIWYG dependency isnt necessary anymore
+by anon: Added editor support info in README.txt
+#753448 by anon: Added support for CKEditor (with wysiwyg, the other is for 
+  "pure" CKEditor) 
+by anon: Removed some unnecessary variables in 
+  "template_preprocess_linkit_dashboard"
+#753448 by anon: Added support for CKEditor
+#748208 by anon, TwoD: Fixed Hardcoded path to TinyMCE library
+#748212 by anon, TwoD: Fixed Enter in autocomplete list cancels dialog
+
+Linkit 6.x-1.2, 2010-03-11
+------------------------------
+Added by anon: Added user links support
+Changed by anon: linkit_node dependencies changed. Dependency on node isnt 
+  needed, node is always enabled
+Changed by anon, TwoD: Rewrote the Wysiwyg integration as a 'native' TinyMCE 
+  plugin
+
+Linkit 6.x-1.1, 2010-03-05
+------------------------------
+by anon: Added "db_rewrite_sql" to node and taxonomy plugin
+by anon: Removed "linkit_tinymce.css" (it wasnt used anymore)
+by anon: Fixed permissions bug 
+  - (create all links) didnt work
+by anon: Permissions is now a plugin
+  - Permission plugin lets the user decide if to use permissions
+
+Linkit 6.x-1.0, 2010-03-04
+------------------------------
+Added by anon: cancel button
+by anon: "hook_linkit_info_plugins" IS needed again, sry. (For permissions)
+Changed by anon: "hook_linkit_info_plugins" not needed anymore
+Changed by anon: One field for both internal and external links
+Changed by anon: No JS files needed for plugins anymore
+#728570 by anon: Add support for attributes
+Added by anon: Added scrollbars to the popup
+Changed by anon: Better JS error-handling in linkit_tinymce_dialog.js
+
+Linkit 6.x-1.0-beta1, 2010-02-27
+------------------------------
+#727706 by anon: Add taxonomy support
+#727704 by anon: Separate node- and views matches from linkit core
+#722998 by anon: Added permission for all plugins.
+Fixed: Some coding standards issues.
+Added: a README.txt file.
+
+Linkit 6.x-1.0-alpha1, 2010-02-20
+------------------------------
+Initial Release for Drupal 6

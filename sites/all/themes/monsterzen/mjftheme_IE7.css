@@ -1,0 +1,13 @@
+/* IE7 specific overrides */
+
+/* this for main body content, was pushing the right nav way out to the right */
+.intbodycontent {
+	padding-right:0px;
+}
+/* this for the blog right column, was showing a gap between the green vertical bar */
+.rightnavgap {
+	height:0px;
+}
+div.content ul li {
+	padding-bottom:7px;
+}

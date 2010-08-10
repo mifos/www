@@ -1,0 +1,12 @@
+; $Id: linkit_user.info,v 1.1 2010/03/09 19:30:29 anon Exp $
+name = Linkit User
+description = Extend Linkit with user links
+core = 6.x
+package = Linkit
+dependencies[] = "linkit"
+; Information added by drupal.org packaging script on 2010-06-26
+version = "6.x-1.4"
+core = "6.x"
+project = "linkit"
+datestamp = "1277574009"
+

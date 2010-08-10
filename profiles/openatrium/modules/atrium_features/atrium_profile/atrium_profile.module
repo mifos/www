@@ -1,0 +1,55 @@
+<?php
+
+include_once('atrium_profile.features.inc');
+
+/**
+ * Implementation of hook_menu_alter().
+ */
+function atrium_profile_menu_alter(&$items) {
+  // Remove node/add/profile as a suitable alternative is provided by
+  // content_profile.
+  if (isset($items['node/add/profile'])) {
+    unset($items['node/add/profile']);
+  }
+  if (isset($items['user/%user/view'])) {
+    $items['user/%user/view']['title'] = t('Profile');
+  }
+  if (isset($items['user/%user_category/edit'])) {
+    $items['user/%user_category/edit']['title'] = t('Account settings');
+  }
+  if (isset($items['user/%user/openid'])) {
+    $items['user/%user/openid']['title'] = t('OpenID');
+  }
+}
+
+/**
+ * Implementation of hook_views_pre_view().
+ */
+function atrium_profile_views_pre_build(&$view) {
+  // Remove email display if site is in public mode.
+  if ($view->name == 'atrium_profile' && variable_get('user_register', 0)) {
+    $fields = $view->display_handler->get_option('fields');
+    if (isset($fields['mail'])) {
+      unset($fields['mail']);
+      $view->display_handler->set_option('fields', $fields);
+    }
+  }
+}
+
+/**
+ * Implementation of hook_context_links_alter().
+ */
+function atrium_profile_context_links_alter(&$links) {
+  global $user;
+  $space = spaces_get_space();
+  if ($space && $space->type == 'user' && $space->id == $user->uid && node_access('create', 'profile')) {
+    $prepend = array(
+      'profile' => array(
+        'title' => t('Edit my profile'),
+        'href' => "user/{$space->id}/edit/profile",
+        'custom' => TRUE,
+      ),
+    );
+    $links = $prepend + $links;
+  }
+}

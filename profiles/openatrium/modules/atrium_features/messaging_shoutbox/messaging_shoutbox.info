@@ -1,0 +1,14 @@
+; $Id$
+name = "Messaging Shoutbox"
+description = "The shoutbox provides a microblog that integrates with Messaging and Notifications."
+package = "Messaging"
+dependencies[] = "node"
+dependencies[] = "comment"
+core = "6.x"
+
+; Information added by fserver
+core = "6.x"
+datestamp = "1277312054"
+project = "atrium_features"
+project status url = "http://code.developmentseed.org/fserver"
+version = "6.x-1.0-alpha5"

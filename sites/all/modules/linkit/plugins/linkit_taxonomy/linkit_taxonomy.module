@@ -1,0 +1,67 @@
+<?php 
+// $Id: linkit_taxonomy.module,v 1.7 2010/06/20 17:04:37 anon Exp $
+
+/**
+ * @file
+ * Extend Linkit with taxonomy links.
+ */
+
+
+/**
+ * Implementation of hook_linkit_load_plugins().
+ */
+function linkit_taxonomy_linkit_load_plugins($string) {
+  $matches = array();
+  
+  // Get terms
+  $result = db_query_range(db_rewrite_sql("SELECT t.name, t.tid FROM {term_data} t WHERE LOWER(t.name) LIKE LOWER('%%%s%%')", 't', 'tid'), $string, 0, 10);
+  while ($term = db_fetch_object($result)) {
+    $matches['taxonomy'][] = array(
+      'title' => $term->name,
+      'path' => 'internal:taxonomy/term/' . $term->tid,
+      'information' => array(
+        'type' => 'Taxonomy',
+      ),
+    );
+  }
+  return  $matches;
+}
+
+/**
+ * Implementation of hook_linkit_get_search_styled_link().
+ */
+function linkit_taxonomy_linkit_get_search_styled_link($string) {
+  // Term links created with Linkit will always begin with "internal:"
+  if(strpos($string, 'internal:') === FALSE) {
+    return;
+  }
+
+  // Check to see that the link really is a term link
+  $splitted_string = explode('/', str_replace('internal:', '', $string));
+  if($splitted_string[0] != 'taxonomy') {
+    return;
+  }
+
+  // This is a term link created with Linkit, try to grab the title and path now. 
+  $result = db_query(db_rewrite_sql("SELECT td.tid, td.name FROM {term_data} td WHERE td.tid = %d"), $splitted_string[2]);
+  $term = db_fetch_object($result);
+
+  // No reault or no term was found
+  if(!$result || !$term) {
+    return;
+  }
+
+  return check_plain($term->name) . ' [path:internal:taxonomy/term/' . $term->tid . ']';
+}
+
+/**
+ * Implementation of hook_linkit_info_plugins().
+ * 
+ * This is used by linkit_permissions
+ */
+function linkit_taxonomy_linkit_info_plugins() {
+  $return['linkit_taxonomy'] = array(
+    'type' => 'taxonomy',
+  );
+  return $return;
+}

@@ -1,0 +1,51 @@
+<?php 
+// $Id: linkit_views.module,v 1.5 2010/06/20 17:04:37 anon Exp $
+
+/**
+ * @file
+ * Extend Linkit with views links.
+ */
+
+
+/**
+ * Implementation of hook_linkit_load_plugins().
+ */
+function linkit_views_linkit_load_plugins($string) {
+  $matches = array();
+  
+  // Get all page displays in view, and create temporary table
+  $temp_table = 'CREATE TEMPORARY TABLE {linkit_tmp_view_table} (title VARCHAR(128) NOT NULL, path VARCHAR(128) NOT NULL)';
+  db_query($temp_table);
+
+  // Get all displays that are "page" and their path
+  $result = db_query("SELECT w.name, wd.display_options FROM {views_view} AS w INNER JOIN {views_display} AS wd ON w.vid = wd.vid WHERE wd.display_plugin = '%s'", 'page');
+  while ($node = db_fetch_object($result)) {
+    $optinos = unserialize($node->display_options);
+    db_query("INSERT INTO {linkit_tmp_view_table} (title, path) VALUES ('%s', '%s')", $node->name, $optinos['path']);
+  }  
+  
+  $result = db_query_range("SELECT * FROM {linkit_tmp_view_table} WHERE LOWER(path) LIKE LOWER('%%%s%%')", $string, 0, 10);
+  while ($node = db_fetch_object($result)) {
+    $matches['view'][] = array(
+      'title' => $node->path,
+      'path' => base_path() . $node->path,
+      'information' => array(
+        'type' => 'Views',
+      ),
+    );
+  }  
+
+  return  $matches;
+}
+
+/**
+ * Implementation of hook_linkit_info_plugins().
+ * 
+ * This is used by linkit_permissions
+ */
+function linkit_views_linkit_info_plugins() {
+  $return['linkit_views'] = array(
+    'type' => 'views',
+  );
+  return $return;
+}

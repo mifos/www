@@ -1,0 +1,113 @@
+<?php 
+// $Id: linkit_node.module,v 1.11 2010/06/26 17:25:20 anon Exp $
+
+/**
+ * @file
+ * Extend Linkit with node links.
+ */
+
+
+/**
+ * Implementation of hook_linkit_load_plugins().
+ */
+function linkit_node_linkit_load_plugins($string) {
+  $matches = array();
+  
+  $settings = variable_get('linkit_node', array());
+ 
+  $fields = array('n.nid', 'n.title'); // default fields
+
+  if($settings['content_type']) {
+    $fields[] = 'n.type';
+  }
+  if($settings['status']) {
+    $fields[] = 'n.status';
+  }
+  if($settings['language']) {
+    $fields[] = 'n.language';
+  } 
+  if($settings['created']) {
+    $fields[] = 'n.created';
+  }
+  if($settings['changed']) {
+    $fields[] = 'n.changed';
+  }
+
+  $where_status = $settings['show_unpublished'] ? "" : "AND n.status = 1";
+  
+  // Get nodes
+  $result = db_query_range(db_rewrite_sql("SELECT %s FROM {node} n WHERE LOWER(n.title) LIKE LOWER('%%%s%%') %s"), implode(",", $fields), $string, $where_status, 0, 10);
+  $i = 0;
+  while ($node = db_fetch_object($result)) {
+    $matches['node'][$i] = array(
+      'title' => $node->title,
+      'path' => 'internal:node/' . $node->nid,
+      'information' => array(
+        'type' => 'Node',
+      ),
+    );
+ 
+    if($settings['nid']) {
+      $matches['node'][$i]['information']['nid'] = $node->nid;
+    } 
+    if($settings['content_type']) {
+      $matches['node'][$i]['information']['content type'] = $node->type;
+    } 
+    if($settings['status']) {
+      $matches['node'][$i]['information']['status'] = $node->status ? 'published' : 'unpublished';
+    }
+    if($settings['language']) {
+      $matches['node'][$i]['information']['language'] = $node->language ? $node->language : '-';
+    } 
+    if($settings['created']) {
+      $matches['node'][$i]['information']['created'] = $node->created ? format_date($node->created, 'small') : '-';
+    } 
+    if($settings['changed']) {
+      $matches['node'][$i]['information']['changed'] = $node->changed ? format_date($node->changed, 'small') : '-';
+    } 
+
+
+    $i++;
+  }
+
+  return $matches;
+}
+
+/**
+ * Implementation of hook_linkit_get_search_styled_link().
+ */
+function linkit_node_linkit_get_search_styled_link($string) {
+  // Node links created with Linkit will always begin with "internal:"
+  if(strpos($string, 'internal:') === FALSE) {
+    return;
+  }
+
+  // Check to see that the link really is a node link
+  $splitted_string = explode('/', str_replace('internal:', '', $string));
+  if($splitted_string[0] != 'node') {
+    return;
+  }
+
+  // This is a node link created with Linkit, try to grab the title and path now. 
+  $result = db_query(db_rewrite_sql("SELECT n.nid, n.title FROM {node} n WHERE n.nid = %d"), $splitted_string[1]);
+  $node = db_fetch_object($result);
+  
+  // No reault or no node was found
+  if(!$result || !$node) {
+    return;
+  }
+
+  return check_plain($node->title) . ' [path:internal:node/' . $node->nid . ']';
+}
+
+/**
+ * Implementation of hook_linkit_info_plugins().
+ * 
+ * This is used by linkit_permissions
+ */
+function linkit_node_linkit_info_plugins() {
+  $return['linkit_node'] = array(
+    'type' => 'node',
+  );
+  return $return;
+}

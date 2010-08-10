@@ -1,0 +1,81 @@
+<?php
+
+/**
+ * Implementation of hook_install().
+ */
+function atrium_casetracker_install() {
+  drupal_get_schema(NULL, TRUE);
+  _atrium_casetracker_default_states();
+
+  // Weight Atrium Case Tracker higher than Case Tracker.
+  db_query("UPDATE {system} SET weight = 1 WHERE name = 'atrium_casetracker' AND type = 'module'");
+}
+
+/**
+ * Update 6001.
+ */
+function atrium_casetracker_update_6001() {
+  drupal_get_schema(NULL, TRUE);
+  _atrium_casetracker_default_states();
+  return array();
+}
+
+/**
+ * Install default casetracker states into DB.
+ */
+function _atrium_casetracker_default_states() {
+  $count = db_result(db_query("SELECT count(*) FROM {casetracker_case_states}"));
+  if (empty($count)) {
+    $realms = array(
+      'priority' => array(
+        '1-Sprint: Critical', '2-Sprint', '3-Release: Critical', '4-Release', '5-Project',
+      ),
+      'status' => array(
+        'Open', 'Closed', 'Resolved-Staging', 'Resolved-Production', 'Deferred', 'Duplicate',
+      ),
+      'type' => array(
+        'Bug', 'Feature Request', 'General Task',
+      ),
+    );
+    foreach ($realms as $realm => $states) {
+      foreach ($states as $statename) {
+        $data = array(
+          'name' => $statename,
+          'realm' => $realm,
+          'weight' => 0,
+        );
+        casetracker_case_state_save($data);
+      }
+    }
+    $csid = db_result(db_query("SELECT csid FROM {casetracker_case_states} WHERE case_state_name = '%s'", 'Open'));
+    variable_set('casetracker_default_case_status', $csid);
+
+    $csid = db_result(db_query("SELECT csid FROM {casetracker_case_states} WHERE case_state_name = '%s'", '3-Release: Critical'));
+    variable_set('casetracker_default_case_priority', $csid);
+
+    $csid = db_result(db_query("SELECT csid FROM {casetracker_case_states} WHERE case_state_name = '%s'", 'General Task'));
+    variable_set('casetracker_default_case_type', $csid);
+  }
+}
+
+/** 
+ * Update 6002, fix what casetracker_basic hath wrought.
+ */
+function atrium_casetracker_update_6002() {
+  $ret = array();
+  $ret[] = update_sql("UPDATE {node_type} SET module = 'features' WHERE type = 'casetracker_basic_project'");
+  $ret[] = update_sql("UPDATE {node_type} SET module = 'features' WHERE type = 'casetracker_basic_case'");
+
+  module_disable(array('casetracker_basic'));
+  $ret[] = array('success' => TRUE, 'query' => 'Module "casetracker_basic" was disabled');
+  return $ret;
+}
+
+/**
+ * Weight Atrium Case Tracker higher than Case Tracker.
+ */
+function atrium_casetracker_update_6003() {
+  $ret = array();
+  $ret[] = update_sql("UPDATE {system} SET weight = 1 WHERE name = 'atrium_casetracker' AND type = 'module'");
+  return $ret;
+}

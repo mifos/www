@@ -1,0 +1,13 @@
+; $Id: linkit_views.info,v 1.1 2010/02/27 16:51:12 anon Exp $
+name = Linkit Views
+description = Extend Linkit with views links
+core = 6.x
+package = Linkit
+dependencies[] = "linkit"
+dependencies[] = "views"
+; Information added by drupal.org packaging script on 2010-06-26
+version = "6.x-1.4"
+core = "6.x"
+project = "linkit"
+datestamp = "1277574009"
+

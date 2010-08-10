@@ -1,0 +1,112 @@
+<?php
+// $Id: spaces_ui.module,v 1.1.2.2 2009/12/17 22:33:05 alexb Exp $
+
+/**
+ * Implementation of hook_menu().
+ */
+function spaces_ui_menu() {
+  $admin = array(
+    'page callback' => 'drupal_get_form',
+    'access callback' => 'user_access',
+    'access arguments' => array('administer spaces'),
+    'file' => 'spaces_ui.admin.inc',
+  );
+  $items['admin/build/spaces'] = array(
+    'title' => 'Spaces',
+    'description' => 'Settings for Spaces.',
+    'page arguments' => array('spaces_preset_list'),
+    'type' => MENU_NORMAL_ITEM,
+  ) + $admin;
+  $items['admin/build/spaces/list'] = array(
+    'title' => 'Presets',
+    'description' => 'Spaces presets.',
+    'page arguments' => array('spaces_preset_list'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  ) + $admin;
+  $items['admin/build/spaces/%spaces_preset'] = array(
+    'title callback' => 'spaces_ui_preset_title',
+    'title arguments' => array(3),
+    'page arguments' => array('spaces_preset_editor', 3),
+    'type' => MENU_CALLBACK,
+  ) + $admin;
+  $items['admin/build/spaces/%spaces_preset/edit'] = array(
+    'title' => 'Edit',
+    'page arguments' => array('spaces_preset_editor', 3),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  ) + $admin;
+  $items['admin/build/spaces/%spaces_preset/delete'] = array(
+    'title' => 'Delete',
+    'page arguments' => array('spaces_preset_confirm', 'delete', 3),
+    'access callback' => 'spaces_ui_preset_task_access',
+    'access arguments' => array(3, 'delete'),
+    'type' => MENU_LOCAL_TASK,
+  ) + $admin;
+  $items['admin/build/spaces/%spaces_preset/revert'] = array(
+    'title' => 'Revert',
+    'page arguments' => array('spaces_preset_confirm', 'revert', 3),
+    'access callback' => 'spaces_ui_preset_task_access',
+    'access arguments' => array(3, 'revert'),
+    'type' => MENU_LOCAL_TASK,
+  ) + $admin;
+  $items['admin/build/spaces/%spaces_preset/disable'] = array(
+    'title' => 'Disable',
+    'page arguments' => array('spaces_preset_confirm', 'disable', 3),
+    'access callback' => 'spaces_ui_preset_task_access',
+    'access arguments' => array(3, 'disable'),
+    'type' => MENU_LOCAL_TASK,
+  ) + $admin;
+  $items['admin/build/spaces/%spaces_preset/enable'] = array(
+    'title' => 'Enable',
+    'page arguments' => array('spaces_preset_confirm', 'enable', 3),
+    'access callback' => 'spaces_ui_preset_task_access',
+    'access arguments' => array(3, 'enable'),
+    'type' => MENU_LOCAL_TASK,
+  ) + $admin;
+  $items['admin/build/spaces/%spaces_preset/export'] = array(
+    'title' => 'Export',
+    'page arguments' => array('spaces_preset_export', 3),
+    'access callback' => 'spaces_ui_preset_task_access',
+    'access arguments' => array(3, 'export'),
+    'type' => MENU_LOCAL_TASK,
+  ) + $admin;
+  return $items;
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function spaces_ui_theme() {
+  $items = array();
+  $base = array(
+    'arguments' => array('form' => array()),
+    'file' => 'spaces_ui.theme.inc',
+    'path' => drupal_get_path('module', 'spaces_ui'),
+  );
+  $items['spaces_preset_list_new'] = $base;
+  return $items;
+}
+
+
+/**
+ * Menu & general access callback for preset manipulation tasks.
+ */
+function spaces_ui_preset_task_access($preset, $op) {
+  switch ($op) {
+    case 'revert':
+      return ($preset->export_type & EXPORT_IN_DATABASE) && ($preset->export_type & EXPORT_IN_CODE);
+    case 'delete':
+      return ($preset->export_type & EXPORT_IN_DATABASE) && !($preset->export_type & EXPORT_IN_CODE);
+    case 'disable':
+      return empty($preset->disabled);
+    case 'enable':
+      return !empty($preset->disabled);
+  }
+  return TRUE;
+}
+
+/**
+ * Menu title callback.
+ */
+function spaces_ui_preset_title($preset) {
+  return check_plain($preset->title);
+}

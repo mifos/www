@@ -1,0 +1,10 @@
+;$Id: ucreate.info,v 1.1.4.1 2008/10/29 15:51:06 xamanu Exp $
+name = U Create
+description = Lets non-admins create user accounts for other people.
+core=6.x
+; Information added by drupal.org packaging script on 2010-02-17
+version = "6.x-1.0-beta3"
+core = "6.x"
+project = "ucreate"
+datestamp = "1266437418"
+

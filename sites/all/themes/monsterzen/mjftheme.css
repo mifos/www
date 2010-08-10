@@ -1,0 +1,1023 @@
+/* version 1.05 
+
+History: 
+07/21/10 mfindlay: 
+07/22/10 mfinday
+07/27/10 mfinday changed style of search box and associated search img to avoid top truncation
+*/
+body,td,th,option,input,textarea,select {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #333333;
+	/*letter-spacing: .04em;*/
+	/*line-height:140%;*/
+	line-height:1.6em;
+}
+html {
+	height:100%;
+}
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	padding-left: 0px;
+	padding-top: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	height:100%;
+}
+form {
+	margin:0px;
+	padding:0px;
+}
+p {
+	margin-top:0px;
+}
+a img {
+	border:0px;
+}
+body a {
+	color: #57b4df;
+	text-decoration:none;
+}
+body a:link {
+	color: #57b4df;
+	text-decoration:none; 
+}
+body a:visited {
+	color: #57b4df;
+	text-decoration:none;
+}
+body a:hover {
+	color: #8fd5f6; 
+	text-decoration:underline;
+}
+body a:active {
+	color: #57b4df; 
+}
+.errtext {
+	color:#FF0000;
+	font-weight:bold;
+}
+.mytracetext
+{
+	color:#FFFFFF;
+	background-color:#333333;
+}
+/*************** TOP NAV *********************/
+.topbarbg {
+	/*background-image:url(../graphics/common/bg/bg_upperfarleft.jpg);
+	background-repeat:repeat-x;
+	height:114px;
+	overflow:hidden;*/
+}
+.topcenter {
+	/*background-image:url(../graphics/common/bg/bg_topcenter.jpg);
+	background-repeat:repeat-x;
+	height:114px;
+	overflow:hidden;*/
+	width:900px;
+}
+/*************** BOTTOM NAV *********************/
+.bottombarbg {
+	/*background-image:url(../graphics/common/bg/bg_lowerfarleft.jpg);
+	background-repeat:repeat-x;
+	height:113px;
+	overflow:hidden;*/
+}
+.bottomcenter {
+	/*background-image:url(../graphics/common/bg/bg_bottomcenter.jpg);
+	background-repeat:repeat-x;
+	height:113px;
+	overflow:hidden;*/
+	width:900px;
+}
+/*************** MAIN CONTENT *********************/
+#contactroll {
+  	margin-right:17px;
+	margin-bottom:45px;
+}
+#page {
+	width:900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+#hero {
+	width:900px;
+}
+#maincontent {
+	width:900px;
+}
+/*#mjf_topnavbar 
+{
+	background-image:url(myimages/common/menubg.gif);
+	background-repeat:no-repeat;
+	width:870px;
+	overflow:hidden;
+	display:block;
+	clear:both;
+	margin-bottom:2px;
+	font-size:13px;
+	padding-left:15px;
+	padding-right:15px;
+	height:26px;
+	padding-top:13px;
+}*/
+#mjf_topnavbar 
+{
+	background-image:url(myimages/common/menubg.gif);
+	background-repeat:no-repeat;
+	width:870px;
+	overflow:hidden;
+	display:block;
+	clear:both;
+	margin-bottom:2px;
+	font-size:13px;
+	padding-left:15px;
+	padding-right:15px;
+	
+	margin-top:11px;
+	height:34px;
+	padding-top:2px;
+}
+
+/**************** TOP NAV LINKS *******************/
+#mjf_topnavbar ul.links {
+	padding-top:3px;
+	font-weight:bold;
+	font-family: Futura, "Futura Book", Arial, Helvetica, sans-serif;
+	text-transform:uppercase;
+}
+#mjf_topnavbar ul.links li{
+	border-right:1px solid #cccccc;
+	padding-right:10px;
+	padding-left:10px;
+}
+#mjf_topnavbar ul.links li.last{
+	border-right:none;
+}
+#mjf_topnavbar ul.links li a:hover {
+	color: #333333; 
+	text-decoration:none;
+}
+/******* above are not used - they are for Drupal generated links. We now use the links below ************/
+
+.primary_menu {
+
+}
+#mjf_topnavbar .primary_menu td.links {
+	padding-top:3px;
+	font-weight:bold;
+	font-family: Futura, "Futura Book", Arial, Helvetica, sans-serif;
+	text-transform:uppercase;
+	color:#45a2cd;
+	padding-right:15px;
+	padding-left:15px;
+	border-right:1px solid #cccccc;
+}
+#mjf_topnavbar .primary_menu td.last {
+	border-right:none;
+}
+#mjf_topnavbar .primary_menu td.links a:link, #mjf_topnavbar .primary_menu td.links a:visited, #mjf_topnavbar .primary_menu td.links a:active {
+	color:#45a2cd;
+	text-decoration:none;
+}
+#mjf_topnavbar .primary_menu td.links a:hover {
+	/* mjf 7/22/10 color:#333333; */
+	color:#45a2cd;
+	text-decoration:none;
+}
+#mjf_topnavbar .primary_menu td.links .selected, #mjf_topnavbar .primary_menu span.toplinkselected {
+	/* mjf 7/22/10 color:#333333; */
+	color:#45a2cd;
+}
+#mjf_topnavbar .primary_menu td.first {
+	padding-left:0px;
+}
+/***** BEGIN SPECIAL MIFOS LINK ******/
+#mjf_topnavbar .primary_menu td.mifoslink {
+	padding-top:3px;
+	font-weight:bold;
+	font-family: Futura, "Futura Book", Arial, Helvetica, sans-serif;
+	color:#8ebf58;
+	padding-right:15px;
+	padding-left:15px;
+	border-left:1px solid #cccccc;
+}
+#mjf_topnavbar .primary_menu td.mifoslink a:link, #mjf_topnavbar .primary_menu td.mifoslink a:visited, #mjf_topnavbar .primary_menu td.mifoslink a:active {
+	color:#8ebf58;
+	text-decoration:none;
+}
+#mjf_topnavbar .primary_menu td.mifoslink a:hover {
+	color:#9ddd57;
+	text-decoration:none;
+}
+/******* END SPECIAL MIFOS LINK **************/
+/************ dotted line ***********************/
+
+#dottedline_900 {
+	background-image:url(myimages/common/dotted_900.gif);
+	background-repeat:no-repeat;
+	height:1px;
+	margin-top:7px;
+	margin-bottom:7px;
+}
+/*************** BOTTOM NAV LINKS ***************************/
+#bottomnavlinks {
+	width:900px;
+	margin-top:10px;
+}
+#bottomnavlinks ul.links {
+	font-weight:bold;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size:10px;
+	text-transform:uppercase;
+}
+#bottomnavlinks ul.links li{
+	border-right:1px solid #57b4df;
+	padding-right:5px;
+	padding-left:5px;
+}
+#bottomnavlinks ul.links li.last{
+	border-right:none;
+}
+#bottomnavlinks ul.links li a{
+	color:#8ebf58;
+}
+
+
+/***********************************/
+#bottomnavpostlinks {
+	width:900px;
+	margin-top:15px;
+	margin-bottom:30px;
+
+}
+.infolink {
+	font-size:11px;
+	color:#57b4df;
+	padding-right:10px;
+}
+.infolink a:link, .infolink a:visited, .infolink a:active {
+	font-size:11px;
+	color:#57b4df;
+	text-decoration:none;
+}
+.infolink a:hover {
+	font-size:11px;
+	color:#57b4df;
+	text-decoration:underline;
+}
+.menubarsborder {
+	border-left:1px solid #999999;
+	border-right:1px solid #999999;
+	padding-left:10px;
+	padding-right:10px;
+}
+.littlelogo {
+	padding-right:10px;
+}
+.supplemental_links {
+	font-size:10px;
+	color:#666666;
+}
+.supplemental_links a:link, .supplemental_links a:visited, .supplemental_links a:active {
+	color:#666666;
+	text-decoration:none;
+}
+.supplemental_links a:hover {
+	color:#666666;
+	text-decoration:underline;
+}
+.supplemental_links_separator {
+	font-size:10px;
+	color:#8ebf58;
+	padding-left:4px;
+	padding-right:4px;
+}
+.supplemental_tiny {
+	padding-top:2px;
+	font-size:9px;
+	color:#666666;
+}
+.supplemental_tiny a:link, .supplemental_tiny a:visited, .supplemental_tiny a:active, .supplemental_tiny a:hover {
+	color:#666666;
+}
+.donatenowtd {
+	padding-left:15px;
+	padding-right:15px;
+}
+.donatenowtext {
+	font-size:10px;
+	color:#666666;
+}
+/* mfindlay 7/1/10 */
+.mainbodycontent {
+	/* width:635px; */
+	width:610px;
+	padding-right:25px;
+
+}
+.rightcolcontent {
+	width:201px;
+}
+.mainbodyseparator {
+	width:22px;
+}
+.rightcolbackground {
+	background-image:url(myimages/common/gray_sidebar_bg.gif);
+	background-repeat:repeat-y;
+	padding-top:22px;
+	padding-bottom:18px;
+	padding-left:24px;
+	padding-right:18px;
+}
+.rightcolnews {
+	font-family: Futura, "Futura Book", Arial, Helvetica, sans-serif;
+	font-size:22px;
+	color:#45a2CD;
+	line-height:1.2em;
+}
+/******************** blog entry display ********************/
+.rsscontent {
+	font-size:11px;
+	color:#333333;
+	padding-bottom:5px;
+	line-height:140%;
+}
+.rsscontent a:link, .rsscontent a:visited, .rsscontent a:active{
+	font-size:11px;
+	color:#333333;
+	text-decoration:none;
+}
+.rsscontent a:hover{
+	font-size:11px;
+	color:#333333;
+	text-decoration:underline;
+}
+.my_blog_title {
+	font-weight:bold;
+}
+
+/************************ social icons ******************************/
+.socialicon {
+	margin-right:4px;
+}
+.sharethisicon {
+	margin-left:4px;
+}
+/******************* internal pages *****************************/
+.intbodyheader {
+	width:653px;
+}
+.intbreadcrumb {
+	font-size:10px;
+	color:#999999;
+	text-transform:uppercase;
+	margin-top:15px;
+	margin-bottom:15px;
+}
+.breadcrumb {
+	width:653px;
+	font-size:10px;
+	margin-top:15px;
+	margin-bottom:15px;
+	text-transform:uppercase;
+	color:#999999;
+	display:inline;
+}
+.breadcrumb a:link, .breadcrumb a:visited, .breadcrumb a:active {
+	color:#999999;
+}
+.breadcrumb a:hover {
+	color:#999999;
+}
+
+/* mfindlay 7/1/10 */
+.intbodycontent {
+	/* width:653px; */
+	width:618px;
+	padding-right:35px;
+}
+
+.rightcolintnews {
+	margin-top:5px;
+	margin-bottom:5px;
+}
+.rightcolintfacts {
+	margin-top:5px;
+	margin-bottom:5px;
+}
+.intbodyseparator {
+	width:4px;
+}
+.intpagesociallinks {
+	margin-top:22px;
+	margin-left:24px;
+	margin-bottom:18px;
+}
+.factcontent {
+	color:#8ebf58;
+	padding-bottom:0px;
+	line-height:140%;
+	font-size:14px;
+}
+#page #maincontent .rightcolintcontent .rightcolintfacts .factcontent ul {
+	list-style-image: url(myimages/common/greenbullet.gif);
+	margin-top:0px;
+	margin-bottom:0px;
+	padding-top:0px;
+}
+#page #maincontent .rightcolintcontent .rightcolintfacts .factcontent ul li{
+	margin-left:-25px;
+	padding-bottom:18px;
+}
+
+#page #maincontent .rightcolintcontent .rightcolintfacts .factcontent ul li a:link{
+	color:#8ebf58;
+	text-decoration:none;
+}
+#page #maincontent .rightcolintcontent .rightcolintfacts .factcontent ul li a:visited{
+	color:#8ebf58;
+	text-decoration:none;
+}
+#page #maincontent .rightcolintcontent .rightcolintfacts .factcontent ul li a:hover{
+	color:#b6df88;
+	text-decoration:underline;
+}
+#page #maincontent .rightcolintcontent .rightcolintfacts .factcontent ul li a:active{
+	color:#8ebf58;
+	text-decoration:none;
+}
+/********************* overrides modules/system/system.css **************/
+tbody {
+  border-top: none;
+}
+/********************* sets STORY title style **************/
+div.node-type-story div.node-inner h2.title{
+	font-family: Futura, "Futura Book", Arial, Helvetica, sans-serif;
+	font-size:24px;
+	color:#ff9900;
+	/* mfindlay 7/1/10   line-height:110%;  */
+	font-weight:normal;
+}
+div.node-type-story div.node-inner h2.title a{
+	font-family: Futura, "Futura Book", Arial, Helvetica, sans-serif;
+	font-size:24px;
+	color:#ff9900;
+	text-decoration:none;
+	/* mfindlay 7/1/10   line-height:110%;  */
+	font-weight:normal;
+}
+/********************* sets PAGE title style **************/
+div.content a {
+	font-weight:bold;
+}
+div.intbodycontent h2.title{
+	font-family: Futura, "Futura Book", Arial, Helvetica, sans-serif;
+	font-size:24px;
+	color:#ff9900;
+	/* mfindlay 7/1/10   line-height:110%;  */
+	font-weight:normal;
+}
+div.intbodycontent h2.title a{
+	font-family: Futura, "Futura Book", Arial, Helvetica, sans-serif;
+	font-size:24px;
+	color:#ff9900;
+	text-decoration:none;
+	/* mfindlay 7/1/10   line-height:110%;  */
+	font-weight:normal;
+}
+/*
+font-family:"FuturaBook",Arial, Helvetica, sans-serif;
+font-family: FuturaMedium, Futura, Arial, Helvetica, sans-serif;
+font-family: Futura, Arial, Helvetica, sans-serif;
+*/
+/******************* sets the "more" link style ***********************/
+/*a.readmore {
+	color:#45a2cd;
+	text-decoration:none;
+}
+a.readmore:link, a.readmore:visited, a.readmore:active{
+	color:#45a2cd;
+	text-decoration:none;
+}
+a.readmore:hover{
+	color:#45a2cd;
+	text-decoration:underline;
+}*/
+/**************************************************************/
+
+/***************************** SEARCH BOX **********************/
+#mysearchform {
+	margin-top:-4px;
+}
+#mysearchform input {
+	margin-top:3px;  /* mfindlay 7/27/10  changed margin-top from 1px to 3px */	
+	width:155px;
+	border:1px solid #cdcdcd;
+}
+#mysearchform #searchroll {
+	margin-top:2px;  /* mfindlay 7/27/10  changed margin-top from -1px to 2px */		
+	margin-left:8px;
+	margin-right:2px;
+}
+
+div.item-list ul  {
+	list-style-image: none;
+	list-style-type: none;
+	margin-bottom:0px;
+}
+div.item-list ul li {
+	margin-left:-10px;
+}
+.rightcolintcontent {
+	width:218px;
+	margin-left:24px;
+}
+/************* right nav menu  ********************/
+/** - rollover effect **/
+.rightnavtable td {
+	font-size:11px;
+}
+.rightnavtable a {
+	display: block; 
+}
+/* div.div.rightcolintmenuheight: this contols the idle and rollover displays of NON-'selected' items */
+div.rightcolintmenuheight a {
+	background: #908e8e; 
+}
+div.rightcolintmenuheight a:link {
+	background: #908e8e; 
+}
+div.rightcolintmenuheight a:active { 
+	background: #908e8e; 
+}
+div.rightcolintmenuheight a:visited {
+	background: #908e8e; 
+}
+div.rightcolintmenuheight a:hover {
+	background: #b5b3b3; 
+}
+
+/******* selected right nav menu item **************/
+/* div.div.rightcolintmenuheight .selecteditem: this contols the idle and rollover displays of 'selected' items */
+div.rightcolintmenuheight .selecteditem {
+	/* mfindlay 7/1/10 background: #b5b3b3; */
+	background: #6e6e6e; 
+}
+div.rightcolintmenuheight .selecteditem:link {
+	/* mfindlay 7/1/10 background: #b5b3b3; */
+	background: #6e6e6e; 
+}
+div.rightcolintmenuheight .selecteditem:active { 
+	/* mfindlay 7/1/10 background: #b5b3b3; */
+	background: #6e6e6e; 
+}
+div.rightcolintmenuheight .selecteditem:visited {
+	/* mfindlay 7/1/10 background: #b5b3b3; */
+	background: #6e6e6e; 
+}
+div.rightcolintmenuheight .selecteditem:hover {
+	/* mfindlay 7/1/10 background: #b5b3b3; */
+	background: #6e6e6e; 
+}
+
+
+/* ------------------------------mfindlay 7/1/10 BEGIN Display LEVEL 2 items differently than LEVEL 3 -------------------*/
+/* div.div.rightcolintmenuheight .selecteditem: this contols the idle and rollover displays of 'selected' items */
+div.rightcolintmenuheight .rightnavtableitem_2 .selecteditem {
+	/* mfindlay 7/1/10 background: #b5b3b3; */
+	background: #6e6e6e; 
+}
+div.rightcolintmenuheight .rightnavtableitem_2 .selecteditem:link {
+	/* mfindlay 7/1/10 background: #b5b3b3; */
+	background: #6e6e6e; 
+}
+div.rightcolintmenuheight .rightnavtableitem_2 .selecteditem:active { 
+	/* mfindlay 7/1/10 background: #b5b3b3; */
+	background: #6e6e6e; 
+}
+div.rightcolintmenuheight .rightnavtableitem_2 .selecteditem:visited {
+	/* mfindlay 7/1/10 background: #b5b3b3; */
+	background: #6e6e6e; 
+}
+div.rightcolintmenuheight .rightnavtableitem_2 .selecteditem:hover {
+	/* mfindlay 7/1/10 background: #b5b3b3; */
+	background: #6e6e6e; 
+}
+
+/* div.div.rightcolintmenuheight: this contols the idle and rollover displays of NON-'selected' items */
+div.rightcolintmenuheight .rightnavtableitem_2 a {
+	background: #908e8e; 
+}
+div.rightcolintmenuheight .rightnavtableitem_2 a:link {
+	background: #908e8e; 
+}
+div.rightcolintmenuheight .rightnavtableitem_2 a:active { 
+	background: #908e8e; 
+}
+div.rightcolintmenuheight .rightnavtableitem_2 a:visited {
+	background: #908e8e; 
+}
+div.rightcolintmenuheight .rightnavtableitem_2 a:hover {
+	background: #6e6e6e; 
+}
+/* ------------------------------mfindlay 7/1/10 END Display LEVEL 2 items differently than LEVEL 3 -------------------*/
+
+/* ------------------------------mfindlay 7/1/10 BEGIN Display LEVEL 3 items differently than LEVEL 3 -------------------*/
+/* div.div.rightcolintmenuheight .selecteditem: this contols the idle and rollover displays of 'selected' items */
+div.rightcolintmenuheight .rightnavtableitem_3 .selecteditem {
+	/* mfindlay 7/1/10 background: #b5b3b3; */
+	background: #b5b3b3; 
+}
+div.rightcolintmenuheight .rightnavtableitem_3 .selecteditem:link {
+	/* mfindlay 7/1/10 background: #b5b3b3; */
+	background: #b5b3b3; 
+}
+div.rightcolintmenuheight .rightnavtableitem_3 .selecteditem:active { 
+	/* mfindlay 7/1/10 background: #b5b3b3; */
+	background: #b5b3b3; 
+}
+div.rightcolintmenuheight .rightnavtableitem_3 .selecteditem:visited {
+	/* mfindlay 7/1/10 background: #b5b3b3; */
+	background: #b5b3b3; 
+}
+div.rightcolintmenuheight .rightnavtableitem_3 .selecteditem:hover {
+	/* mfindlay 7/1/10 background: #b5b3b3; */
+	background: #b5b3b3; 
+}
+
+/* div.div.rightcolintmenuheight: this contols the idle and rollover displays of NON-'selected' items */
+div.rightcolintmenuheight .rightnavtableitem_3 a {
+	background: #908e8e; 
+}
+div.rightcolintmenuheight .rightnavtableitem_3 a:link {
+	background: #908e8e; 
+}
+div.rightcolintmenuheight .rightnavtableitem_3 a:active { 
+	background: #908e8e; 
+}
+div.rightcolintmenuheight .rightnavtableitem_3 a:visited {
+	background: #908e8e; 
+}
+div.rightcolintmenuheight .rightnavtableitem_3 a:hover {
+	background: #b5b3b3; 
+}
+/* ------------------------------mfindlay 7/1/10 END Display LEVEL 3 items differently than LEVEL 3 -------------------*/
+
+
+.rightcolintmenu {
+	width:242px;
+	/*margin-bottom:5px;*/
+	position:relative;
+}
+.rightcolintmenuheight {
+	width:242px;
+	background-color:#908e8e;
+	height:200px;
+	overflow:visible;
+	display:table;
+}
+.rightnavtable .rightnavtabletitle {
+	font-family:Arial, Helvetica, sans-serif;
+	background-color:#908e8e;
+	font-size:14px;
+	color:#333333;
+	padding-top:8px;
+	padding-bottom:8px;
+	font-weight:bold;
+	line-height:170%;
+	text-transform:uppercase;
+	padding-left:22px;
+	padding-right:12px;
+}
+/*.rightnavtableitem {
+	font-family:Arial, Helvetica, sans-serif;
+	background-color:#908e8e;
+	font-size:11px;
+	color:#ffffff;
+	border-top:1px solid #898787;
+	font-weight:bold;
+	line-height:170%;
+}*/
+.rightnavtableitem_bordertop {
+	border-top:1px solid #6e6e6e;
+}
+.rightnavtableitem_parent_2 {
+	font-family:Arial, Helvetica, sans-serif;
+	background-color:#908e8e;  /* mfindlay 7/1/10 NON-CURRENT section color made to be 908E8E instead of CURRENT color of #6e6e6e; */
+	font-size:11px;
+	color:#ffffff;
+	border-top:1px solid #6e6e6e;  /* #898787 */
+	/* mfindlay 7/1/10 font-weight:bold; */
+	line-height:170%;
+	padding-top:2px;
+	padding-bottom:4px;
+	padding-right:12px;
+	padding-left:22px;
+	/*background-image:url(myimages/common/downarrow.gif);*/
+	background-image:url(myimages/common/arrow_up.gif);
+	background-repeat:no-repeat;
+	background-position:90% 50%;
+	cursor:pointer; /* mfindlay 7/1/10 */
+}
+
+/* mfinday 7/1/10 For rightnavtableitem_parent_2 items, added "hover" so that the darker background shows when hovering, even if it's not hyperlinked */
+.rightnavtableitem_parent_2:hover {
+	background-color:#6e6e6e;
+}
+.rightnavtableitem_2 a {
+	padding-top:2px;
+	padding-bottom:4px;
+	padding-right:12px;
+	padding-left:22px;
+}
+.rightnavtableitem_2 a:link, .rightnavtableitem_2 a:visited, .rightnavtableitem_2 a:active, .rightnavtableitem_2 a:hover {
+	color:#ffffff;
+	text-decoration:none;
+} 
+.rightnavtableitem_3 a {
+	padding-top:2px;
+	padding-bottom:4px;
+	padding-right:12px;
+	padding-left:42px;    /* mfindlay 7/1/10 increased indent from 32 to 42px */
+}
+.rightnavtableitem_3 a:link, .rightnavtableitem_3 a:visited, .rightnavtableitem_3 a:active, .rightnavtableitem_3 a:hover {
+	color:#ffffff;
+	text-decoration:none;
+} 
+.rightnavtableitemselected {
+	background: #6e6e6e;
+}
+
+/* mfinday 7/1/10 For rightnavtableitem_parent_2 items, added "current" so that the current section item would show darker background */
+.current {
+	background-color:#6e6e6e;
+	cursor:default; /* mfindlay 7/1/10 */
+	background-image:url(myimages/common/arrow_down_selected.gif);
+}
+/* mfinday 7/1/10 For toggling right nav menu items. Start them invisible */
+.hideme {
+	display:none;
+}
+.downarrow {
+	background-image:url(myimages/common/arrow_down_selected.gif);
+}
+.uparrow {
+	background-image:url(myimages/common/arrow_up_selected.gif);
+}
+/********* green vertical background *********/
+.greenborderright {
+	/* border-right:1px solid #8ebf58;*/
+}
+
+.greenvertical {
+	background-image:url(myimages/common/greenvertical.gif);
+	background-repeat:repeat-y;
+	background: url('myimages/common/greenvertical.gif') repeat-y;
+	background-position:left;
+	/*background-attachment:fixed;*/
+}
+/* gap of whitespace that appears before the green vertical line begins */
+.rightnavgap {
+	width:242px;
+	height:9px;
+	background-color:#ffffff;
+	background-image:none;
+	overflow:hidden;
+}
+/* vertical gap that appears before the first "right" content. This will have the green vertical line to the left */
+.rightnavcontentleadinggap {
+	width:242px;
+	height:11px;
+	overflow:hidden;
+}
+/************ BEGIN Milonic *******/
+.mmpadding {
+	padding-top:2px;
+	padding-bottom:2px;
+	padding-right:10px;
+	padding-left:15px;
+}
+.mmpadding a{
+	text-decoration:none;
+	cursor:pointer;
+}
+.mmpadding a:hover{
+	text-decoration:none;
+	cursor:pointer;
+}
+div.miloniclink a:hover{
+	cursor:default;
+}
+/************* image location on story teasers **************/
+/* teaser */
+.node-teaser .node-inner .image-attach-teaser {
+    display:block;
+    float:left;
+    /* mfindlay 7/1/10 margin:5px 10px 10px 0px; */
+	margin:5px 15px 10px 0px;
+    width:100px;
+}
+
+/* main story */
+.node-inner .all-attached-images .image-attach-body {
+    display:block;
+    float:left;
+    /* mfindlay 7/1/10 margin:5px 10px 10px 0px; */
+	margin:5px 15px 10px 0px;
+    width:100px;
+}
+/* does this force us to use images of 110 pixels wide? */
+.node-teaser .node-inner p {
+    /*margin-left: 110px;*/
+}
+
+/******************** blog ******************/
+.blogbg {
+	background-image:url(myimages/blog/blogbackground.gif);
+	background-repeat:repeat-x;
+}
+.bloggap {
+	width:5px;
+}
+/************* calendar ****************/
+
+/******from calendar.css ****/
+.calendar-calendar .month-view table {
+  border:none;
+  padding:0;
+  margin:0;
+  width:100%;
+}
+
+.calendar-calendar div.date-nav {
+  background-color:#fff;
+  color:#57b4df;
+  padding:0.2em;
+  border:none;
+  height:25px;
+}
+
+.calendar-calendar th.days {
+  background-color:#fff;
+  color:#333333;
+  font-weight:bold;
+  border:none;
+}
+.calendar-calendar td {
+  width: 12%; /* 14% is about 1/7 of total table width */
+  min-width: 12%;
+  border: none;
+  color: #333;
+  text-align:center;
+  vertical-align: top;
+  margin: 0;
+  padding:0;
+  line-height:120%;
+  font-weight:normal;
+}
+.calendar-calendar tr td.today,
+.calendar-calendar tr.odd td.today,
+.calendar-calendar tr.even td.today {
+  background-color:#fff;
+  border:1px solid #ccc;
+}
+
+/***** from date.css *****/
+.date-nav {
+  width:100%;
+}
+.date-nav div.date-prev {
+  text-align: left; /* LTR */
+  width:24%;
+  float: left; /* LTR */
+  color:#57b4df;
+}
+.date-nav div.date-next {
+  text-align: right; /* LTR */
+  width:24%;
+  float: right; /* LTR */
+  color:#57b4df;
+}
+div.date-heading {
+  text-align:center;
+  width:50%;
+  float: left; /* LTR */
+  color:#57b4df;
+}
+.date-nav div.date-heading h3 {
+  margin:0;
+  padding:0;
+  color:#57b4df;
+}
+
+/*******  custom calendar css *******/
+#block-views-calendar_date-calendar_block_1 .block-inner h2.title {
+	font-family: Futura, "Futura Book", Arial, Helvetica, sans-serif;
+	font-size:22px;
+	color:#45a2CD;
+	font-weight:normal;
+}
+.date-nav div.date-prev a{
+  color:#57b4df;
+}
+.date-nav div.date-next a{
+  color:#57b4df;
+}
+.date-nav div.date-heading h3 a{
+  color:#57b4df;
+}
+.calendar-calendar td a {
+	font-weight:normal;
+	color: #333;
+}
+
+/******** twitter **********/
+#block-views-tweets-block2 .block-inner h2.title {
+	font-family: Futura, "Futura Book", Arial, Helvetica, sans-serif;
+	font-size:22px;
+	color:#45a2CD;
+	font-weight:normal;
+}
+.blogcontent {
+	margin-top:40px;
+	margin-left:30px;
+	margin-right:5px;
+}
+.intblogcontent {
+}
+/* mfindlay 7/1/10 */
+.node-inner {
+	padding-top:10px;
+	clear:both; 
+}
+/* mfindlay 7/1/10 */
+h2.title {
+	margin-bottom:10px;
+	line-height:1.2em;
+}
+.form-item label {
+	display:block;
+}
+div.item-list ul li{
+	display:inline;
+	padding-right:10px;
+	margin-left:0px;
+}
+div.item-list ul {
+	padding-left:0px;
+}
+/* mfindlay: as per requested: 7/15/10 
+Mark,
+can you please apply to the global css stylesheet, 
+a style for images that will be applied to images by default 
+that just has padding of 10px on right and padding of 10px on bottom.
+We will then only use the margin setting in the text editor to change 
+it to something when we want to override this default.
+I’ll then pass along that CSS change to Jim.
+Thanks,
+Ed
+
+img {
+	margin-right:10px;
+	margin-bottom:10px;
+}
+*/
+
+/* fix for firefox */
+div.item-list ul li.clear-block{
+	margin:0px;
+	padding:0px;
+}
+/******** 7/22/10 ***********/
+.rightcolsocialcontent {
+	width:201px;
+	margin-bottom:22px;  /* 10px */
+}
+.rightcolintsocialcontent {
+	width:201px;
+	margin-bottom:22px;  /* 10px */
+	margin-left:24px;
+}
+.rightcolhomebackground {
+	background-image:url(myimages/common/gray_sidebar_bg.gif);
+	background-repeat:repeat-y;
+}
+.intpageblogsociallinks {
+	width:201px;
+	margin-bottom:22px;  /* 10px */
+	margin-left:24px;
+}
+.bottomaddress {
+	margin-top:20px;
+}
+.bottomaddress td{
+	font-size:11px;
+	color:#666666;
+}
+#bottomnavlinks ul.links {
+	display:inline;
+}

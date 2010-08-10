@@ -1,0 +1,69 @@
+<?php 
+// $Id: linkit_user.module,v 1.4 2010/06/20 17:04:37 anon Exp $
+
+/**
+ * @file
+ * Extend Linkit with user links.
+ */
+
+
+/**
+ * Implementation of hook_linkit_load_plugins().
+ */
+function linkit_user_linkit_load_plugins($string) {
+  $matches = array();
+
+  // Get users
+  $result = db_query_range("SELECT u.uid, u.name FROM {users} u WHERE LOWER(u.name) LIKE LOWER('%%%s%%') AND u.status = 1", $string, 0, 10);
+  while ($user = db_fetch_object($result)) {
+    $matches['user'][] = array(
+      'title' => $user->name,
+      'path' => 'internal:user/' . $user->uid,
+      'information' => array(
+        'type' => 'User',
+      ),
+    );
+
+  }
+
+  return $matches;
+}
+
+/**
+ * Implementation of hook_linkit_get_search_styled_link().
+ */
+function linkit_user_linkit_get_search_styled_link($string) {
+  // User links created with Linkit will always begin with "internal:"
+  if(strpos($string, 'internal:') === FALSE) {
+    return;
+  }
+
+  // Check to see that the link really is a user link
+  $splitted_string = explode('/', str_replace('internal:', '', $string));
+  if($splitted_string[0] != 'user') {
+    return;
+  }
+
+  // This is a node link created with Linkit, try to grab the title and path now. 
+  $result = db_query(db_rewrite_sql("SELECT u.uid, u.name FROM {users} u WHERE u.uid = %d"), $splitted_string[1]);
+  $user = db_fetch_object($result);
+
+  // No reault or no user was found
+  if(!$result || !$user) {
+    return;
+  }
+
+  return check_plain($user->name) . ' [path:internal:user/' . $user->uid . ']';
+}
+
+/**
+ * Implementation of hook_linkit_info_plugins().
+ * 
+ * This is used by linkit_permissions
+ */
+function linkit_user_linkit_info_plugins() {
+  $return['linkit_user'] = array(
+    'type' => 'user',
+  );
+  return $return;
+}
