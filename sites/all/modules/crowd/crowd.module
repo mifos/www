@@ -1,0 +1,566 @@
+<?php
+
+// $Id: crowd.module,v 1.1.2.11 2010/04/08 15:33:51 ebeyrent Exp $
+
+/**
+ * @file 
+ * Provides single sign-on integration between Drupal and Atlassian Crowd
+ */
+
+// If the ldapauth module is enabled, provide integration
+if(module_exists('ldapauth')) {
+  define('CROWD_USELDAP', variable_get('crowd_useldap', 0));
+  define('CROWD_USELDAP_GROUPS', variable_get('crowd_useldap_groups', 0));
+  define('LDAPAUTH_LOGIN_PROCESS', variable_get('ldapauth_login_process', 0));
+  define('LDAPAUTH_LOGIN_CONFLICT', variable_get('ldapauth_login_conflict', 1));
+  define('CROWD_LDAP_EMAIL_ATTR', variable_get('crowd_ldap_email_attribute', 'mail'));
+}
+
+define('CROWD_SSO_DOMAIN', variable_get('crowd_cookie_sso_domain', ''));
+define('CROWD_SECURE_SSO_COOKIE', variable_get('crowd_secure_sso_cookie', false));
+define('CROWD_LOGOUT_NO_COOKIE', variable_get('crowd_logout_no_cookie', false));
+define('CROWD_VALIDATE_TOKEN', variable_get('crowd_validate_token', false));
+
+/**
+ * Implementation of hook_init()
+ * Traps a page load to see if authentication is required.
+ */
+function crowd_init() {
+  require_once('Services/Atlassian/Crowd.php');
+  crowd_sso_login(); 
+}
+
+/**
+ * Implementation of hook_menu()
+ */
+function crowd_menu() {
+  $items = array();
+
+  $items['admin/settings/crowd'] = array(
+    'title' => t('Crowd Settings'),
+    'description' => 'Configure central authentication services',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('crowd_admin_settings'),
+    'access arguments' => array('administer crowd'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'crowd.admin.inc',
+  );
+  
+  $items['admin/settings/crowd/cache-wsdl'] = array(
+    'title' => t('Cache Crowd WSDL'),
+    'description' => t('Due to bugs with PHP, the WSDL file needs to be cached locally.'),
+    'page callback' => 'crowd_check_wsdl',
+    'access arguments' => array('administer crowd'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'crowd.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function crowd_perm() {
+  return array('administer crowd');
+}
+
+/**
+ * Implementation of hook_user()
+ *
+ * @param string $op
+ * @param array $edit
+ * @param array $account
+ * @param string $category
+ */
+function crowd_user($op, &$edit, &$account, $category = NULL) {
+  switch($op) {
+    case 'delete':
+      // Delete the entry from the authmap table
+      db_query("DELETE FROM {authmap} WHERE uid = %d AND module='crowd'", $account->uid);
+      break;
+    case 'logout':
+      // Log the user out of Crowd
+      crowd_sso_logout();
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_form_alter().
+ *
+ * Overrides validation for the login form.
+ *
+ * @param unknown_type $form
+ * @param unknown_type $form_state
+ * @param unknown_type $form_id
+ * @see hook_form_alter()
+ */
+function crowd_form_alter(&$form, $form_state, $form_id) {
+  if ($form_id == 'user_login_block' || $form_id == 'user_login') {
+    // Looking for the original user authentication funct
+    $array_key = array_search('user_login_authenticate_validate', $form['#validate']);
+
+    // Can't find it. Rebuild the #validate array with new validation handler, called just before the final validator
+    if($array_key === FALSE){
+      // Prepend the Crowd validation handler to the form validation handlers
+      array_unshift($form['#validate'], 'crowd_login_validate');      
+    }
+    else {
+      // Found it, now to do the swap
+      $form['#validate'][$array_key] = 'crowd_login_validate';
+    }
+    
+    /**
+     * The ldapauth module also attempts it's own authentication validation; this needs to be disabled in order
+     * to prevent double authentication attempts
+     * 
+     * @todo What other modules provide authentication validation overrides for external authentication?
+     */ 
+    if(module_exists('ldapauth')) {
+      if ($key = array_search('ldapauth_login_authenticate_validate', $form['#validate'])) {
+        unset($form['#validate'][$key]);
+      }
+    }
+  }
+}
+
+/**
+ * Validation handler for the login form.
+ *
+ * @param string $form
+ * @param array $form_state
+ */
+function crowd_login_validate($form, &$form_state) {
+  global $user, $crowd_auth;
+
+  // Check to see if user 1 is logging in
+  $result = db_query("SELECT uid FROM {users} WHERE name = '%s' AND uid = '1'", $form_state['values']['name']);
+  if ($account = db_fetch_object($result)) {
+    user_authenticate($form_state['values']);
+    return;
+  }
+  
+  try {
+    // Attempt to authenticate the user in Crowd
+    $crowd_user = crowd_login($form_state['values']['name'], $form_state['values']['pass']);    
+    if($crowd_user) {
+      $crowd_auth = TRUE;
+
+      // Either login in or registers the current user, based on username. Either way, the global $user object is populated based on $form_state['values']['name'].
+      if(CROWD_USELDAP) {
+        user_external_login_register($form_state['values']['name'], 'ldapauth');        
+      }
+      else {
+        user_external_login_register($form_state['values']['name'], 'crowd');
+      }
+      
+      // Update the user object with data from Crowd
+      _crowd_update_user($crowd_user);
+      
+      // Finalize the login process. Must be called when logging in a user.
+      user_authenticate_finalize($form_state['values']);
+            
+    }
+  }
+  catch(Exception $e) {
+    // Crowd Authentication failed
+    if(CROWD_USELDAP) {
+      /**
+       * The LDAPAUTH_LOGIN_PROCESS variable will match one of the following (string) values:
+       *   - 0 :: This means that ldapauth is configured in mixed mode; LDAP authentication is performed only if Drupal authentication fails
+       *   - 1 :: This means that ldapauth is configured to use the LDAP directory only 
+       */
+      if(LDAPAUTH_LOGIN_PROCESS === "0") {
+        // If we are in mixed mode, attempt to authenticate in Drupal
+        $crowd_auth = FALSE;
+        user_authenticate($form_state['values']);
+      }
+      
+      /**
+       * The LDAPAUTH_LOGIN_CONFLICT variable will match one of the following (string) values:
+       *   - 0 :: Disallow login and log the conflict
+       *   - 1 :: Associate local account with the LDAP entry
+       */
+      if(LDAPAUTH_LOGIN_CONFLICT === "0") {
+        watchdog('crowd', 'An exception was thrown while authenticating against Crowd.  The fault message is %fault.', array('%fault' => $e->getMessage()), WATCHDOG_ERROR);
+      }
+    }
+    else {
+      form_set_error('name', $e->getMessage());
+      watchdog('crowd', 'An exception was thrown while authenticating against Crowd.  The fault message is %fault.', array('%fault' => $e->getMessage()), WATCHDOG_ERROR);
+    } 
+  }
+}
+
+/**
+ * Logs a user in via Crowd SOAP interface.
+ *
+ * @param 
+ *   string $username The Crowd username.
+ * @param 
+ *   string $password The Crowd password.
+ * @return 
+ *   boolean TRUE if the login was successful, FALSE otherwise.
+ */
+function crowd_login($username, $password) {
+  global $crowd_user, $user, $account;
+  
+  if ($user->uid) {
+    //Don't Login  because we already are
+    return; 
+  }
+  
+  // Get an instance of the Crowd connector object
+  $crowd = crowd_get_client();
+  if(! is_object($crowd)) {
+    watchdog('crowd', 'Failed to connect to Crowd', null, WATCHDOG_ERROR);
+    return false;
+  }
+  
+  try {
+    // Attempt to authenticate the user in Crowd
+    $auth_token = $crowd->authenticatePrincipal($username,$password,$_SERVER['HTTP_USER_AGENT'],$_SERVER['REMOTE_ADDR']);
+    if($auth_token) {
+      watchdog('crowd', 'User %username successfully authenticated against Crowd', array('%username' => $username), WATCHDOG_INFO);
+    }
+    else {
+      drupal_set_message('Failed to authenticate against Crowd', 'error');
+      watchdog('crowd', 'User %username failed to authenticate against Crowd', array('%username' => $username), WATCHDOG_ERROR);
+      return false;
+    }
+  }
+  catch(Exception $e) {
+    watchdog('crowd', 'Exception thrown when authenticating user %username in Crowd - %message',
+      array(
+        '%username' => $username,
+        '%message' => $e->getMessage(),
+      ),
+      WATCHDOG_ERROR
+    );  
+  }
+  
+  // Attempt to get the Crowd user object
+  $crowd_user = crowd_get_user($auth_token);
+  if($crowd_user) {
+    // Set the cookie for SSO into other apps
+    setcookie('crowd.token_key', $auth_token, null, '/', CROWD_SSO_DOMAIN, CROWD_SECURE_SSO_COOKIE);
+    return $crowd_user;
+  }
+  watchdog('crowd', 'Crowd authentication failed to get the user object for user %username', array('%username' => $username), WATCHDOG_ERROR);
+  return FALSE;
+}
+
+/**
+ * Menu callback function to log a user out of Drupal and then out of Crowd
+ */
+function crowd_sso_logout() {
+  global $user;
+
+  // Read the Crowd SSO cookie
+  $user_token = $_COOKIE['crowd_token_key']; 
+  
+  // If the SSO cookie isn't defined, then assume the user does not have a valid session. 
+  if (!empty($user_token)) {
+    $crowd = crowd_get_client();
+    if($crowd) {
+      try {
+        // Invalidate the token for this user for all application clients in Crowd.
+        $result = $crowd->__call('invalidatePrincipalToken', array($user_token));
+        if($result) {
+          watchdog('crowd', 'Successfully logged out of Crowd SSO', array(), WATCHDOG_INFO);
+        }
+      }
+      catch(Exception $e) {
+        watchdog('crowd', 'An exception was thrown while logging the user out of Crowd - %message', array('%message' => $e->getMessage()), WATCHDOG_ERROR);
+        return false;
+      }
+    }    
+  }
+  else { 
+    return false;
+  } 
+}
+
+/**
+ * Helper function to automatically log in a user if he or she has already been authenticated in Crowd
+ * 
+ * @see user_logout()
+ * @see user_external_login_register()
+ * @see user_authenticate_finalize()
+ */
+function crowd_sso_login() {
+  global $user;
+  
+  if($user->uid) {
+    // Only validate if the current user is not user 1
+    if($user->uid > 1) {
+      /**
+       * This module has a configuration option that, when enabled, will automatically log the authenticated user
+       * out of Drupal if the Crowd SSO cookie cannot be found.  If the SSO cookie isn't defined (or has been deleted), 
+       * then assume the user does not have a valid session.  User 1 is exempted from this behavior.
+       */
+      if(CROWD_VALIDATE_TOKEN) {
+        if(! crowd_is_logged_in()) {
+          require_once(drupal_get_path('module', 'user').'/user.pages.inc');
+          user_logout();
+        }      
+      }
+      else {
+        if(CROWD_LOGOUT_NO_COOKIE) {
+          // Get the Crowd SSO cookie.
+          $crowd_token = $_COOKIE['crowd_token_key']; 
+          if (empty($crowd_token)) {
+            require_once(drupal_get_path('module', 'user').'/user.pages.inc');
+            user_logout();
+          }     
+        }
+      }
+    }
+    return;
+  }
+  
+  // Check to see if the current user has a valid user token for Crowd
+  $user_token = crowd_is_logged_in();
+  if($user_token) {
+    // If the user has a valid token, get the user object from Crowd
+    $crowd_user = crowd_get_user($user_token);
+    
+    // Check to make sure we got a user object and the user is active in Crowd
+    if($crowd_user && $crowd_user->active) {
+      $crowd_auth = TRUE;
+      $form_state['values']['name'] = $crowd_user->name;
+      
+      // Force the user to be authenticated in Drupal
+      user_external_login_register($form_state['values']['name'], 'crowd');
+      user_authenticate_finalize($form_state['values']);
+    }
+  }
+}
+
+/**
+ * Helper function to create a new instance of the Services_Atlassian_Crowd object
+ * 
+ * @see Services_Atlassian_Crowd::__construct()
+ */
+function crowd_get_client() {
+  $crowd_server = trim(variable_get('crowd_server', ''), '/');
+  
+  if(preg_match("/^https\:/", $crowd_server)) {
+    /**
+     * Define the path to the cached WSDL file
+     * @see crowd_check_wsdl()
+     */ 
+    $wsdl = file_directory_path().DIRECTORY_SEPARATOR.'crowdsoapservice.wsdl';
+    
+    if(!file_exists($wsdl)){
+      // Display an error
+      drupal_set_message(t('Unable to connect to Atlassian Crowd.  Please contact your system administrator.'), 'error');
+      watchdog('crowd', 'WSDL file has not been cached.  You must cache the WSDL from the Crowd server; please visit %url', 
+        array('%url' => url('admin/settings/crowd/cache-wsdl')), 
+        WATCHDOG_CRITICAL);
+      return false;
+    }
+  }
+  else {
+    $wsdl = $crowd_server.':'.
+      variable_get('crowd_port', '443').'/'.
+      variable_get('crowd_uri', '');
+  }
+  
+  // Define the configuration array to pass to the Services_Atlassian_Crowd constructor
+  $config = array(
+    'app_name' => variable_get('crowd_application', ''),
+    'app_credential' => variable_get('crowd_application_password', ''),
+    'service_url' => $wsdl,
+  );
+  
+  // Create a new instance of the Crowd SOAP client
+  try {
+    $crowd = new Services_Atlassian_Crowd($config);
+  }
+  catch(Exception $e) {
+    watchdog('crowd', 'Cannot instantiate Crowd object, exception thrown: %exception', array('%exception' => $e->getMessage()), WATCHDOG_ERROR);  
+    return false;
+  }
+  
+  if(!is_object($crowd)) {
+    watchdog('crowd', 'Failed to connect to Atlassian Crowd', null, WATCHDOG_ERROR);
+    return false;
+  }
+  else {
+    // Authenticate the Drupal application in Crowd
+    try {
+      $server_token = $crowd->authenticateApplication();
+      if($server_token) {
+        return $crowd;
+      }
+      else {
+        drupal_get_messages('error');
+        watchdog('crowd', 'Failed to authenticate this application', null, WATCHDOG_ERROR);
+      }
+    }
+    catch(Exception $e) {
+      // Remove any error messages that may have been thrown by the Services_Atlassian_Crowd object and fail silently
+      drupal_get_messages('error');
+      watchdog('crowd', 'Failed to authenticate this application, exception thrown: %exception', array('%exception' => $e->getMessage()), WATCHDOG_ERROR);
+    }
+  }  
+  return false;
+}
+
+/**
+ * Helper function to retrieve a Crowd-authenticated user object from Crowd
+ * @param $user_token
+ *   Authentication token string stored in a cookie by Crowd
+ * @return
+ *   Returns the user object from Crowd, or false
+ */
+function crowd_get_user($user_token) {
+  // Get the Crowd connector instance
+  $crowd = crowd_get_client(true);
+  try {
+    // Load the Crowd-authenticated user using the Crowd authentication token as the search parameter
+    $result = $crowd->__call('findPrincipalByToken', array($user_token));
+    if(!$result) {
+      watchdog('crowd', 'Failed to load the user by token from Crowd.', null, WATCHDOG_ERROR); 
+      return false;
+    }
+    return $result;
+  }
+  catch(Exception $e) {
+    watchdog('crowd', 'Exception thrown when loading the user by token - %message.', array('%message' => $e->getMessage()), WATCHDOG_ERROR);  
+    return false;
+  }
+  return false;
+}
+
+/**
+ * Helper function to determine if the current user is already logged in to Crowd.
+ * @return
+ *   Either returns the user's SSO token, or false if the cookie wasn't found.
+ */
+function crowd_is_logged_in() {
+  // Get the Crowd SSO cookie.
+  $crowd_token = $_COOKIE['crowd_token_key']; 
+  
+  // If the SSO cookie isn't defined, then assume the user does not have a valid session. 
+  if (!empty($crowd_token)) {
+    $crowd = crowd_get_client();
+    if($crowd) {
+      try{
+        $result = $crowd->__call('isValidPrincipalToken', array(
+          $crowd_token,
+          $_SERVER['HTTP_USER_AGENT'],
+          $_SERVER['REMOTE_ADDR'],
+        ));
+        if(!$result) {
+          // Expire the Crowd SSO cookie
+          setcookie('crowd.token_key', '', time()-42000, '/', CROWD_SSO_DOMAIN, CROWD_SECURE_SSO_COOKIE);
+          return false;
+        }
+        return $crowd_token;
+      }
+      catch(Exception $e) {
+        watchdog('crowd', 'Failed to verify user token.  Exception thrown: %exception', array('%exception' => $e->getMessage()), WATCHDOG_ERROR);
+      }
+        
+    }
+  }
+  else { 
+    return false;
+  }
+}
+
+/**
+ * Helper function to update newly created user accounts in Drupal.  This is called when:
+ * - a user successfully authenticates against Crowd and the user account doesn't exist in Drupal
+ * 
+ * @param $crowd_user
+ *   Object containing user data from Crowd
+ */
+function _crowd_update_user($crowd_user) {
+  global $user;
+  $mail = '';
+  // Extract the mail attribute
+  foreach($crowd_user->attributes->SOAPAttribute as $attribute) {
+    if($attribute->name == CROWD_LDAP_EMAIL_ATTR) {
+      $mail = $attribute->values->string;
+      break;
+    }  
+  }
+
+  // Update the user's email in Drupal with data from Crowd
+  $info = array(
+    'mail' => $mail
+  );
+  if(CROWD_USELDAP) {
+    require_once(drupal_get_path('module', 'ldapgroups') .'/ldapgroups.inc');
+    global $_ldapauth_ldap;
+    // Cycle through LDAP configurations.  First one to succeed wins.
+    $result = db_query("SELECT sid FROM {ldapauth} WHERE status = 1 ORDER BY weight");
+    while ($row = db_fetch_object($result)) {
+      // Initialize LDAP.
+      if (!_ldapauth_init($row->sid)) {
+        continue;
+      }
+    }
+    /**
+     * The LDAP Integration module stores LDAP connection information in the user object, and will not work if
+     * this data is not set up properly.  This is performed in ldapauth.module, which this module overrides.
+     */
+    $ldap_user = _ldapauth_user_lookup($crowd_user->name);
+    $info['ldap_authentified'] = TRUE; 
+    $info['ldap_dn'] = $ldap_user['dn']; 
+    $info['ldap_config'] = $_ldapauth_ldap->getOption('sid');
+    $user->ldap_config = $_ldapauth_ldap->getOption('sid');
+    // Import the user groups as roles if configured to do so
+    if(CROWD_USELDAP_GROUPS) {
+      ldapgroups_user_login($user);
+    }    
+  }
+  $user = user_save($user, $info, 'account');
+  
+  // Update the user profile based on LDAP information
+  if(CROWD_USELDAP) {
+    // Retrieve the LDAP mappings for profile fields and attributes
+    $ldap_drupal_reverse_mappings = _ldapdata_reverse_mappings(variable_get('ldapprov_server', 0));
+    // Retrieve profile fields list.
+    $profile_fields = _ldapdata_retrieve_profile_fields();
+    // Build an array of mapped fields for updating the user profile
+    if((!empty($profile_fields)) && (!empty($ldap_drupal_reverse_mappings))) {
+      foreach ($profile_fields as $key => $field) {
+        if (isset($ldap_drupal_reverse_mappings[$key])) {
+          foreach($crowd_user->attributes->SOAPAttribute as $attribute) {
+            if($attribute->name == $ldap_drupal_reverse_mappings[$key]) {
+              $info[$field] = $attribute->values->string;
+              break;    
+            }
+          }          
+        }
+      }
+    }
+    
+    // Only update the profile if there is data to update
+    if((module_exists('profile')) && (!empty($info))) {
+      // Load the configured profile categories
+      $categories = profile_categories();
+      if(!empty($categories)) {
+        // Loop through the categories
+        foreach($categories as $index=> $category) {
+          // Retrieve the fields for each category
+          $result = _profile_get_fields($category['name'],false);
+          $wanted = array();
+          while ($profile_field = db_fetch_object($result)) {
+            // Only map in the fields for this category
+            $wanted[$profile_field->name] = $info[$profile_field->name];
+          }
+          // Update the user's profile
+          profile_save_profile($wanted, $user, $category['name'], false);
+        }
+      }
+    }
+  }
+  watchdog('crowd', 'Updated user %name with data from Crowd User with directory id %crowd_id', array('%name' => $crowd_user->name, '%crowd_id' => $crowd_user->directoryId), WATCHDOG_NOTICE, l(t('edit'), 'user/'. $user->uid .'/edit'));  
+}
+

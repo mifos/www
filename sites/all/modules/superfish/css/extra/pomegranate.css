@@ -1,0 +1,35 @@
+/* $Id: pomegranate.css,v 1.4 2010/03/27 09:18:40 mehrpadin Exp $ */
+.sf-menu.sf-style-pomegranate a {
+  border: 1px outset #68000e;
+  color: #ffebee !important;
+}
+.sf-navbar.sf-style-pomegranate a {
+  border: 0;
+}
+.sf-menu.sf-style-pomegranate li,
+.sf-navbar.sf-style-pomegranate {
+  background: #79001c;
+}
+.sf-menu.sf-style-pomegranate li li{
+  background: #6c0019;
+}
+.sf-menu.sf-style-pomegranate li li li {
+  background: #5f0016;
+}
+.sf-menu.sf-style-pomegranate li:hover,
+.sf-menu.sf-style-pomegranate li.sfHover,
+.sf-menu.sf-style-pomegranate li.active a,
+.sf-menu.sf-style-pomegranate a:focus,
+.sf-menu.sf-style-pomegranate a:hover,
+.sf-menu.sf-style-pomegranate a:active,
+.sf-navbar.sf-style-pomegranate li li {
+  background: #4c0012;
+  color: #ffffff !important;
+}
+.sf-navbar.sf-style-pomegranate li ul {
+  background-color: #4c0012;
+  width: 100%;
+}
+.sf-navbar.sf-style-pomegranate li ul li ul {
+  background-color: transparent;
+}

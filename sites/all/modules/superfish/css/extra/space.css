@@ -1,0 +1,31 @@
+/* $Id: space.css,v 1.4 2010/03/27 09:18:40 mehrpadin Exp $ */
+.sf-menu.sf-style-space a {
+  border: 1px outset #000000;
+  color: #f1f1f1 !important;
+}
+.sf-navbar.sf-style-space a {
+  border: 0;
+}
+.sf-menu.sf-style-space li,
+.sf-menu.sf-style-space li li,
+.sf-menu.sf-style-space li li li,
+.sf-navbar.sf-style-space {
+  background: #333333;
+}
+.sf-menu.sf-style-space li:hover,
+.sf-menu.sf-style-space li.sfHover,
+.sf-menu.sf-style-space li.active a,
+.sf-menu.sf-style-space a:focus,
+.sf-menu.sf-style-space a:hover,
+.sf-menu.sf-style-space a:active,
+.sf-navbar.sf-style-space li li {
+  background: #008ad2;
+  color: #ffffff !important;
+}
+.sf-navbar.sf-style-space li ul {
+  background-color: #008ad2;
+  width: 100%;
+}
+.sf-navbar.sf-style-space li ul li ul {
+  background-color: transparent;
+}

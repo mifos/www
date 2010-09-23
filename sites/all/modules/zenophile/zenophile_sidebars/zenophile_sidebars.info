@@ -1,0 +1,12 @@
+; $Id: zenophile_sidebars.info,v 1.2 2010/06/03 05:02:48 garrettalbright Exp $
+name = Zenophile Sidebars
+description = Adds controls to adjust the width and placement of the sidebars and page.
+package = Development
+core = 6.x
+dependencies[] = zenophile
+; Information added by drupal.org packaging script on 2010-06-04
+version = "6.x-2.0"
+core = "6.x"
+project = "zenophile"
+datestamp = "1275620711"
+

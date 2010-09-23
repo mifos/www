@@ -1,0 +1,41 @@
+/* $Id: spring.css,v 1.4 2010/03/27 09:18:40 mehrpadin Exp $ */
+.sf-menu.sf-style-spring a {
+  border: 1px solid #ffffff;
+  border-bottom: 0;
+  color: #37731f !important;
+}
+.sf-navbar.sf-style-spring a {
+  border: 0;
+}
+.sf-menu.sf-style-spring li,
+.sf-navbar.sf-style-spring {
+  background: #ecffdf;
+}
+.sf-menu.sf-style-spring li li {
+  background: #eaffdb;
+}
+.sf-menu.sf-style-spring li li li {
+  background: #daf8c5;
+}
+.sf-menu.sf-style-spring li:hover,
+.sf-menu.sf-style-spring li.sfHover,
+.sf-menu.sf-style-spring li.active a,
+.sf-menu.sf-style-spring a:focus,
+.sf-menu.sf-style-spring a:hover,
+.sf-menu.sf-style-spring a:active,
+.sf-navbar.sf-style-spring li li {
+  background: #bff6a9;
+}
+.sf-navbar.sf-style-spring li ul {
+  background-color: #bff6a9;
+  width: 100%;
+}
+.sf-navbar.sf-style-spring li ul li ul {
+  background-color: transparent;
+}
+.sf-menu.sf-style-spring .sf-sub-indicator {
+  background-image: url('../../images/arrows-777777.png');
+}
+.sf-menu.rtl.sf-style-spring .sf-sub-indicator {
+  background-image: url('../../images/arrows-777777-rtl.png');
+}

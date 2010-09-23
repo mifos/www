@@ -1,0 +1,210 @@
+<?php
+// $Id: node_widget.module,v 1.8 2010/03/17 19:41:34 antoniodemarco Exp $
+
+/**
+ * @file
+ * Provide an input widget for Node Reference module that allows to directly create and reference nodes.
+ */
+
+define('NODE_WIDGET_VALUES', 'node_widget');
+
+/**
+ * Implementation of hook_init()
+ */
+function node_widget_init() {
+  $path = drupal_get_path('module', 'node_widget');
+  drupal_add_css($path .'/node_widget.css', 'module');
+  foreach (array('includes', 'modules') as $subdir) {
+    foreach (file_scan_directory($path .'/'. $subdir, '.*\.inc$') as $file) {
+      module_load_include('inc', 'node_widget', $subdir .'/'. $file->name);
+    }
+  }
+}
+
+/**
+ * Implementation of hook_menu_alter()
+ */
+function node_widget_menu_alter(&$items) {
+
+  // Override default filefield AHAH callback
+  if (isset($items['filefield/ahah/%/%/%'])) {
+    $items['filefield/ahah/%/%/%']['page callback'] = 'filefield_node_widget_js';
+    $items['filefield/ahah/%/%/%']['page arguments'] = array(2, 3, 4, 5, 6);
+  }
+}
+
+/**
+ * Implementation of hook_elements().
+ */
+function node_widget_elements() {
+
+  $elements = array();
+  $elements['node_widget_element'] = array(
+    '#input' => TRUE,
+    '#columns' => array('nid'),
+    '#process' => array('node_widget_element_process'),
+    '#value_callback' => 'node_widget_element_value',
+  );
+  // Filefield and Imagefield support
+  $elements['filefield_widget']['#process'][] = 'filefield_widget_node_widget_process';
+  $elements['imagefield_widget']['#process'][] = 'imagefield_widget_node_widget_process';
+  return $elements;
+}
+
+/**
+ * Implementation of hook_widget_info().
+ */
+function node_widget_widget_info() {
+  return array(
+    'node_widget_node_form' => array(
+      'label' => t('Node Widget: create and reference nodes'),
+      'field types' => array('nodereference'),
+      'multiple values' => CONTENT_HANDLE_CORE,
+      'callbacks' => array(
+        'default value' => CONTENT_CALLBACK_CUSTOM
+      ),
+      'description' => t('Directly create the nodes you want to reference.'),
+    ),
+  );
+}
+
+
+/**
+ * Implementation of hook_widget()
+ */
+function node_widget_widget(&$form, &$form_state, $field, $items, $delta = 0) {
+  $element = array();
+  if ($field['widget']['type'] == 'node_widget_node_form') {
+
+    node_widget_add_callback($form, '#after_build', 'node_widget_node_form_after_build');
+    node_widget_add_callback($form, '#validate', 'node_widget_node_form_validate');
+    node_widget_add_callback($form, '#submit', 'node_widget_node_form_submit');
+
+    $type = array_shift(array_filter($field['referenceable_types'], 'is_string'));
+    $element = array(
+      '#title' => $field['widget']['label'],
+      '#type' => 'node_widget_element',
+      '#node_type' => $type,
+      '#default_value' => $items,
+    );
+
+  }
+  return $element;
+}
+
+/**
+ * Implementation of hook_widget_settings().
+ */
+function node_widget_widget_settings($op, $widget) {
+
+  $types = node_get_types();
+  switch ($op) {
+    case 'form':
+      $form = array();
+      foreach ($types as $type) {
+
+        $settings['fields'] = array();
+      	$fields = module_invoke_all('node_widget_widget_settings', $type);
+        foreach ($fields as $field) {
+          $default_value = isset($widget['enable_'. $type->type .'_'. $field['name']]) ? $widget['enable_'. $type->type .'_'. $field['name']] : TRUE;
+          $default_value = $field['supported'] ? $default_value : FALSE;
+          $field_label = $field['label'] .' <em>('. $field['name'] .') </em>';
+          $settings['fields'][]['enable_'. $type->type .'_'. $field['name']] = array(
+            '#type' => 'checkbox',
+            '#disabled' => !$field['supported'],
+            '#title' => $field_label,
+            '#default_value' => $default_value,
+            '#description' => $field['message'],
+          );
+        }
+        $form[$type->type] = array(
+          '#type' => 'fieldset',
+          '#title' => $type->name,
+          '#collapsible' => TRUE,
+          '#collapsed' => TRUE,
+        );
+        $form[$type->type][] = $settings;
+
+      }
+      return $form;
+
+    case 'save':
+      $elements = array();
+      foreach ($types as $type) {
+        $settings['fields'] = array('#theme' => 'node_widget_widget_settings');
+        $fields = module_invoke_all('node_widget_widget_settings', $type);
+        foreach ($fields as $field) {
+          if ($field['supported']) {
+            $elements[] = 'enable_'. $type->type .'_'. $field['name'];
+          }
+        }
+      }
+      return $elements;
+  }
+}
+
+/**
+ * The #value_callback for the node_widget_element type element.
+ */
+function node_widget_element_value(&$element, $edit = FALSE) {
+  $values = array();
+
+  $delta = $element['#delta'];
+  // Populate default values
+  if ($element['#default_value'][$delta]['nid']) {
+    $nid = $element['#default_value'][$delta]['nid'];
+    $values[$delta] = node_load($nid);
+  }
+  // Restore node widget fields values during a preview
+  elseif (isset($element['#default_value'][$delta][NODE_WIDGET_VALUES])) {
+    $values[$delta] = (object) $element['#default_value'][$delta][NODE_WIDGET_VALUES];
+  }
+
+  return $values;
+}
+
+/**
+ * Implementation of #process callback for node_widget_element.
+ *
+ * @see: node_widget_elements()
+ */
+function node_widget_element_process($element, $edit, &$form_state, &$form) {
+
+  $field_name = $element['#field_name'];
+  $node_widget = new node_widget($form['#field_info'][$field_name], $form, $form_state);
+  $node = $element['#value'][$element['#delta']];
+  $node->type = $node_widget->get_referenced_type();
+  $_form_state['#node_widget_settings'] = $node_widget->get_widget_settings();
+  $element[NODE_WIDGET_VALUES] = drupal_retrieve_form($node->type .'_node_widget_form', $_form_state, $node);
+
+//  if (!isset($node->nid)) {
+//    $element[NODE_WIDGET_VALUES] += node_widget_select_element($node->type);
+//  }
+  return $element;
+}
+
+function node_widget_select_element($type) {
+
+  $options[] = t('-- Create --');
+  $result = db_query("SELECT nid, title FROM {node} WHERE type = '%s'", $type);
+  while ($node = db_fetch_object($result)) {
+    $options[$node->nid] = $node->title;
+  }
+  $element['select_node'] = array(
+    '#type' => 'select',
+    '#title' => t('Create or select a node'),
+    '#options' => $options,
+    '#default_value' => 0,
+    '#weight' => -98,
+  );
+  return $element;
+}
+
+/**
+ * Add callback to form object
+ */
+function node_widget_add_callback(&$form, $type, $callback) {
+  if (empty($form[$type]) || !in_array($callback, $form[$type])) {
+    $form[$type][] = $callback;
+  }
+}

@@ -1,0 +1,46 @@
+<?php
+// $Id: crowd.install,v 1.2.2.4 2010/03/31 17:03:57 ebeyrent Exp $
+
+/**
+ * @file 
+ *   Crowd module install file
+ */
+
+/**
+ * Implementation of hook_install()
+ */
+function crowd_install() {
+  db_query("UPDATE {system} SET weight = 1000 WHERE name = 'crowd'");
+}
+
+/**
+ * Implementation of hook_requirements()
+ */
+function crowd_requirements($phase) {
+  $requirements = array();
+  $t = get_t();
+  switch ($phase) {
+    case 'runtime': 
+    case 'install':
+      // PEAR library is required - check to make sure the Services_Atlassian_Crowd class exists
+      require_once('Services/Atlassian/Crowd.php');
+      if (class_exists('Services_Atlassian_Crowd', false)) {
+        $requirements['crowd'] = array(
+          'title' => t('Services_Atlassian_Crowd PEAR Package'),
+          'value' => '',
+          'severity' => REQUIREMENT_OK,
+          'description' => t('The <a href="@url">Services_Atlassian_Crowd PEAR package</a> for PHP has been correctly installed.', array('@url' => 'http://pear.php.net/package/Services_Atlassian_Crowd')),
+        );
+      }
+      else {
+        $requirements['crowd'] = array(
+          'title' => t('Services_Atlassian_Crowd PEAR Package'),
+          'value' => t(''),
+          'severity' => REQUIREMENT_ERROR,
+          'description' => t('The Services_Atlassian_Crowd PEAR package for PHP is missing. Please check the <a href="@url">Services_Atlassian_Crowd PEAR documentation</a> for information on how to correct this.', array('@url' => 'http://pear.php.net/package/Services_Atlassian_Crowd')),
+        );
+      }
+      break;
+  }
+  return $requirements;
+}

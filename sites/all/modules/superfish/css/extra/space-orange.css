@@ -1,0 +1,31 @@
+/* $Id: space-orange.css,v 1.4 2010/03/27 09:18:40 mehrpadin Exp $ */
+.sf-menu.sf-style-space-orange a {
+  border: 1px outset #000000;
+  color: #f1f1f1 !important;
+}
+.sf-navbar.sf-style-space-orange a {
+  border: 0;
+}
+.sf-menu.sf-style-space-orange li,
+.sf-menu.sf-style-space-orange li li,
+.sf-menu.sf-style-space-orange li li li,
+.sf-navbar.sf-style-space-orange {
+  background: #333333;
+}
+.sf-menu.sf-style-space-orange li:hover,
+.sf-menu.sf-style-space-orange li.sfHover,
+.sf-menu.sf-style-space-orange li.active a,
+.sf-menu.sf-style-space-orange a:focus,
+.sf-menu.sf-style-space-orange a:hover,
+.sf-menu.sf-style-space-orange a:active,
+.sf-navbar.sf-style-space-orange li li {
+  background: #dc5300;
+  color: #ffffff !important;
+}
+.sf-navbar.sf-style-space-orange li ul {
+  background-color: #dc5300;
+  width: 100%;
+}
+.sf-navbar.sf-style-space-orange li ul li ul {
+  background-color: transparent;
+}

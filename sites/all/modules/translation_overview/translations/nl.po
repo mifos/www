@@ -1,0 +1,272 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: translation_overview - Dutch Translation\n"
+"POT-Creation-Date: 2009-07-30 00:58+0200\n"
+"PO-Revision-Date: 2009-08-19 20:35+0100\n"
+"Last-Translator: Erik Stielstra <sutharsan a t  drupal dot org>\n"
+"Language-Team: Dutch Translation Team\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Dutch\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Poedit-Country: NETHERLANDS\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: translation_overview.pages.inc:5
+msgid "Translations of %title"
+msgstr "Vertaling van %title"
+
+#: translation_overview.pages.inc:43
+msgid "High"
+msgstr "Hoog"
+
+#: translation_overview.pages.inc:44
+#: translation_overview.module:320
+msgid "Normal"
+msgstr "Normaal"
+
+#: translation_overview.pages.inc:45
+msgid "Ignore"
+msgstr "Negeren"
+
+#: translation_overview.pages.inc:81
+msgid "n/a"
+msgstr "n.v.t."
+
+#: translation_overview.pages.inc:95
+msgid "Submit"
+msgstr "Opslaan"
+
+#: translation_overview.pages.inc:111
+#, fuzzy
+msgid "The translation priorities have been saved."
+msgstr "De vertalingsprioriteit is opgeslagen. "
+
+#: translation_overview.pages.inc:114
+#, fuzzy
+msgid "There was a problem saving the translation priorities."
+msgstr "Er was een probleem bij het opslaan van de vertalingsprioriteiten. "
+
+#: translation_overview.pages.inc:125
+msgid "Language"
+msgstr "Taal"
+
+#: translation_overview.pages.inc:126;339;408
+msgid "Title"
+msgstr "Titel"
+
+#: translation_overview.pages.inc:127;159;409
+msgid "Status"
+msgstr "Status"
+
+#: translation_overview.pages.inc:131
+msgid "Priority"
+msgstr "Prioriteit"
+
+#: translation_overview.pages.inc:161
+msgid "Published"
+msgstr "Gepubliceerd"
+
+#: translation_overview.pages.inc:162
+msgid "Not published"
+msgstr "Niet gepubliceerd"
+
+#: translation_overview.pages.inc:163
+msgid "Promoted"
+msgstr "Zichtbaar op de voorpagina"
+
+#: translation_overview.pages.inc:164
+msgid "Not promoted"
+msgstr "Niet zichtbaar op de voorpagina"
+
+#: translation_overview.pages.inc:165
+msgid "Sticky"
+msgstr "Vastgeplakt (sticky)"
+
+#: translation_overview.pages.inc:166
+msgid "Not sticky"
+msgstr "Niet vastgeplakt (sticky)"
+
+#: translation_overview.pages.inc:167
+msgid "Up-to-date translation"
+msgstr "Vertaling is actueel"
+
+#: translation_overview.pages.inc:168
+msgid "Outdated translation"
+msgstr "Verouderde vertaling"
+
+#: translation_overview.pages.inc:173
+msgid "type"
+msgstr "type"
+
+#: translation_overview.pages.inc:179
+msgid "category"
+msgstr "categorie"
+
+#: translation_overview.pages.inc:201
+#, fuzzy
+msgid "Show only items where"
+msgstr "Toon enkel items waarvan"
+
+#: translation_overview.pages.inc:216
+msgid "<em>and</em> where <strong>%a</strong> is <strong>%b</strong>"
+msgstr "<em>en</em> waarvan <strong>%a</strong> gelijk is aan <strong>%b</strong>"
+
+#: translation_overview.pages.inc:219
+msgid "<strong>%a</strong> is <strong>%b</strong>"
+msgstr "<strong>%a</strong> gelijk is aan <strong>%b</strong>"
+
+#: translation_overview.pages.inc:233;253
+msgid "Refine"
+msgstr "Verfijnen"
+
+#: translation_overview.pages.inc:233;252
+msgid "Filter"
+msgstr "Filter"
+
+#: translation_overview.pages.inc:235;265
+msgid "Undo"
+msgstr "Ongedaan maken"
+
+#: translation_overview.pages.inc:236;268
+msgid "Reset"
+msgstr "Opnieuw instellen"
+
+#: translation_overview.pages.inc:334;403
+msgid "There are no translatable node types on this site."
+msgstr "Er zijn geen vertaalbare inhoudstypen op deze website"
+
+#: translation_overview.pages.inc:340;410
+msgid "Type"
+msgstr "Type"
+
+#: translation_overview.pages.inc:341;412
+msgid "Created"
+msgstr "Aangemaakt"
+
+#: translation_overview.pages.inc:411
+msgid "Source language"
+msgstr "Brontaal"
+
+#: translation_overview.module:19
+msgid "The table uses the following symbols to indicate the translation status: !original, !current, !outofdate, !missing."
+msgstr "De tabel gebruikt de volgende symbolen om de vertaalstatus aan te geven: !original, !current, !outofdate, !missing."
+
+#: translation_overview.module:319
+msgid "High priority"
+msgstr "Hoge prioriteit"
+
+#: translation_overview.module:321
+msgid "Ignored"
+msgstr "Genegeerd"
+
+#: translation_overview.module:329
+msgid "unpublished"
+msgstr "ongepubliceerd"
+
+#: translation_overview.module:333
+msgid "Original"
+msgstr "Origineel"
+
+#: translation_overview.module:334
+msgid "original"
+msgstr "origineel"
+
+#: translation_overview.module:337
+msgid "Complete"
+msgstr "Voltooid"
+
+#: translation_overview.module:338
+msgid "completed translation"
+msgstr "voltooide vertaling"
+
+#: translation_overview.module:341
+msgid "Out-of-date"
+msgstr "Verouderd"
+
+#: translation_overview.module:342
+msgid "out-of-date translation"
+msgstr "verouderde vertaling"
+
+#: translation_overview.module:345
+msgid "Untranslated"
+msgstr "Onvertaald"
+
+#: translation_overview.module:346
+msgid "untranslated content"
+msgstr "onvertaalde inhoud"
+
+#: translation_overview.module:350
+msgid "with a note"
+msgstr "met een opmerking"
+
+#: translation_overview.module:355
+msgid "Click to edit it."
+msgstr "Klik om te wijzigen. "
+
+#: translation_overview.module:358
+msgid "Click to add it."
+msgstr "Klik om toe te voegen. "
+
+#: translation_overview.module:361
+msgid "Click to view it."
+msgstr "Klik om weer te geven. "
+
+#: translation_overview.module:399;411
+msgid "translation_overview"
+msgstr "translation_overview"
+
+#: translation_overview.module:399
+msgid "Added a column for %langcode to the translation_overview_priority table."
+msgstr "Een kolom voor %langcode werd aan de translation_overview_priority tabel toegevoegd"
+
+#: translation_overview.module:411
+msgid "Dropped the %langcode column from the translation_overview_priority table."
+msgstr "De %langcode kolom werd uit de translation_overview_priority tabel verwijderd."
+
+#: translation_overview.module:43
+msgid "view translation overview assigments"
+msgstr "Vertalingsoverzicht opdracht weergeven"
+
+#: translation_overview.module:45
+msgid "manage "
+msgstr "beheren"
+
+#: translation_overview.module:45
+msgid " translation overview priorities"
+msgstr "Vertalingsoverzicht prioriteiten"
+
+#: translation_overview.module:61
+#: translation_overview.info:0
+msgid "Translation overview"
+msgstr "Vertalingsoverzicht"
+
+#: translation_overview.module:63
+msgid "View the translation status of the site's content."
+msgstr "De vertalingsstatus van de website's inhoud bekijken. "
+
+#: translation_overview.module:69
+msgid "Translator assigments"
+msgstr "Vertalingsopdracht"
+
+#: translation_overview.module:70
+msgid "View the translations assignments."
+msgstr "Bekijk de vertalingsopdrachten"
+
+#: translation_overview.install:26;66
+msgid "Track the priority in which nodes should be translated into various languages."
+msgstr "De prioriteit bewaken van de inhoud die in verschillende talen vertaald moeten worden. "
+
+#: translation_overview.install:29;69
+msgid "The identifier for a node or set of node translations."
+msgstr "De naam voor een vertaling van een node of een set van nodes"
+
+#: translation_overview.info:0
+msgid "Provides an overview of the translation status of the site's content."
+msgstr "Bied een statusoverzicht van de vertaling van de website-inhoud. "
+
+#: translation_overview.info:0
+msgid "Multilanguage"
+msgstr "Meertalig"
+

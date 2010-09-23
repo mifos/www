@@ -1,0 +1,41 @@
+/* $Id: light-blue.css,v 1.4 2010/03/27 09:18:40 mehrpadin Exp $ */
+.sf-menu.sf-style-light-blue a {
+  border: 1px solid #b7d5f3;
+  color: #00305f !important;
+}
+.sf-navbar.sf-style-light-blue a {
+  border: 0;
+}
+.sf-menu.sf-style-light-blue li,
+.sf-navbar.sf-style-light-blue {
+  background: #d9ecff;
+}
+.sf-menu.sf-style-light-blue li li {
+  background: #d1e8ff;
+}
+.sf-menu.sf-style-light-blue li li li {
+  background: #c6e3ff;
+}
+.sf-menu.sf-style-light-blue li:hover,
+.sf-menu.sf-style-light-blue li.sfHover,
+.sf-menu.sf-style-light-blue li.active a,
+.sf-menu.sf-style-light-blue a:focus,
+.sf-menu.sf-style-light-blue a:hover,
+.sf-menu.sf-style-light-blue a:active,
+.sf-navbar.sf-style-light-blue li li{
+  background: #b5d8fa;
+  color: #001020 !important;
+}
+.sf-navbar.sf-style-light-blue li ul {
+  background-color: #b5d8fa;
+  width: 100%;
+}
+.sf-navbar.sf-style-light-blue li ul li ul {
+  background-color: transparent;
+}
+.sf-menu.sf-style-light-blue .sf-sub-indicator {
+  background-image: url('../../images/arrows-ffffff.png');
+}
+.sf-menu.rtl.sf-style-light-blue .sf-sub-indicator {
+  background-image: url('../../images/arrows-ffffff-rtl.png');
+}

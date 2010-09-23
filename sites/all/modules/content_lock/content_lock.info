@@ -1,0 +1,12 @@
+; $Id: content_lock.info,v 1.2 2010/08/30 01:22:28 ohnobinki Exp $
+name = Content locking (edit lock)
+description = Prevents users to edit the same node at the same time. The second user can enter the edit-mode and gets notified
+core = 6.x
+project = "content_lock"
+package = "Drupal Wiki"
+; Information added by drupal.org packaging script on 2010-09-02
+version = "6.x-2.1"
+core = "6.x"
+project = "content_lock"
+datestamp = "1283456206"
+

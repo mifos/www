@@ -1,0 +1,36 @@
+/* $Id: coffee.css,v 1.4 2010/03/27 09:18:40 mehrpadin Exp $ */
+.sf-menu.sf-style-coffee a {
+  border: 1px solid #381301;
+  color: #f1dec6 !important;
+  font-weight: bold;
+}
+.sf-navbar.sf-style-coffee a {
+  border: 0;
+}
+.sf-menu.sf-style-coffee li,
+.sf-navbar.sf-style-coffee {
+  background: #210c02;
+}
+.sf-menu.sf-style-coffee li li {
+  background: #290f03;
+}
+.sf-menu.sf-style-coffee li li li {
+  background: #311304;
+}
+.sf-menu.sf-style-coffee li:hover,
+.sf-menu.sf-style-coffee li.sfHover,
+.sf-menu.sf-style-coffee li.active a,
+.sf-menu.sf-style-coffee a:focus,
+.sf-menu.sf-style-coffee a:hover,
+.sf-menu.sf-style-coffee a:active,
+.sf-navbar.sf-style-coffee li li {
+  background: #52250f;
+  color: #ffffff !important;
+}
+.sf-navbar.sf-style-coffee li ul {
+  background-color: #52250f;
+  width: 100%;
+}
+.sf-navbar.sf-style-coffee li ul li ul {
+  background-color: transparent;
+}

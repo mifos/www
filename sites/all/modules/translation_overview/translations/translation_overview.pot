@@ -1,0 +1,280 @@
+# $Id: translation_overview.pot,v 1.1.4.2 2009/06/06 16:25:05 hass Exp $
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  translation_overview.admin.inc,v 1.1 2008/09/11 23:21:07 drewish
+#  translation_overview.pages.inc,v 1.8 2008/10/23 01:51:12 drewish
+#  translation_overview.module,v 1.7 2008/10/23 01:51:12 drewish
+#  translation_overview.info,v 1.4 2008/09/25 20:10:38 drewish
+#  translation_overview.install,v 1.2 2008/10/17 23:57:24 drewish
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2009-06-06 18:21+0200\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: translation_overview.admin.inc:32 translation_overview.pages.inc:125
+msgid "Language"
+msgstr ""
+
+#: translation_overview.admin.inc:45
+msgid "Who manages the languages"
+msgstr ""
+
+#: translation_overview.pages.inc:5
+msgid "Translations of %title"
+msgstr ""
+
+#: translation_overview.pages.inc:43
+msgid "High"
+msgstr ""
+
+#: translation_overview.pages.inc:44 translation_overview.module:303
+msgid "Normal"
+msgstr ""
+
+#: translation_overview.pages.inc:45
+msgid "Ignore"
+msgstr ""
+
+#: translation_overview.pages.inc:81
+msgid "n/a"
+msgstr ""
+
+#: translation_overview.pages.inc:95
+msgid "Submit"
+msgstr ""
+
+#: translation_overview.pages.inc:111
+msgid "The translation priorities have been saved."
+msgstr ""
+
+#: translation_overview.pages.inc:114
+msgid "There was a problem saving the translation priorities."
+msgstr ""
+
+#: translation_overview.pages.inc:126;339;408
+msgid "Title"
+msgstr ""
+
+#: translation_overview.pages.inc:127;159;409
+msgid "Status"
+msgstr ""
+
+#: translation_overview.pages.inc:131
+msgid "Priority"
+msgstr ""
+
+#: translation_overview.pages.inc:161
+msgid "Published"
+msgstr ""
+
+#: translation_overview.pages.inc:162
+msgid "Not published"
+msgstr ""
+
+#: translation_overview.pages.inc:163
+msgid "Promoted"
+msgstr ""
+
+#: translation_overview.pages.inc:164
+msgid "Not promoted"
+msgstr ""
+
+#: translation_overview.pages.inc:165
+msgid "Sticky"
+msgstr ""
+
+#: translation_overview.pages.inc:166
+msgid "Not sticky"
+msgstr ""
+
+#: translation_overview.pages.inc:167
+msgid "Up-to-date translation"
+msgstr ""
+
+#: translation_overview.pages.inc:168
+msgid "Outdated translation"
+msgstr ""
+
+#: translation_overview.pages.inc:173
+msgid "type"
+msgstr ""
+
+#: translation_overview.pages.inc:179
+msgid "category"
+msgstr ""
+
+#: translation_overview.pages.inc:201
+msgid "Show only items where"
+msgstr ""
+
+#: translation_overview.pages.inc:216
+msgid "<em>and</em> where <strong>%a</strong> is <strong>%b</strong>"
+msgstr ""
+
+#: translation_overview.pages.inc:219
+msgid "<strong>%a</strong> is <strong>%b</strong>"
+msgstr ""
+
+#: translation_overview.pages.inc:233;253
+msgid "Refine"
+msgstr ""
+
+#: translation_overview.pages.inc:233;252
+msgid "Filter"
+msgstr ""
+
+#: translation_overview.pages.inc:235;265
+msgid "Undo"
+msgstr ""
+
+#: translation_overview.pages.inc:236;268
+msgid "Reset"
+msgstr ""
+
+#: translation_overview.pages.inc:334;403
+msgid "There are no translatable node types on this site."
+msgstr ""
+
+#: translation_overview.pages.inc:340;410
+msgid "Type"
+msgstr ""
+
+#: translation_overview.pages.inc:341;412
+msgid "Created"
+msgstr ""
+
+#: translation_overview.pages.inc:411
+msgid "Source language"
+msgstr ""
+
+#: translation_overview.module:14
+msgid "These settings control which roles are allowed to assign the translation priorities for each language. Only roles with the \"manage translation overview priorities\" permission are show."
+msgstr ""
+
+#: translation_overview.module:22
+msgid "The table uses the following symbols to indicate the translation status: !original Original language, !current Current translation, !outofdate Out-of-date translation, !missing Untranslated."
+msgstr ""
+
+#: translation_overview.module:302
+msgid "High priority"
+msgstr ""
+
+#: translation_overview.module:304
+msgid "Ignored"
+msgstr ""
+
+#: translation_overview.module:312
+msgid "unpublished"
+msgstr ""
+
+#: translation_overview.module:316
+msgid "Original"
+msgstr ""
+
+#: translation_overview.module:317
+msgid "original"
+msgstr ""
+
+#: translation_overview.module:320
+msgid "Complete"
+msgstr ""
+
+#: translation_overview.module:321
+msgid "completed translation"
+msgstr ""
+
+#: translation_overview.module:324
+msgid "Out-of-date"
+msgstr ""
+
+#: translation_overview.module:325
+msgid "out-of-date translation"
+msgstr ""
+
+#: translation_overview.module:328
+msgid "Untranslated"
+msgstr ""
+
+#: translation_overview.module:329
+msgid "untranslated content"
+msgstr ""
+
+#: translation_overview.module:333
+msgid "with a note"
+msgstr ""
+
+#: translation_overview.module:336
+msgid "Click to edit it."
+msgstr ""
+
+#: translation_overview.module:339
+msgid "Click to add it."
+msgstr ""
+
+#: translation_overview.module:342
+msgid "Click to view it."
+msgstr ""
+
+#: translation_overview.module:379;391;0
+msgid "translation_overview"
+msgstr ""
+
+#: translation_overview.module:379
+msgid "Added a column for %langcode to the translation_overview_priority table."
+msgstr ""
+
+#: translation_overview.module:391
+msgid "Dropped the %langcode column from the translation_overview_priority table."
+msgstr ""
+
+#: translation_overview.module:51
+msgid "manage translation overview priorities"
+msgstr ""
+
+#: translation_overview.module:52
+msgid "view translation overview assigments"
+msgstr ""
+
+#: translation_overview.module:66;97 translation_overview.info:0
+msgid "Translation overview"
+msgstr ""
+
+#: translation_overview.module:68
+msgid "View the translation status of the site's content."
+msgstr ""
+
+#: translation_overview.module:74
+msgid "Translator assigments"
+msgstr ""
+
+#: translation_overview.module:75
+msgid "View the translations assignments."
+msgstr ""
+
+#: translation_overview.module:98
+msgid "Settings for the translation overview."
+msgstr ""
+
+#: translation_overview.install:28;63
+msgid "Track the priority in which nodes should be translated into various languages."
+msgstr ""
+
+#: translation_overview.install:31;66
+msgid "The identifier for a node or set of node translations."
+msgstr ""
+
+#: translation_overview.info:0
+msgid "Provides an overview of the translation status of the site's content."
+msgstr ""
+

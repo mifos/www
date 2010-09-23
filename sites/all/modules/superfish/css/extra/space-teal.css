@@ -1,0 +1,31 @@
+/* $Id: space-teal.css,v 1.4 2010/03/27 09:18:40 mehrpadin Exp $ */
+.sf-menu.sf-style-space-teal a {
+  border: 1px outset #000000;
+  color: #f1f1f1 !important;
+}
+.sf-navbar.sf-style-space-teal a {
+  border: 0;
+}
+.sf-menu.sf-style-space-teal li,
+.sf-menu.sf-style-space-teal li li,
+.sf-menu.sf-style-space-teal li li li,
+.sf-navbar.sf-style-space-teal {
+  background: #333333;
+}
+.sf-menu.sf-style-space-teal li:hover,
+.sf-menu.sf-style-space-teal li.sfHover,
+.sf-menu.sf-style-space-teal li.active a,
+.sf-menu.sf-style-space-teal a:focus,
+.sf-menu.sf-style-space-teal a:hover,
+.sf-menu.sf-style-space-teal a:active,
+.sf-navbar.sf-style-space-teal li li {
+  background: #08997f;
+  color: #ffffff !important;
+}
+.sf-navbar.sf-style-space-teal li ul {
+  background-color: #08997f;
+  width: 100%;
+}
+.sf-navbar.sf-style-space-teal li ul li ul {
+  background-color: transparent;
+}

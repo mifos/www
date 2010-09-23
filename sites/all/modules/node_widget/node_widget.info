@@ -1,0 +1,14 @@
+; $Id: node_widget.info,v 1.1 2010/02/09 12:27:12 antoniodemarco Exp $
+
+name = Node Widget
+description = Provide an input widget for Node Reference module that allows to directly create and reference nodes.
+core = 6.x
+package = CCK
+dependencies[] = nodereference
+
+; Information added by drupal.org packaging script on 2010-07-11
+version = "6.x-1.x-dev"
+core = "6.x"
+project = "node_widget"
+datestamp = "1278835071"
+

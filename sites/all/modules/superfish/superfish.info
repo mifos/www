@@ -1,0 +1,13 @@
+name = Superfish
+description = jQuery Superfish plugin for your Drupal menus.
+dependencies[] = menu
+version = "6.x-1.6"
+core = "6.x"
+project = "superfish"
+datestamp = "1271248157"
+; Information added by drupal.org packaging script on 2010-04-13
+version = "6.x-1.6"
+core = "6.x"
+project = "superfish"
+datestamp = "1271190308"
+

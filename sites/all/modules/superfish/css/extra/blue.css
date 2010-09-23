@@ -1,0 +1,35 @@
+/* $Id: blue.css,v 1.4 2010/03/27 09:18:40 mehrpadin Exp $ */
+.sf-menu.sf-style-blue a {
+  border: 1px outset #003973;
+  color: #ffffff !important;
+}
+.sf-navbar.sf-style-blue a {
+  border: 0;
+}
+.sf-menu.sf-style-blue li,
+.sf-navbar.sf-style-blue {
+  background: #095cb1;
+}
+.sf-menu.sf-style-blue li li {
+  background: #0151a4;
+}
+.sf-menu.sf-style-blue li li li {
+  background: #00478f;
+}
+.sf-menu.sf-style-blue li:hover,
+.sf-menu.sf-style-blue li.sfHover,
+.sf-menu.sf-style-blue li.active a,
+.sf-menu.sf-style-blue a:focus,
+.sf-menu.sf-style-blue a:hover,
+.sf-menu.sf-style-blue a:active,
+.sf-navbar.sf-style-blue li li {
+  background: #3270c5;
+  color: #ffea00 !important;
+}
+.sf-navbar.sf-style-blue li ul {
+  background-color: #3270c5;
+  width: 100%;
+}
+.sf-navbar.sf-style-blue li ul li ul {
+  background-color: transparent;
+}

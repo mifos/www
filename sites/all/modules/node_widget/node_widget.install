@@ -1,0 +1,19 @@
+<?php
+// $Id: node_widget.install,v 1.1 2010/03/05 13:47:20 antoniodemarco Exp $
+
+/**
+ * Implementation of hook_install()
+ */
+function node_widget_install() {
+  // Force new AHAH callback for filefield support
+  // @see node_widget_menu_alter()
+  menu_rebuild();
+}
+
+/**
+ * Implementation of hook_update_X()
+ */
+function node_widget_update_6000() {
+  menu_rebuild();
+  return array();
+}
