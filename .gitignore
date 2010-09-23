@@ -1,3 +1,4 @@
+backup/
 robots.txt
-settings.php
-sites/default/files
+sites/*/files
+sites/*/settings.php
