@@ -1,7 +1,0 @@
-#!/bin/bash
-
-# push user-generated content (UGC) to prod
-
-# test UGC: /var/www/test_mifos_com/sites/mifos.com/files
-# ...rsync to...
-# prod UGC: /var/www/mifos/sites/mifos.com/files
