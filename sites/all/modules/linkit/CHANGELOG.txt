@@ -1,46 +1,10 @@
-// $Id: CHANGELOG.txt,v 1.38.2.18 2010/10/31 16:09:59 anon Exp $
+// $Id: CHANGELOG.txt,v 1.31 2010/06/26 17:36:18 anon Exp $
 Linkit x.x-x.x, xxxx-xx-xx
-
-Linkit 6.x-1.7, xxxx-xx-xx
-------------------------------
-Changed by anon: Changed mainterns in README.txt
-#855436, #939448, #941320 Fixed by anon: Installation problems when both 
-  Pathfilter and Pathologic was missing. 
-#946092 by anon: Display the book a node belong to in the autocomplete list
-#947726 by anon: Display the conent-type name insead of content-type type
-Changed by anon: Removed some CSS styles to make the dashboard more like the 
-  default theme
-#906476 by anon: Added ability to add an #anchor via the attributes section
-Added by anon: Message via drupal_set_message when Pathfilter and Pathologic 
-  is not installed
-by anon: Added description to Linkit settings menu callback
-by anon: Fixed some "PHP notice: Undefined index
-#942798 by anon: Added settings for which content types should appear in the
-  suggestions
-#953454 by anon: change callback from linkit_dashboard to linkit_dashboard_page
-#955356 by blixxxa: Added Swedish translation
-
-Linkit 6.x-1.6, 2010-09-15
-------------------------------
-#867626 Fixed by anon: When inserting or edit an "a" tag, "link_text" attribute 
-  is added to the "a" tag when using CKeditor
-#860832 Added by anon: Integrate Linkit with IMCE
-Fixed by anon: Some standard coding
-Fixed by anon: Deleted some unused code
-#894520 Fixed by jerodfritz: Undefined index for $form['#after_build']
-
-Linkit 6.x-1.5, 2010-07-21
-------------------------------
-#831788 Added by anon: Allow inserting links without selecting text/element
-by anon: Changed linkit.css so its look the same with the admin module 
-  (http://drupal.org/project/admin) and the theme Rubik
-#772594 Added by anon: FCKeditor support for both stand alone AND with wysiwyg
-#838734 Fixed by anon: Endless loading when editing an external link
 
 Linkit 6.x-1.4, 2010-06-26
 ------------------------------
 by anon: Added node created- and changed time to result list.
-#831786 by anon: Changed dependencies, either Pathfilter module OR Pathologic
+#831786 by anon: Changed dependencys, either Pathfilter module OR Pathologic
   module should be installed to install linkit module.
 #831688 by anon: Added support for search styled link in edit mode 
   (Title [path:internal:node/1])
@@ -50,8 +14,8 @@ by anon: Added uninstall hook
 #824500, #822236 by anon: Added settings to allow users to configurate the 
   search results for nodes with nid, content type, language, status.
 by anon: Changed how the hooks works to make them more configurable.
-#837280 by anon: Fixed the commands for tinymce button so that it dont override
- the  original link button.
+#837280 by anon: Fixed the commands for tinymce button so that it dont override the 
+  original link button.
 #807974 by anon, grendzy: linkit should not override theme's form styles.
 
 Linkit 6.x-1.3, 2010-04-03

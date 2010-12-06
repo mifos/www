@@ -13,7 +13,6 @@
     <div id="overview-main">
         <p>Tabs are generally used to break content into multiple sections that can be swapped to save space, much like an accordion.</p>
 <p>By default a tab widget will swap between tabbed sections onClick, but the events can be changed to onHover through an option. Tab content can be loaded via Ajax by setting an href on a tab.</p>
-<p><em>NOTE: Tabs created dynamically using .tabs( "add", ... ) are given an id of ui-tabs-NUM, where NUM is an auto-incrementing id. If you use this naming convention for your own elements, you may encounter problems.</em></p>
 <table id="toc" class="toc" summary="Contents"><tr><td><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1"><a href="#Events"><span class="tocnumber">1</span> <span class="toctext">Events</span></a></li>
@@ -198,7 +197,9 @@ A simple jQuery UI Tabs.<br />
   &lt;link href=&quot;http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;/&gt;
   &lt;script src=&quot;http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js&quot;&gt;&lt;/script&gt;
   &lt;script src=&quot;http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js&quot;&gt;&lt;/script&gt;
-  
+  &lt;script type=&quot;text/javascript&quot; src=&quot;http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js&quot;&gt;&lt;/script&gt;
+
   &lt;script&gt;
   $(document).ready(function() {
     $(&quot;#tabs&quot;).tabs();
@@ -755,7 +756,7 @@ $( ".selector" ).tabs( "option", "selected", 3 );</code></pre>
     </dl>
   </div>
   <div class="option-description">
-    <p>The HTML content of this string is shown in a tab title while remote content is loading. Pass in empty string to deactivate that behavior. An span element must be present in the A tag of the title, for the spinner content to be visible.</p>
+    <p>The HTML content of this string is shown in a tab title while remote content is loading. Pass in empty string to deactivate that behavior.</p>
   </div>
   <div class="option-examples">
     <h4>Code examples</h4>
@@ -1302,7 +1303,7 @@ $( ".selector" ).tabs( "option", "tabTemplate", '&lt;div&gt;&lt;a href&#61;"#&#1
     </dl>
   </div>
   <div class="method-description">
-    <p>Enable a disabled tab.  To enable more than one tab at once reset the disabled property like: <code>$('#example').tabs("option","disabled",[]);</code>. The second argument is the zero-based index of the tab to be enabled.</p>
+    <p>Enable a disabled tab.  To enable more than one tab at once reset the disabled property like: <code>$('#example').data('disabled.tabs', []);</code>. The second argument is the zero-based index of the tab to be enabled.</p>
   </div>
 </li>
 
@@ -1324,7 +1325,7 @@ $( ".selector" ).tabs( "option", "tabTemplate", '&lt;div&gt;&lt;a href&#61;"#&#1
     </dl>
   </div>
   <div class="method-description">
-    <p>Disable a tab. The selected tab cannot be disabled. To disable more than one tab at once use: <code>$('#example').tabs("option","disabled", [1, 2, 3]);</code>  The second argument is the zero-based index of the tab to be disabled.</p>
+    <p>Disable a tab. The selected tab cannot be disabled. To disable more than one tab at once use: <code>$('#example').data('disabled.tabs', [1, 2, 3]);</code>  The second argument is the zero-based index of the tab to be disabled.</p>
   </div>
 </li>
 
@@ -1504,10 +1505,10 @@ $( ".selector" ).tabs( "option", "tabTemplate", '&lt;div&gt;&lt;a href&#61;"#&#1
 </div>
 
 </p><!-- 
-Pre-expand include size: 56145 bytes
-Post-expand include size: 94471 bytes
-Template argument size: 56684 bytes
+Pre-expand include size: 56270 bytes
+Post-expand include size: 95581 bytes
+Template argument size: 56921 bytes
 Maximum: 2097152 bytes
 -->
 
-<!-- Saved in parser cache with key jqdocs_docs:pcache:idhash:3777-1!1!0!!en!2 and timestamp 20101025190219 -->
+<!-- Saved in parser cache with key jqdocs_docs:pcache:idhash:3350-1!1!0!!en!2 and timestamp 20100421011850 -->

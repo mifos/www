@@ -1,5 +1,5 @@
 <?php
-// $Id: workflow.rules.inc,v 1.1.2.2 2010/10/25 01:56:45 jvandyk Exp $
+// $Id: workflow.rules.inc,v 1.1.2.1 2010/02/19 22:30:31 jvandyk Exp $
 
 /**
  * @file
@@ -52,14 +52,6 @@ function workflow_rules_condition_info() {
       'help' => t('Evaluates to TRUE, if the workflow being updated is moved from state A to state B'),
       'module' => 'Workflow',
     ),
-    'workflow_check_state' => array(
-      'label' => t('Content has workflow state'),
-      'arguments' => array(
-        'node' => array('type' => 'node', 'label' => t('Node')),
-      ),
-      'help' => t('Check state of workflow for a content'),
-      'module' => 'Workflow',
-    ),
   );
 }
 
@@ -77,17 +69,6 @@ function workflow_check_transition($old_state, $new_state, $settings) {
     return in_array($old_state, $settings['from_state']);
   }
   return  in_array($old_state, $settings['from_state']) &&  in_array($new_state, $settings['to_state']);
-}
-
-/**
- * Condition implementation: check state. 
- */
-function workflow_check_state($node, $settings) {
-  if (in_array('ANY', $settings['state'])) {
-    return TRUE;
-  }
-  $state = workflow_node_current_state($node);
-  return  in_array($state, $settings['state']);
 }
 
 /**

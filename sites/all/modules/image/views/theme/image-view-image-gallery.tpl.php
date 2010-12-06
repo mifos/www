@@ -1,7 +1,5 @@
 <?php
-// $Id: image-view-image-gallery.tpl.php,v 1.2.2.1 2010/08/03 17:43:00 sun Exp $
-
-
+// $Id: image-view-image-gallery.tpl.php,v 1.2 2009/09/05 13:48:50 joachim Exp $
 /**
  * @file
  * Template for a list of gallery nodes.
@@ -12,7 +10,7 @@
  */
 ?>
 <div class="item-list image-gallery-nodes clear-block">
-  <?php if (!empty($title)): ?>
+  <?php if (!empty($title)) : ?>
     <h3><?php print $title; ?></h3>
   <?php endif; ?>
   <<?php print $options['type']; ?> class="images">
@@ -21,4 +19,3 @@
     <?php endforeach; ?>
   </<?php print $options['type']; ?>>
 </div>
-

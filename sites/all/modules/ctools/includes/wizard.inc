@@ -1,5 +1,5 @@
 <?php
-// $Id: wizard.inc,v 1.12.2.9 2010/09/10 18:25:13 merlinofchaos Exp $
+// $Id: wizard.inc,v 1.12.2.4 2010/04/09 22:15:55 merlinofchaos Exp $
 
 /**
  * @file
@@ -97,18 +97,17 @@ function ctools_wizard_multistep_form($form_info, $step, &$form_state) {
   $output = ctools_build_form($info['form id'], $form_state);
 
   if (empty($form_state['executed']) || !empty($form_state['rerender'])) {
-    if (empty($form_state['title']) && !empty($info['title'])) {
-      $form_state['title'] = $info['title'];
-    }
-
     if (!empty($form_state['ajax render'])) {
       // Any include files should already be included by this point:
       return $form_state['ajax render']($form_state, $output);
     }
 
     // Automatically use the modal tool if set to true.
-    if (!empty($form_state['modal']) && empty($form_state['modal return'])) {
+    if (!empty($form_state['modal'])) {
       ctools_include('modal');
+      if (empty($form_state['title'])) {
+        $form_state['title'] = $info['title'];
+      }
 
       // This overwrites any previous commands.
       $form_state['commands'] = ctools_modal_form_render($form_state, $output);
@@ -160,7 +159,7 @@ function ctools_wizard_multistep_form($form_info, $step, &$form_state) {
   }
 
   // Render ajax commands if we have any.
-  if (isset($form_state['ajax']) && !empty($form_state['commands'])) {
+  if (isset($form_state['ajax']) && isset($form_state['commands'])) {
     return ctools_ajax_render($form_state['commands']);
   }
 
@@ -200,20 +199,6 @@ function ctools_wizard_wrapper(&$form, &$form_state) {
     }
 
     if (!empty($form_info['show trail'])) {
-      if (!empty($form_info['free trail'])) {
-        // ctools_wizard_get_path() returns results suitable for #redirect
-        // which can only be directly used in drupal_goto. We have to futz
-        // with it.
-        $path = ctools_wizard_get_path($form_info, $id);
-        $options = array();
-        if (!empty($path[1])) {
-          $options['query'] = $path[1];
-        }
-        if (!empty($path[2])) {
-          $options['fragment'] = $path[2];
-        }
-        $title = l($title, $path[0], $options);
-      }
       $trail[] = '<span class="' . $class . '">' . $title . '</span>';
     }
   }
@@ -247,7 +232,6 @@ function ctools_wizard_wrapper(&$form, &$form_state) {
         '#next' => $form_state['previous'],
         '#wizard type' => 'next',
         '#weight' => -2000,
-        '#skip validation' => TRUE,
         // hardcode the submit so that it doesn't try to save data.
         '#submit' => array('ctools_wizard_submit'),
         '#attributes' => $button_attributes,
@@ -259,11 +243,11 @@ function ctools_wizard_wrapper(&$form, &$form_state) {
     }
 
     // If there is a next form, place the next button.
-    if (isset($form_state['next']) || !empty($form_info['free trail'])) {
+    if (isset($form_state['next'])) {
       $form['buttons']['next'] = array(
         '#type' => 'submit',
         '#value' => $form_info['next text'],
-        '#next' => !empty($form_info['free trail']) ? $form_state['step'] : $form_state['next'],
+        '#next' => $form_state['next'],
         '#wizard type' => 'next',
         '#weight' => -1000,
         '#attributes' => $button_attributes,
@@ -286,7 +270,7 @@ function ctools_wizard_wrapper(&$form, &$form_state) {
         '#attributes' => $button_attributes,
       );
     }
-    else if (empty($form_state['next']) || !empty($form_info['free trail'])) {
+    else if (empty($form_state['next'])) {
       $form['buttons']['return'] = array(
         '#type' => 'submit',
         '#value' => $form_info['finish text'],
@@ -296,13 +280,12 @@ function ctools_wizard_wrapper(&$form, &$form_state) {
     }
 
     // If we are allowed to cancel, place a cancel button.
-    if ((isset($form_info['cancel path']) && !isset($form_info['show cancel'])) || !empty($form_info['show cancel'])) {
+    if (isset($form_info['cancel path']) || !empty($form_info['show cancel'])) {
       $form['buttons']['cancel'] = array(
         '#type' => 'submit',
         '#value' => $form_info['cancel text'],
         '#wizard type' => 'cancel',
         // hardcode the submit so that it doesn't try to save data.
-        '#skip validation' => TRUE,
         '#submit' => array('ctools_wizard_submit'),
         '#attributes' => $button_attributes,
       );
@@ -337,14 +320,14 @@ function ctools_wizard_wrapper(&$form, &$form_state) {
     if (count($params) > 1) {
       $url = array_shift($params);
       $options = array();
-
+      
       $keys = array(0 => 'query', 1 => 'fragment');
       foreach ($params as $key => $value) {
         if (isset($keys[$key]) && isset($value)) {
           $options[$keys[$key]] = $value;
         }
       }
-
+      
       $params = array($url, $options);
     }
     $form['#action'] =  call_user_func_array('url', $params);
@@ -396,7 +379,7 @@ function ctools_wizard_get_path($form_info, $step) {
   if (is_array($form_info['path'])) {
     foreach ($form_info['path'] as $id => $part) {
       $form_info['path'][$id] = str_replace('%step', $step, $form_info['path'][$id]);
-    }
+    }    
     return $form_info['path'];
   }
   else {
@@ -414,7 +397,6 @@ function ctools_wizard_defaults(&$form_info) {
   $hook = $form_info['id'];
   $defaults = array(
     'show trail' => FALSE,
-    'free trail' => FALSE,
     'show back' => FALSE,
     'show cancel' => FALSE,
     'show return' => FALSE,
@@ -424,13 +406,7 @@ function ctools_wizard_defaults(&$form_info) {
     'finish text' => t('Finish'),
     'cancel text' => t('Cancel'),
   );
-
-  if (!empty($form_info['free trail'])) {
-    $defaults['next text'] = t('Update');
-    $defaults['finish text'] = t('Save');
-  }
-
-  $form_info = $form_info + $defaults;
+  $form_info =  $form_info + $defaults;
   // set form callbacks if they aren't defined
   foreach($form_info['forms'] as $step => $params) {
     if (!$params['form id']) {

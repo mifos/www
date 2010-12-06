@@ -1,5 +1,5 @@
 <?php
-// $Id: image_gallery_handler_field_gallery_cover_thumbnail.inc,v 1.1.2.2 2010/08/03 17:43:00 sun Exp $
+// $Id: image_gallery_handler_field_gallery_cover_thumbnail.inc,v 1.1 2009/08/27 12:10:57 joachim Exp $
 
 /**
  * Field handler for gallery cover node image.
@@ -9,7 +9,6 @@
  * and the order to get the cover node.
  */
 class image_gallery_handler_field_gallery_cover_thumbnail extends image_gallery_handler_field_gallery_cover {
-
   /**
    * Defines default values for options.
    */
@@ -31,8 +30,8 @@ class image_gallery_handler_field_gallery_cover_thumbnail extends image_gallery_
     $form['descendants']['#description'] = theme('advanced_help_topic', 'image_gallery', 'descendants') .
       t('Whether to go into subgalleries when getting a cover image. Either: consider only this gallery itself, consider subgalleries all together, or recurse into subgalleries one by one if the gallery itself is empty.');
     $form['descendants']['#options'] = array(
-      'single' => t('Only get cover image from this gallery'),
-      'flat' => t('Consider subgalleries, flattened.'),
+      'single'  => t('Only get cover image from this gallery'),
+      'flat'    => t('Consider subgalleries, flattened.'),
       'recurse' => t('Consider subgalleries, recursively. (Warning: this can produce many queries per row if your parent galleries are empty!).'),
     );
 
@@ -44,7 +43,7 @@ class image_gallery_handler_field_gallery_cover_thumbnail extends image_gallery_
       '#title' => t('Image size to show'),
       '#options' => $sizes,
       '#default_value' => $this->options['image_derivative'],
-      '#description' => t('Pick an image derivative to display.'),
+      '#description' => t('Pick an image derivative to display.')
     );
   }
 
@@ -59,7 +58,7 @@ class image_gallery_handler_field_gallery_cover_thumbnail extends image_gallery_
     $output = $this->render_link($output, $values);
     // Wrap a common class so the thumbnail can be style no matter what field.
     // TODO: theme function?
-    return '<span class="image-gallery-view-cover-thumbnail">' . $output . '</span>';
+    return '<div class="image-gallery-view-cover-thumbnail">' . $output . '</div>';
   }
 }
 

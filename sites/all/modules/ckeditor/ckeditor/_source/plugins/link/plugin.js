@@ -37,8 +37,8 @@ CKEDITOR.plugins.add( 'link',
 				'background-position: center center;' +
 				'background-repeat: no-repeat;' +
 				'border: 1px solid #a9a9a9;' +
-				'width: 18px !important;' +
-				'height: 18px !important;' +
+				'width: 18px;' +
+				'height: 18px;' +
 			'}\n' +
 			'a.cke_anchor' +
 			'{' +
@@ -58,7 +58,7 @@ CKEDITOR.plugins.add( 'link',
 				 * for this in Firefox. So we must detect the state by element paths.
 				 */
 				var command = editor.getCommand( 'unlink' ),
-					element = evt.data.path.lastElement && evt.data.path.lastElement.getAscendant( 'a', true );
+					element = evt.data.path.lastElement.getAscendant( 'a', true );
 				if ( element && element.getName() == 'a' && element.getAttribute( 'href' ) )
 					command.setState( CKEDITOR.TRISTATE_OFF );
 				else
@@ -110,7 +110,7 @@ CKEDITOR.plugins.add( 'link',
 		{
 			editor.contextMenu.addListener( function( element, selection )
 				{
-					if ( !element || element.isReadOnly() )
+					if ( !element )
 						return null;
 
 					var isAnchor = ( element.is( 'img' ) && element.getAttribute( '_cke_real_element_type' ) == 'anchor' );
@@ -176,22 +176,13 @@ CKEDITOR.plugins.link =
 	 */
 	getSelectedLink : function( editor )
 	{
-		try
-		{
-			var selection = editor.getSelection();
-			if ( selection.getType() == CKEDITOR.SELECTION_ELEMENT )
-			{
-				var selectedElement = selection.getSelectedElement();
-				if ( selectedElement.is( 'a' ) )
-					return selectedElement;
-			}
-
-			var range = selection.getRanges( true )[ 0 ];
-			range.shrink( CKEDITOR.SHRINK_TEXT );
-			var root = range.getCommonAncestor();
-			return root.getAscendant( 'a', true );
-		}
+		var range;
+		try { range  = editor.getSelection().getRanges()[ 0 ]; }
 		catch( e ) { return null; }
+
+		range.shrink( CKEDITOR.SHRINK_TEXT );
+		var root = range.getCommonAncestor();
+		return root.getAscendant( 'a', true );
 	}
 };
 

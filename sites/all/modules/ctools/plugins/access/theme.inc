@@ -1,5 +1,5 @@
 <?php
-// $Id: theme.inc,v 1.1.2.4 2010/07/22 22:38:11 merlinofchaos Exp $
+// $Id: theme.inc,v 1.1.2.1 2010/02/03 01:18:58 merlinofchaos Exp $
 
 /**
  * @file
@@ -41,20 +41,12 @@ function ctools_theme_ctools_access_settings(&$form, &$form_state, $conf) {
  * Check for access.
  */
 function ctools_theme_ctools_access_check($conf, $context) {
-  if (!empty($GLOBALS['theme'])) {
-    $theme = $GLOBALS['theme'];
+  // As far as I know there should always be a context at this point, but this
+  // is safe.
+  if (empty($context) || empty($context->data)) {
+    return FALSE;
   }
-  else if (!empty($GLOBALS['custom_theme'])) {
-    $theme = $GLOBALS['custom_theme'];
-  }
-  else if (!empty($GLOBALS['user']->theme)) {
-    $theme = $GLOBALS['user']->theme;
-  }
-  else {
-    $theme = variable_get('theme_default', 'garland');
-  }
-
-  return $conf['theme'] == $theme;
+  return $conf['theme'] == $GLOBALS['theme'];
 }
 
 /**

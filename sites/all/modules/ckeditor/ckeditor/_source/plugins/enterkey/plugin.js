@@ -24,11 +24,6 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 			// Get the range for the current selection.
 			range = range || getRange( editor );
 
-			// We may not have valid ranges to work on, like when inside a
-			// contenteditable=false element.
-			if ( !range )
-				return;
-
 			var doc = range.document;
 
 			// Exit the list when we're inside an empty list item block. (#5376)
@@ -69,7 +64,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 				if ( node.is( 'li' ) )
 				{
 					nextBlock.breakParent( node );
-					nextBlock.move( nextBlock.getNext(), 1 );
+					nextBlock.move( nextBlock.getNext(), true );
 				}
 			}
 			else if ( previousBlock && ( node = previousBlock.getParent() ) && node.is( 'li' ) )
@@ -194,11 +189,6 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 			// Get the range for the current selection.
 			range = range || getRange( editor );
 
-			// We may not have valid ranges to work on, like when inside a
-			// contenteditable=false element.
-			if ( !range )
-				return;
-
 			var doc = range.document;
 
 			// Determine the block element to be used.
@@ -317,7 +307,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 			return true;
 		}
 		else
-			return enter( editor, editor.config.shiftEnterMode, 1 );
+			return enter( editor, editor.config.shiftEnterMode, true );
 	}
 
 	function enter( editor, mode, forceMode )
@@ -335,7 +325,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 		setTimeout( function()
 			{
 				editor.fire( 'saveSnapshot' );	// Save undo step.
-				if ( mode == CKEDITOR.ENTER_BR || editor.getSelection().getStartElement().hasAscendant( 'pre', 1 ) )
+				if ( mode == CKEDITOR.ENTER_BR || editor.getSelection().getStartElement().hasAscendant( 'pre', true ) )
 					enterBr( editor, mode, null, forceMode );
 				else
 					enterBlock( editor, mode, null, forceMode );
@@ -349,7 +339,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 	function getRange( editor )
 	{
 		// Get the selection ranges.
-		var ranges = editor.getSelection().getRanges( true );
+		var ranges = editor.getSelection().getRanges();
 
 		// Delete the contents of all ranges except the first one.
 		for ( var i = ranges.length - 1 ; i > 0 ; i-- )

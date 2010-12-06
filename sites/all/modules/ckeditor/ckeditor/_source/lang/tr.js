@@ -4,8 +4,9 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 
 /**
-* @fileOverview
-*/
+ * @fileOverview Defines the {@link CKEDITOR.lang} object, for the
+ * Turkish language.
+ */
 
 /**#@+
    @type String
@@ -104,13 +105,9 @@ CKEDITOR.lang['tr'] =
 		targetTop		: 'Enüst Pencere (_top)',
 		targetSelf		: 'Aynı Pencere (_self)',
 		targetParent	: 'Ana Pencere (_parent)',
-		langDirLTR		: 'Left to Right (LTR)', // MISSING
-		langDirRTL		: 'Right to Left (RTL)', // MISSING
-		styles			: 'Style', // MISSING
-		cssClasses		: 'Stylesheet Classes', // MISSING
 
 		// Put the voice-only part of the label in the span.
-		unavailable		: '%1<span class="cke_accessibility">, hazır değildir</span>'
+		unavailable		: '%1<span class="cke_accessibility">, unavailable</span>'
 	},
 
 	contextmenu :
@@ -195,25 +192,24 @@ CKEDITOR.lang['tr'] =
 	// List style dialog
 	list:
 	{
-		numberedTitle		: 'Sayılandırılmış Liste Özellikleri',
-		bulletedTitle		: 'Simgeli Liste Özellikleri',
-		type				: 'Tipi',
-		start				: 'Başla',
-		validateStartNumber				:'List start number must be a whole number.', // MISSING
-		circle				: 'Daire',
-		disc				: 'Disk',
-		square				: 'Kare',
-		none				: 'Yok',
-		notset				: '<ayarlanmamış>',
-		armenian			: 'Ermenice sayılandırma',
-		georgian			: 'Gürcüce numaralandırma (an, ban, gan, vs.)',
-		lowerRoman			: 'Küçük Roman (i, ii, iii, iv, v, vs.)',
-		upperRoman			: 'Büyük Roman (I, II, III, IV, V, vs.)',
-		lowerAlpha			: 'Küçük Alpha (a, b, c, d, e, vs.)',
-		upperAlpha			: 'Büyük Alpha (A, B, C, D, E, vs.)',
-		lowerGreek			: 'Küçük Greek (alpha, beta, gamma, vs.)',
-		decimal				: 'Ondalık (1, 2, 3, vs.)',
-		decimalLeadingZero	: 'Başı sıfırlı ondalık (01, 02, 03, vs.)'
+		numberedTitle		: 'Numbered List Properties', // MISSING
+		bulletedTitle		: 'Bulleted List Properties', // MISSING
+		type				: 'Type', // MISSING
+		start				: 'Start', // MISSING
+		circle				: 'Circle', // MISSING
+		disc				: 'Disc', // MISSING
+		square				: 'Square', // MISSING
+		none				: 'None', // MISSING
+		notset				: '<not set>', // MISSING
+		armenian			: 'Armenian numbering', // MISSING
+		georgian			: 'Georgian numbering (an, ban, gan, etc.)', // MISSING
+		lowerRoman			: 'Lower Roman (i, ii, iii, iv, v, etc.)', // MISSING
+		upperRoman			: 'Upper Roman (I, II, III, IV, V, etc.)', // MISSING
+		lowerAlpha			: 'Lower Alpha (a, b, c, d, e, etc.)', // MISSING
+		upperAlpha			: 'Upper Alpha (A, B, C, D, E, etc.)', // MISSING
+		lowerGreek			: 'Lower Greek (alpha, beta, gamma, etc.)', // MISSING
+		decimal				: 'Decimal (1, 2, 3, etc.)', // MISSING
+		decimalLeadingZero	: 'Decimal leading zero (01, 02, 03, etc.)' // MISSING
 	},
 
 	// Find And Replace Dialog
@@ -478,7 +474,7 @@ CKEDITOR.lang['tr'] =
 		hSpace			: 'Yatay Boşluk',
 		vSpace			: 'Dikey Boşluk',
 		validateSrc		: 'Lütfen köprü URL\'sini yazın',
-		validateWidth	: 'Genişlik bir sayı olmalıdır.',
+		validateWidth	: 'Width must be a number.',
 		validateHeight	: 'Yükseklik sayı olmalıdır.',
 		validateHSpace	: 'HSpace sayı olmalıdır.',
 		validateVSpace	: 'VSpace sayı olmalıdır.'
@@ -684,7 +680,7 @@ CKEDITOR.lang['tr'] =
 	scayt :
 	{
 		title			: 'Girmiş olduğunuz kelime denetimi',
-		opera_title		: 'Opera tarafından desteklenmemektedir',
+		opera_title		: 'Not supported by Opera', // MISSING
 		enable			: 'SCAYT etkinleştir',
 		disable			: 'SCAYT pasifleştir',
 		about			: 'SCAYT hakkında',
@@ -698,20 +694,20 @@ CKEDITOR.lang['tr'] =
 		emptyDic		: 'Sözlük adı boş olamaz.',
 
 		optionsTab		: 'Seçenekler',
-		allCaps			: 'Tüm büyük küçük kelimeleri yoksay',
-		ignoreDomainNames : 'Domain adlarını yoksay',
-		mixedCase		: 'Karışık büyüklük ile Sözcükler yoksay',
-		mixedWithDigits	: 'Sayılarla Kelimeler yoksay',
+		allCaps			: 'Ignore All-Caps Words', // MISSING
+		ignoreDomainNames : 'Ignore Domain Names', // MISSING
+		mixedCase		: 'Ignore Words with Mixed Case', // MISSING
+		mixedWithDigits	: 'Ignore Words with Numbers', // MISSING
 
 		languagesTab	: 'Diller',
 
 		dictionariesTab	: 'Sözlükler',
-		dic_field_name	: 'Sözlük adı',
-		dic_create		: 'Oluştur',
-		dic_restore		: 'Geri al',
-		dic_delete		: 'Sil',
-		dic_rename		: 'Yeniden adlandır',
-		dic_info		: 'Initially the User Dictionary is stored in a Cookie. However, Cookies are limited in size. When the User Dictionary grows to a point where it cannot be stored in a Cookie, then the dictionary may be stored on our server. To store your personal dictionary on our server you should specify a name for your dictionary. If you already have a stored dictionary, please type it\'s name and click the Restore button.',
+		dic_field_name	: 'Dictionary name', // MISSING
+		dic_create		: 'Create', // MISSING
+		dic_restore		: 'Restore', // MISSING
+		dic_delete		: 'Delete', // MISSING
+		dic_rename		: 'Rename', // MISSING
+		dic_info		: 'Initially the User Dictionary is stored in a Cookie. However, Cookies are limited in size. When the User Dictionary grows to a point where it cannot be stored in a Cookie, then the dictionary may be stored on our server. To store your personal dictionary on our server you should specify a name for your dictionary. If you already have a stored dictionary, please type it\'s name and click the Restore button.', // MISSING
 
 		aboutTab		: 'Hakkında'
 	},
@@ -740,18 +736,12 @@ CKEDITOR.lang['tr'] =
 	colordialog :
 	{
 		title		: 'Renk seç',
-		options	:	'Renk Seçenekleri',
+		options	:	'Color Options', // MISSING
 		highlight	: 'İşaretle',
 		selected	: 'Seçilmiş',
 		clear		: 'Temizle'
 	},
 
 	toolbarCollapse	: 'Toolbar\'ı topla',
-	toolbarExpand	: 'Toolbar\'ı aç',
-
-	bidi :
-	{
-		ltr : 'Text direction from left to right', // MISSING
-		rtl : 'Text direction from right to left' // MISSING
-	}
+	toolbarExpand	: 'Toolbar\'ı aç'
 };

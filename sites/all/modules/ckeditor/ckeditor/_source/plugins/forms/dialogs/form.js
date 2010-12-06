@@ -104,7 +104,7 @@ CKEDITOR.dialog.add( 'form', function( editor )
 						type : 'text',
 						label : editor.lang.form.action,
 						'default' : '',
-						accessKey : 'T'
+						accessKey : 'A'
 					},
 					{
 						type : 'hbox',

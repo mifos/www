@@ -1,6 +1,5 @@
 <?php
-// $Id: image_gallery_handler_relationship_gallery_cover.inc,v 1.1.2.1 2010/08/03 17:43:00 sun Exp $
-
+// $Id: image_gallery_handler_relationship_gallery_cover.inc,v 1.1 2009/08/27 12:10:57 joachim Exp $
 /*
  * @file
  * Handlers for image gallery cover node.
@@ -31,7 +30,7 @@
  * To use this, you need to give the subquery sort order, and the subquery's
  * correlated field (the field from the main views query on which to link) --
  * this is usually just 'tid'.
- *
+ * 
  * Define these as follows:
  *  'relationship' => array(
  *    'title' => t('Latest image'),
@@ -49,7 +48,6 @@
  * left_query() method to return your own subquery on which to join.
  */
 class image_gallery_handler_relationship_gallery_cover extends views_handler_relationship {
-
   /**
    * Defines default values for options.
    */
@@ -73,15 +71,15 @@ class image_gallery_handler_relationship_gallery_cover extends views_handler_rel
       '#title' => t('Depth'),
       '#default_value' => $this->options['depth'],
       '#description' => t('The depth will determine how deep to look into descendant galleries to cover nodes.' .
-        'There is no recursion: so setting the depth to 1 will choose the best fitting node out of the pool of images in the gallery and its children taken all together.' .
-        'Setting this to 0 will only consider the gallery itself.'
-      ),
+         'There is no recursion: so setting the depth to 1 will choose the best fitting node out of the pool of images in the gallery and its children taken all together.' .
+         'Setting this to 0 will only consider the gallery itself.'
+       ),
     );
   }
 
   /**
    * Return the subquery to use for the left side of the relationship join clause.
-   *
+   * 
    */
   function left_query() {
     $order = $this->definition['subquery order'];
@@ -180,4 +178,3 @@ class image_gallery_handler_relationship_gallery_cover_example extends views_han
     return $sub_query;
   }
 */
-

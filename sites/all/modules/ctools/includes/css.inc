@@ -1,5 +1,5 @@
 <?php
-/* $Id: css.inc,v 1.10.2.7 2010/10/15 21:10:11 merlinofchaos Exp $ */
+/* $Id: css.inc,v 1.10.2.3 2010/05/18 18:09:41 sdboyer Exp $ */
 
 /*
  * @file
@@ -191,14 +191,7 @@ function ctools_css_add_css($filename = NULL, $type = 'module', $media = 'all', 
       drupal_add_css($filename, $type, $media, $preprocess);
       break;
     case FILE_DOWNLOADS_PRIVATE:
-      $path = file_create_path($filename);
-      if ($path) {
-        $url = file_create_url($path);
-      }
-      else {
-        $url = $filename;
-      }
-
+      $url = file_create_url($filename);
       $output = '<link type="text/css" rel="stylesheet" media="' . $media . '" href="' . $url . '" />'."\n";
       drupal_set_html_head($output);
   }
@@ -331,13 +324,7 @@ function ctools_css_disassemble($css) {
       }
 
       // Disassemble the declaration, check it and tuck it into an array.
-      $declarations = _ctools_css_disassemble_declaration($declaration);
-      if (!isset($disassembled_css[$selector_str])) {
-        $disassembled_css[$selector_str] = $declarations;
-      }
-      else {
-        $disassembled_css[$selector_str] += $declarations;
-      }
+      $disassembled_css[$selector_str] = _ctools_css_disassemble_declaration($declaration);
     }
   }
   return $disassembled_css;
@@ -381,7 +368,7 @@ function _ctools_css_disassemble_declaration($declaration) {
       // Clean up the current property-value pair.
       $propval_pair = preg_replace("/[\n|\t|\\|\s]+/", ' ', trim($propval_pair));
       // Explode the remaining fragements some more, but clean them up first.
-      list($property, $value) = explode(':', $propval_pair, 2);
+      list($property, $value) = explode(':', $propval_pair);
       // If the property survived, toss it onto the stack.
       if (!empty($property)) {
         $formatted_statement[trim($property)] = trim($value);
@@ -512,7 +499,6 @@ function ctools_css_filter_default_allowed_properties() {
     'text-align',
     'text-decoration',
     'text-indent',
-    'text-transform',
     'unicode-bidi',
     'vertical-align',
     'voice-family',
@@ -544,7 +530,6 @@ function ctools_css_filter_default_allowed_values() {
     'both',
     'bottom',
     'brown',
-    'capitalize',
     'center',
     'collapse',
     'dashed',
@@ -553,10 +538,8 @@ function ctools_css_filter_default_allowed_values() {
     'gray',
     'green',
     'italic',
-    'inherit',
     'left',
     'lime',
-    'lowercase',
     'maroon',
     'medium',
     'navy',
@@ -573,7 +556,6 @@ function ctools_css_filter_default_allowed_values() {
     'top',
     'transparent',
     'underline',
-    'uppercase',
     'white',
     'yellow',
   );

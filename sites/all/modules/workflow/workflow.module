@@ -1,5 +1,5 @@
 <?php
-// $Id: workflow.module,v 1.83.2.18 2010/10/25 02:13:48 jvandyk Exp $
+// $Id: workflow.module,v 1.83.2.13 2010/03/03 18:17:02 jvandyk Exp $
 
 /**
  * @file
@@ -237,7 +237,6 @@ function workflow_nodeapi(&$node, $op, $teaser = NULL, $page = NULL) {
       break;
 
     case 'delete':
-      $node->workflow_stamp = time();
       db_query("DELETE FROM {workflow_node} WHERE nid = %d", $node->nid);
       _workflow_write_history($node, WORKFLOW_DELETION, t('Node deleted'));
       // Delete any scheduled transitions for this node.
@@ -274,7 +273,6 @@ function workflow_comment($a1, $op) {
 function workflow_transition($node, $sid) {
   // Make sure new state is a valid choice.
   if (array_key_exists($sid, workflow_field_choices($node))) {
-    $node->workflow_scheduled = isset($node->workflow_scheduled) ? $node->workflow_scheduled : FALSE;
     if (!$node->workflow_scheduled) {
       // It's an immediate change. Do the transition.
       workflow_execute_transition($node, $sid, isset($node->workflow_comment) ? $node->workflow_comment : NULL);
@@ -349,7 +347,7 @@ function workflow_node_form(&$form, $form_state, $title, $name, $current, $choic
   else {
     $form['workflow'][$name] = array(
       '#type' => 'radios',
-      '#title' => $form['#wf']->options['name_as_title'] ? $title : '',
+      '#title' => $title,
       '#options' => $choices,
       '#name' => $name,
       '#parents' => array('workflow'),
@@ -443,7 +441,6 @@ function workflow_form_alter(&$form, $form_state, $form_id) {
     }
     $workflow = workflow_load($wid);
     $form['#wf'] = $workflow;
-    $name = check_plain($workflow->name);
 
     // If the current node state is not one of the choices, autoselect first choice.
     // We know all states in $choices are states that user has permission to
@@ -456,7 +453,7 @@ function workflow_form_alter(&$form, $form_state, $form_id) {
     if (sizeof($choices) > 1) {
       $form['workflow'] = array(
         '#type' => 'fieldset',
-        '#title' => $name,
+        '#title' => check_plain($workflow->name),
         '#collapsible' => TRUE,
         '#collapsed' => FALSE,
         '#weight' => 10,
@@ -465,6 +462,7 @@ function workflow_form_alter(&$form, $form_state, $form_id) {
 
     $timestamp = NULL;
     $comment = '';
+    $name = '';
 
     // See if scheduling information is present.
     if (isset($node->_workflow_scheduled_timestamp) && isset($node->_workflow_scheduled_sid)) {
@@ -1549,7 +1547,7 @@ function workflow_token_values($type, $object = NULL) {
         $user_name = $node->uid ? $node->name : variable_get('anonymous', 'Anonymous');
         $uid = $node->uid;
         $mail = $node->uid ? $node->user_mail : '';
-        $comment = isset($node->workflow_comment) ? $node->workflow_comment : '';
+        $comment = $node->workflow_comment;
       }
       else if (!isset($node->workflow) && empty($row->sid)) {
         // If the state is not specified and the node has no workflow history,
@@ -1563,7 +1561,7 @@ function workflow_token_values($type, $object = NULL) {
         $user_name = $node->uid ? $node->name : variable_get('anonymous', 'Anonymous');
         $uid = $node->uid;
         $mail = $node->uid ? $node->user_mail : '';
-        $comment = isset($node->workflow_comment) ? $node->workflow_comment : '';
+        $comment = $node->workflow_comment;
       }
       else {
         // Default to the most recent transition data in the workflow history table.
@@ -1597,7 +1595,6 @@ function workflow_token_values($type, $object = NULL) {
  * Implementation of hook_token_list().
  */
 function workflow_token_list($type = 'all') {
-  $tokens = array();
 
   if ($type == 'workflow' || $type == 'node' || $type == 'all') {
     $tokens['workflow']['workflow-name']                          =  'Name of workflow appied to this node';
@@ -1632,16 +1629,4 @@ function workflow_content_extra_fields($type_name) {
     'weight' => 10,
   );
   return $extra;
-}
-
-/**
- * Implementation of hook_user().
- */
-function workflow_user($op, &$edit, &$account, $category = NULL) {
-  switch ($op) {
-    case 'delete':
-      db_query("UPDATE {workflow_node} SET uid = 0 WHERE uid = %d", $account->uid);
-      db_query("UPDATE {workflow_node_history} SET uid = 0 WHERE uid = %d", $account->uid);
-    break;
-  }
 }

@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.35.4.32 2010/08/13 15:26:24 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.35.4.28 2009/05/10 12:44:14 karens Exp $ */
 /**
  * @file
  * Parse iCal data.
@@ -392,8 +392,6 @@ function date_ical_parse_date($field, $data) {
     // Fix commonly used alternatives like US-Eastern which should be US/Eastern.
     $tz = str_replace('-', '/', $tz);
     // Unset invalid timezone names.
-    module_load_include('install', 'date_timezone');
-    $tz = _date_timezone_replacement($tz);
     if (!date_timezone_is_valid($tz)) {
       $tz = '';
     }
@@ -421,7 +419,7 @@ function date_ical_parse_date($field, $data) {
  *   PROPERTIES include FREQ, INTERVAL, COUNT, BYDAY, BYMONTH, BYYEAR, UNTIL
  */
 function date_ical_parse_rrule($field, $data) {
-  $data = preg_replace("/RRULE.*:/", '', $data);
+  $data = str_replace('RRULE:', '', $data);
   $items = array('DATA' => $data);
   $rrule = explode(';', $data);
   foreach ($rrule as $key => $value) {
@@ -586,17 +584,16 @@ function date_ical_date($ical_date, $to_tz = FALSE) {
  *
  */
 function date_ical_escape_text($text) {
-  $text = drupal_html_to_text($text);
-  $text = trim($text);
+  //$text = strip_tags($text);
   // TODO Per #38130 the iCal specs don't want : and " escaped
   // but there was some reason for adding this in. Need to watch
   // this and see if anything breaks.
   //$text = str_replace('"', '\"', $text);
   //$text = str_replace(":", "\:", $text);
-  $text = preg_replace("/\\\b/","\\\\", $text);
+  $text = str_replace("\\", "\\\\", $text);
   $text = str_replace(",", "\,", $text);
   $text = str_replace(";", "\;", $text);
-  $text = str_replace("\n", "\\n ", $text);
+  $text = str_replace("\n", "\n ", $text);
   return trim($text);
 }
 

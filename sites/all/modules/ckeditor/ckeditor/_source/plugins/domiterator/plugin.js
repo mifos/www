@@ -20,11 +20,11 @@ CKEDITOR.plugins.add( 'domiterator' );
 			return;
 
 		this.range = range;
-		this.forceBrBreak = 0;
+		this.forceBrBreak = false;
 
 		// Whether include <br>s into the enlarged range.(#3730).
-		this.enlargeBr = 1;
-		this.enforceRealBlocks = 0;
+		this.enlargeBr = true;
+		this.enforceRealBlocks = false;
 
 		this._ || ( this._ = {} );
 	}
@@ -44,9 +44,6 @@ CKEDITOR.plugins.add( 'domiterator' );
 			// Indicats that the current element in the loop is the last one.
 			var isLast;
 
-			// Indicate at least one of the range boundaries is inside a preformat block.
-			var touchPre;
-
 			// Instructs to cleanup remaining BRs.
 			var removePreviousBr, removeLastBr;
 
@@ -54,14 +51,7 @@ CKEDITOR.plugins.add( 'domiterator' );
 			if ( !this._.lastNode )
 			{
 				range = this.range.clone();
-
-				// Shrink the range to exclude harmful "noises" (#4087, #4450, #5435).
-				range.shrink( CKEDITOR.NODE_ELEMENT, true );
-
-				touchPre = range.endContainer.hasAscendant( 'pre', true )
-					|| range.startContainer.hasAscendant( 'pre', true );
-
-				range.enlarge( this.forceBrBreak && !touchPre || !this.enlargeBr ?
+				range.enlarge( this.forceBrBreak || !this.enlargeBr ?
 							   CKEDITOR.ENLARGE_LIST_ITEM_CONTENTS : CKEDITOR.ENLARGE_BLOCK_CONTENTS );
 
 				var walker = new CKEDITOR.dom.walker( range ),
@@ -80,7 +70,7 @@ CKEDITOR.plugins.add( 'domiterator' );
 				// next block.(#3887)
 				if ( this._.lastNode &&
 						this._.lastNode.type == CKEDITOR.NODE_TEXT &&
-						!CKEDITOR.tools.trim( this._.lastNode.getText() ) &&
+						!CKEDITOR.tools.trim( this._.lastNode.getText( ) ) &&
 						this._.lastNode.getParent().isBlockBoundary() )
 				{
 					var testRange = new CKEDITOR.dom.range( range.document );
@@ -112,13 +102,12 @@ CKEDITOR.plugins.add( 'domiterator' );
 			{
 				// closeRange indicates that a paragraph boundary has been found,
 				// so the range can be closed.
-				var closeRange = 0,
-					parentPre = currentNode.hasAscendant( 'pre' );
+				var closeRange = false;
 
 				// includeNode indicates that the current node is good to be part
 				// of the range. By default, any non-element node is ok for it.
 				var includeNode = ( currentNode.type != CKEDITOR.NODE_ELEMENT ),
-					continueFromSibling = 0;
+					continueFromSibling = false;
 
 				// If it is an element node, let's check if it can be part of the
 				// range.
@@ -126,13 +115,12 @@ CKEDITOR.plugins.add( 'domiterator' );
 				{
 					var nodeName = currentNode.getName();
 
-					if ( currentNode.isBlockBoundary( this.forceBrBreak &&
-							!parentPre && { br : 1 } ) )
+					if ( currentNode.isBlockBoundary( this.forceBrBreak && { br : 1 } ) )
 					{
 						// <br> boundaries must be part of the range. It will
 						// happen only if ForceBrBreak.
 						if ( nodeName == 'br' )
-							includeNode = 1;
+							includeNode = true;
 						else if ( !range && !currentNode.getChildCount() && nodeName != 'hr' )
 						{
 							// If we have found an empty block, and haven't started
@@ -154,7 +142,7 @@ CKEDITOR.plugins.add( 'domiterator' );
 								this._.nextNode = currentNode;
 						}
 
-						closeRange = 1;
+						closeRange = true;
 					}
 					else
 					{
@@ -171,7 +159,7 @@ CKEDITOR.plugins.add( 'domiterator' );
 							currentNode = currentNode.getFirst();
 							continue;
 						}
-						includeNode = 1;
+						includeNode = true;
 					}
 				}
 				else if ( currentNode.type == CKEDITOR.NODE_TEXT )
@@ -179,7 +167,7 @@ CKEDITOR.plugins.add( 'domiterator' );
 					// Ignore normal whitespaces (i.e. not including &nbsp; or
 					// other unicode whitespaces) before/after a block node.
 					if ( beginWhitespaceRegex.test( currentNode.getText() ) )
-						includeNode = 0;
+						includeNode = false;
 				}
 
 				// The current node is good to be part of the range and we are
@@ -201,18 +189,17 @@ CKEDITOR.plugins.add( 'domiterator' );
 					{
 						var parentNode = currentNode.getParent();
 
-						if ( parentNode.isBlockBoundary( this.forceBrBreak
-								&& !parentPre && { br : 1 } ) )
+						if ( parentNode.isBlockBoundary( this.forceBrBreak && { br : 1 } ) )
 						{
-							closeRange = 1;
+							closeRange = true;
 							isLast = isLast || ( parentNode.equals( lastNode) );
 							break;
 						}
 
 						currentNode = parentNode;
-						includeNode = 1;
+						includeNode = true;
 						isLast = ( currentNode.equals( lastNode ) );
-						continueFromSibling = 1;
+						continueFromSibling = true;
 					}
 				}
 
@@ -225,8 +212,26 @@ CKEDITOR.plugins.add( 'domiterator' );
 
 				// We have found a block boundary. Let's close the range and move out of the
 				// loop.
-				if ( isLast || ( closeRange && range ) )
+				if ( ( closeRange || isLast ) && range )
+				{
+					var boundaryNodes = range.getBoundaryNodes(),
+						startPath = new CKEDITOR.dom.elementPath( range.startContainer );
+
+					// Drop the range if it only contains bookmark nodes, and is
+					// not because of the original collapsed range. (#4087,#4450)
+					if ( boundaryNodes.startNode.getParent().equals( startPath.blockLimit )
+						 && isBookmark( boundaryNodes.startNode ) && isBookmark( boundaryNodes.endNode ) )
+					{
+						range = null;
+						this._.nextNode = null;
+					}
+					else
 						break;
+				}
+
+				if ( isLast )
+					break;
+
 			}
 
 			// Now, based on the processed range, look for (or create) the block to be returned.
@@ -240,7 +245,7 @@ CKEDITOR.plugins.add( 'domiterator' );
 					return null;
 				}
 
-				var startPath = new CKEDITOR.dom.elementPath( range.startContainer );
+				startPath = new CKEDITOR.dom.elementPath( range.startContainer );
 				var startBlockLimit = startPath.blockLimit,
 					checkLimits = { div : 1, th : 1, td : 1 };
 				block = startPath.block;
@@ -302,9 +307,6 @@ CKEDITOR.plugins.add( 'domiterator' );
 				}
 			}
 
-			// Ignore bookmark nodes.(#3783)
-			var bookmarkGuard = CKEDITOR.dom.walker.bookmark( false, true );
-
 			if ( removePreviousBr )
 			{
 				var previousSibling = block.getPrevious();
@@ -319,6 +321,9 @@ CKEDITOR.plugins.add( 'domiterator' );
 
 			if ( removeLastBr )
 			{
+				// Ignore bookmark nodes.(#3783)
+				var bookmarkGuard = CKEDITOR.dom.walker.bookmark( false, true );
+
 				var lastChild = block.getLast();
 				if ( lastChild && lastChild.type == CKEDITOR.NODE_ELEMENT && lastChild.getName() == 'br' )
 				{
@@ -337,12 +342,6 @@ CKEDITOR.plugins.add( 'domiterator' );
 			{
 				this._.nextNode = ( isLast || block.equals( lastNode ) ) ? null :
 					block.getNextSourceNode( true, null, lastNode );
-			}
-
-			if ( !bookmarkGuard( this._.nextNode ) )
-			{
-				this._.nextNode = this._.nextNode.getNextSourceNode( true, null, function( node )
-					{ return !node.equals( lastNode ) && bookmarkGuard( node ); } );
 			}
 
 			return block;

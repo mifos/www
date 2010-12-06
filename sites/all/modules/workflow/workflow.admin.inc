@@ -1,5 +1,5 @@
 <?php
-// $Id: workflow.admin.inc,v 1.7.2.3 2010/03/15 04:22:48 jvandyk Exp $
+// $Id: workflow.admin.inc,v 1.7.2.2 2010/03/02 18:32:54 jvandyk Exp $
 
 /**
  * @file
@@ -182,12 +182,6 @@ function workflow_edit_form($form_state, $workflow) {
     '#size' => '16',
     '#maxlength' => '254',
   );
-  $form['basic']['name_as_title'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Use the workflow name as the title of the workflow form.'),
-    '#default_value' => isset($workflow->options['name_as_title']) ? $workflow->options['name_as_title'] : 0,
-    '#description' => t('The workflow section of the editing form is in its own fieldset. Checking the box will add the workflow name as the title of workflow section of the editing form.'),
-  );
   $form['comment'] = array(
     '#type' => 'fieldset',
     '#title' => t('Comment for Workflow Log'),
@@ -336,12 +330,7 @@ function workflow_edit_form_submit($form, &$form_state) {
   if (isset($form_state['values']['transitions'])) {
     workflow_update_transitions($form_state['values']['transitions']);
   }
-  $options = array(
-    'comment_log_node' => $form_state['values']['comment_log_node'],
-    'comment_log_tab' => $form_state['values']['comment_log_tab'],
-    'name_as_title' => $form_state['values']['name_as_title'],
-  );
-  workflow_update($form_state['values']['wid'], $form_state['values']['wf_name'], array_filter($form_state['values']['tab_roles']), $options);
+  workflow_update($form_state['values']['wid'], $form_state['values']['wf_name'], array_filter($form_state['values']['tab_roles']), array('comment_log_node' => $form_state['values']['comment_log_node'], 'comment_log_tab' => $form_state['values']['comment_log_tab']));
   drupal_set_message(t('The workflow was updated.'));
   $form_state['redirect'] = 'admin/build/workflow';
 }

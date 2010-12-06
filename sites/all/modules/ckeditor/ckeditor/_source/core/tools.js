@@ -220,10 +220,6 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 			return ( !!object && object instanceof Array );
 		},
 
-		/**
-		 * Whether the object contains no properties of it's own.
- 		 * @param object
-		 */
 		isEmpty : function ( object )
 		{
 			for ( var i in object )
@@ -233,7 +229,6 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 			}
 			return true;
 		},
-
 		/**
 		 * Transforms a CSS property name to its relative DOM style name.
 		 * @param {String} cssName The CSS property name.
@@ -342,7 +337,20 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 		 */
 		htmlEncodeAttr : function( text )
 		{
-			return text.replace( /"/g, '&quot;' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' );
+			return text.replace( /"/g, '&quot;' ).replace( /</g, '&lt;' ).replace( />/, '&gt;' );
+		},
+
+		/**
+		 * Replace characters can't be represented through CSS Selectors string
+		 * by CSS Escape Notation where the character escape sequence consists
+		 * of a backslash character (\) followed by the orginal characters.
+		 * Ref: http://www.w3.org/TR/css3-selectors/#grammar
+		 * @param cssSelectText
+		 * @return the escaped selector text.
+		 */
+		escapeCssSelector : function( cssSelectText )
+		{
+			return cssSelectText.replace( /[\s#:.,$*^\[\]()~=+>]/g, '\\$&' );
 		},
 
 		/**
@@ -362,20 +370,6 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 				return ++last;
 			};
 		})(),
-
-		/**
-		 * Gets a unique ID for CKEditor's interface elements. It returns a
-		 * string with the "cke_" prefix and a progressive number.
-		 * @function
-		 * @returns {String} A unique ID.
-		 * @example
-		 * alert( CKEDITOR.tools.<b>getNextId()</b> );  // "cke_1" (e.g.)
-		 * alert( CKEDITOR.tools.<b>getNextId()</b> );  // "cke_2"
-		 */
-		getNextId : function()
-		{
-			return 'cke_' + this.getNextNumber();
-		},
 
 		/**
 		 * Creates a function override.
@@ -674,10 +668,6 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 			return fn && fn.apply( window, Array.prototype.slice.call( arguments, 1 ) );
 		},
 
-		/**
-		 * Append the 'px' length unit to the size if it's missing.
-		 * @param length
-		 */
 		cssLength : (function()
 		{
 			var decimalRegex = /^\d+(?:\.\d+)?$/;
@@ -687,20 +677,11 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 			};
 		})(),
 
-		/**
-		 * String specified by {@param str} repeats {@param times} times.
-		 * @param str
-		 * @param times
-		 */
 		repeat : function( str, times )
 		{
 			return new Array( times + 1 ).join( str );
 		},
 
-		/**
-		 * Return the first successfully executed function's return value that
-		 * doesn't throw any exception.
-		 */
 		tryThese : function()
 		{
 			var returnValue;

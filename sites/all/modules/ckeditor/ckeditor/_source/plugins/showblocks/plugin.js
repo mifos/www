@@ -24,10 +24,9 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 		'.%2 h6'+
 		'{'+
 			'background-repeat: no-repeat;'+
-			'background-position: top %3;'+
 			'border: 1px dotted gray;'+
 			'padding-top: 8px;'+
-			'padding-%3: 8px;'+
+			'padding-left: 8px;'+
 		'}'+
 
 		'.%2 p'+
@@ -85,7 +84,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 			'%1h6.png);'+
 		'}';
 
-	var cssTemplateRegex = /%1/g, cssClassRegex = /%2/g, backgroundPositionRegex = /%3/g;
+	var cssTemplateRegex = /%1/g, cssClassRegex = /%2/g;
 
 	var commandDefinition =
 	{
@@ -119,8 +118,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 
 			editor.addCss( cssTemplate
 				.replace( cssTemplateRegex, 'background-image: url(' + CKEDITOR.getUrl( this.path ) + 'images/block_' )
-				.replace( cssClassRegex, 'cke_show_blocks ' )
-				.replace( backgroundPositionRegex, editor.lang.dir == 'rtl' ? 'right' : 'left' ) );
+				.replace( cssClassRegex, 'cke_show_blocks ' ) );
 
 			editor.ui.addButton( 'ShowBlocks',
 				{
@@ -153,3 +151,4 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
  * @example
  * config.startupOutlineBlocks = true;
  */
+CKEDITOR.config.startupOutlineBlocks = false;

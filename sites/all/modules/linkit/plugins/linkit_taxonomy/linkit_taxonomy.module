@@ -1,5 +1,5 @@
 <?php 
-// $Id: linkit_taxonomy.module,v 1.7.2.1 2010/08/27 16:56:03 anon Exp $
+// $Id: linkit_taxonomy.module,v 1.7 2010/06/20 17:04:37 anon Exp $
 
 /**
  * @file
@@ -32,13 +32,13 @@ function linkit_taxonomy_linkit_load_plugins($string) {
  */
 function linkit_taxonomy_linkit_get_search_styled_link($string) {
   // Term links created with Linkit will always begin with "internal:"
-  if (strpos($string, 'internal:') === FALSE) {
+  if(strpos($string, 'internal:') === FALSE) {
     return;
   }
 
   // Check to see that the link really is a term link
   $splitted_string = explode('/', str_replace('internal:', '', $string));
-  if ($splitted_string[0] != 'taxonomy') {
+  if($splitted_string[0] != 'taxonomy') {
     return;
   }
 
@@ -47,7 +47,7 @@ function linkit_taxonomy_linkit_get_search_styled_link($string) {
   $term = db_fetch_object($result);
 
   // No reault or no term was found
-  if (!$result || !$term) {
+  if(!$result || !$term) {
     return;
   }
 

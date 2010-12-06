@@ -105,10 +105,6 @@ CKEDITOR.lang['fi'] =
 		targetTop		: 'Päällimmäinen ikkuna (_top)',
 		targetSelf		: 'Sama ikkuna (_self)',
 		targetParent	: 'Ylemmän tason ikkuna (_parent)',
-		langDirLTR		: 'Vasemmalta oikealle (LTR)',
-		langDirRTL		: 'Oikealta vasemmalle (RTL)',
-		styles			: 'Tyyli',
-		cssClasses		: 'Tyylitiedoston luokat',
 
 		// Put the voice-only part of the label in the span.
 		unavailable		: '%1<span class="cke_accessibility">, ei saatavissa</span>'
@@ -116,7 +112,7 @@ CKEDITOR.lang['fi'] =
 
 	contextmenu :
 	{
-		options : 'Pikavalikon ominaisuudet'
+		options : 'Context Menu Options' // MISSING
 	},
 
 	// Special char dialog.
@@ -124,7 +120,7 @@ CKEDITOR.lang['fi'] =
 	{
 		toolbar		: 'Lisää erikoismerkki',
 		title		: 'Valitse erikoismerkki',
-		options : 'Erikoismerkin ominaisuudet'
+		options : 'Special Character Options' // MISSING
 	},
 
 	// Link dialog.
@@ -200,14 +196,13 @@ CKEDITOR.lang['fi'] =
 		bulletedTitle		: 'Numeroimattoman listan ominaisuudet',
 		type				: 'Tyyppi',
 		start				: 'Alku',
-		validateStartNumber				:'Listan ensimmäisen numeron tulee olla kokonaisluku.',
 		circle				: 'Ympyrä',
 		disc				: 'Levy',
 		square				: 'Neliö',
 		none				: 'Ei mikään',
 		notset				: '<ei asetettu>',
 		armenian			: 'Armeenialainen numerointi',
-		georgian			: 'Georgialainen numerointi (an, ban, gan, etc.)',
+		georgian			: 'Georgian numbering (an, ban, gan, etc.)', // MISSING
 		lowerRoman			: 'Pienet roomalaiset (i, ii, iii, iv, v, jne.)',
 		upperRoman			: 'Isot roomalaiset (I, II, III, IV, V, jne.)',
 		lowerAlpha			: 'Pienet aakkoset (a, b, c, d, e, jne.)',
@@ -512,7 +507,7 @@ CKEDITOR.lang['fi'] =
 	{
 		toolbar	: 'Hymiö',
 		title	: 'Lisää hymiö',
-		options : 'Hymiön ominaisuudet'
+		options : 'Smiley Options' // MISSING
 	},
 
 	elementsPath :
@@ -564,7 +559,7 @@ CKEDITOR.lang['fi'] =
 	{
 		button			: 'Pohjat',
 		title			: 'Sisältöpohjat',
-		options : 'Sisältöpohjan ominaisuudet',
+		options : 'Template Options', // MISSING
 		insertOption	: 'Korvaa editorin koko sisältö',
 		selectPromptMsg	: 'Valitse pohja editoriin<br>(aiempi sisältö menetetään):',
 		emptyListMsg	: '(Ei määriteltyjä pohjia)'
@@ -741,18 +736,12 @@ CKEDITOR.lang['fi'] =
 	colordialog :
 	{
 		title		: 'Valitse väri',
-		options	:	'Värin ominaisuudet',
+		options	:	'Color Options', // MISSING
 		highlight	: 'Korostus',
 		selected	: 'Valittu',
 		clear		: 'Poista'
 	},
 
 	toolbarCollapse	: 'Kutista työkalupalkki',
-	toolbarExpand	: 'Laajenna työkalupalkki',
-
-	bidi :
-	{
-		ltr : 'Tekstin suunta vasemmalta oikealle',
-		rtl : 'Tekstin suunta oikealta vasemmalle'
-	}
+	toolbarExpand	: 'Laajenna työkalupalkki'
 };

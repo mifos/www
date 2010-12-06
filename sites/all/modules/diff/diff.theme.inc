@@ -1,10 +1,4 @@
 <?php
-// $Id: diff.theme.inc,v 1.1.2.3 2010/08/12 16:34:08 yhahn Exp $
-
-/**
- * @file
- * Themeable function callbacks for diff.module.
- */
 
 /**
  * Theme function to display the revisions formular with means to select
@@ -272,32 +266,46 @@ function theme_diff_empty_line($line) {
 }
 
 /**
- * Theme function for inline diff form.
+ * Simple inline controls and legend.
  */
-function theme_diff_inline_form($form) {
-  drupal_add_css(drupal_get_path('module', 'diff') .'/diff.css');
-  return drupal_render($form);
+function theme_diff_inline_controls($node) {
+  drupal_add_css(drupal_get_path('module', 'diff') .'/diff.css', 'module', 'all', FALSE);
+
+  $output = "<div class='diff-inline-controls clear-block'>";
+  if (empty($_SESSION['diff_inline_highlight'])) {
+    $output .= l(t('Highlight changes'), "node/{$node->nid}/revisions/{$node->vid}/view", array('query' => 'diff=1', 'attributes' => array('class' => 'button')));
+  }
+  else {
+    $output .= l(t('Hide changes'), "node/{$node->nid}", array('query' => 'diff=0', 'attributes' => array('class' => 'button')));
+    $output .= "<span class='diff-inline-legend'>";
+    $output .= "<label>". t('Legend') ."</label>";
+    $output .= "<span class='diff-added'>". t('Added') ."</span>";
+    $output .= "<span class='diff-changed'>". t('Changed') ."</span>";
+    $output .= "<span class='diff-deleted'>". t('Deleted') ."</span>";
+    $output .= "</span>";
+  }
+  $output .= "</div>";
+  return $output;
 }
 
 /**
- * Display inline diff metadata.
+ * Theme function for diff inline forms.
  */
-function theme_diff_inline_metadata($node) {
-  drupal_add_css(drupal_get_path('module', 'diff') .'/diff.css');
-  $output = "<div class='diff-inline-metadata clear-block'>";
-  $output .= "<div class='diff-inline-byline'>";
-  $output .= t('Updated by !name on @date', array(
-    '!name' => theme('username', $node),
-    '@date' => format_date($node->revision_timestamp, 'small'),
-  ));
-  $output .= "</div>";
-  $output .= "<div class='diff-inline-legend clear-block'>";
-  $output .= "<label>". t('Legend') ."</label>";
-  $output .= theme('diff_inline_chunk', t('Added'), 'add');
-  $output .= theme('diff_inline_chunk', t('Changed'), 'change');
-  $output .= theme('diff_inline_chunk', t('Deleted'), 'relete');
-  $output .= "</div>";
-  $output .= "</div>";
+function theme_diff_inline_revisions($node, $revisions) {
+  $num = count($revisions);
+  foreach ($revisions as $revision) {
+    $log = !empty($revision->log) ? "<div class='log'>". filter_xss($revision->log) ."</div>" : '';
+    $row = array();
+    $row[] = theme('username', $revision);
+    $row[] = array('data' => format_date($revision->timestamp, 'small') . $log, 'class' => 'info');
+    $row[] = array('data' => l(t('View'), "node/{$node->nid}/revisions/{$revision->vid}/view"));
+    $rows[] = array(
+      'data' => $row,
+      'class' => (_diff_inline_set_vid() == $revision->vid) ? 'active' : '',
+    );
+    $num--;
+  }
+  $output .= theme('table', array(), $rows, array('class' => 'diff-inline-revisions'));
   return $output;
 }
 

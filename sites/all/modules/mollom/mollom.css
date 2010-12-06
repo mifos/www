@@ -1,11 +1,5 @@
-/* $Id: mollom.css,v 1.1.2.4 2010/09/14 20:28:45 sun Exp $ */
+/* $Id: mollom.css,v 1.1.2.1 2009/05/25 13:09:43 dries Exp $ */
 
-#edit-mollom-captcha {
+input#edit-mollom-captcha {
   display: block;
-}
-
-/* Help themes to properly display Mollom's log messages. */
-.dblog-event pre,
-#simpletest-result-form table td {
-  white-space: pre-wrap;
 }

@@ -1,5 +1,5 @@
 <?php
-// $Id: emaudio.module,v 1.1.4.24 2010/07/19 16:25:21 aaron Exp $
+// $Id: emaudio.module,v 1.1.4.23 2009/11/19 16:54:40 aaron Exp $
 
 /**
  * @file
@@ -104,15 +104,15 @@ function emaudio_field_formatter_info() {
       'label' => t('Full Size Audio Player'),
       'field types' => $types,
     ),
-    'audio_preview' => array(
+    'emaudio_preview' => array(
       'label' => t('Preview Size Audio Player'),
       'field types' => $types,
     ),
-    'audio_thumbnail' => array(
+    'emaudio_thumbnail' => array(
       'label' => t('Image Thumbnail'),
       'field types' => $types,
     ),
-    'audio_embed' => array(
+    'emaudio_embed' => array(
       'label' => t('Embed Code'),
       'field types' => $types,
     ),

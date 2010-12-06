@@ -1,5 +1,5 @@
 <?php
-// $Id: bootstrap.inc,v 1.206.2.29 2010/08/06 11:50:24 goba Exp $
+// $Id: bootstrap.inc,v 1.206.2.23 2010/06/02 13:07:45 goba Exp $
 
 /**
  * @file
@@ -221,11 +221,6 @@ define('LANGUAGE_LTR', 0);
  * Language written right to left. Possible value of $language->direction.
  */
 define('LANGUAGE_RTL', 1);
-
-// Hide E_DEPRECATED messages.
-if (defined('E_DEPRECATED')) {
-  error_reporting(error_reporting() & ~E_DEPRECATED);
-}
 
 /**
  * Start the timer with the specified name. If you start and stop
@@ -597,11 +592,7 @@ function variable_init($conf = array(), $regenerate = FALSE, $recursion_depth = 
 }
 
 /**
- * Returns a persistent variable.
- *
- * Case-sensitivity of the variable_* functions depends on the database
- * collation used. To avoid problems, always use lower case for persistent
- * variable names.
+ * Return a persistent variable.
  *
  * @param $name
  *   The name of the variable to return.
@@ -619,11 +610,7 @@ function variable_get($name, $default) {
 }
 
 /**
- * Sets a persistent variable.
- *
- * Case-sensitivity of the variable_* functions depends on the database
- * collation used. To avoid problems, always use lower case for persistent
- * variable names.
+ * Set a persistent variable.
  *
  * @param $name
  *   The name of the variable to set.
@@ -645,9 +632,7 @@ function variable_set($name, $value) {
   $conf[$name] = $value;
 
   // The write-through rebuild optimization isn't compatible with SimpleTest.
-  // Because array-based prefixes don't work with SimpleTest, we can assume
-  // that a non-string prefix indicates lack of SimpleTest operations.
-  if (is_string($db_prefix) && strpos($db_prefix, 'simpletest') === 0) {
+  if (strpos($db_prefix, 'simpletest') === 0) {
     cache_clear_all('variables', 'cache');
   }
   
@@ -655,11 +640,7 @@ function variable_set($name, $value) {
 }
 
 /**
- * Unsets a persistent variable.
- *
- * Case-sensitivity of the variable_* functions depends on the database
- * collation used. To avoid problems, always use lower case for persistent
- * variable names.
+ * Unset a persistent variable.
  *
  * @param $name
  *   The name of the variable to undefine.
@@ -674,9 +655,7 @@ function variable_del($name) {
   unset($conf[$name]);
 
   // The write-through rebuild optimization isn't compatible with SimpleTest.
-  // Because array-based prefixes don't work with SimpleTest, we can assume
-  // that a non-string prefix indicates lack of SimpleTest operations.
-  if (is_string($db_prefix) && strpos($db_prefix, 'simpletest') === 0) {
+  if (strpos($db_prefix, 'simpletest') === 0) {
     cache_clear_all('variables', 'cache');
   }
   
@@ -1104,7 +1083,7 @@ function bootstrap_hooks() {
 function drupal_unpack($obj, $field = 'data') {
   if ($obj->$field && $data = unserialize($obj->$field)) {
     foreach ($data as $key => $value) {
-      if (!empty($key) && !isset($obj->$key)) {
+      if (!isset($obj->$key)) {
         $obj->$key = $value;
       }
     }
@@ -1222,8 +1201,7 @@ function request_uri() {
  * Log a system message.
  *
  * @param $type
- *   The category to which this message belongs. Can be any string, but the
- *   general practice is to use the name of the module calling watchdog().
+ *   The category to which this message belongs.
  * @param $message
  *   The message to store in the log. See t() for documentation
  *   on how $message and $variables interact. Keep $message
@@ -1233,8 +1211,7 @@ function request_uri() {
  *   NULL if message is already translated or not possible to
  *   translate.
  * @param $severity
- *   The severity of the message, as per RFC 3164. Possible values are
- *   WATCHDOG_ERROR, WATCHDOG_WARNING, etc.
+ *   The severity of the message, as per RFC 3164
  * @param $link
  *   A link to associate with the message.
  *
@@ -1258,7 +1235,7 @@ function watchdog($type, $message, $variables = array(), $severity = WATCHDOG_NO
     );
 
   // Call the logging hooks to log/process the message
-  foreach (module_implements('watchdog') as $module) {
+  foreach (module_implements('watchdog', TRUE) as $module) {
     module_invoke($module, 'watchdog', $log_message);
   }
 }
@@ -1416,16 +1393,6 @@ function drupal_bootstrap($phase = NULL) {
   return $phase_index;
 }
 
-/**
- * Redirect to the installer if an essential table is missing.
- */
-function detect_installation_or_run_installer() {
-  if (variable_get('pressflow_smart_start', FALSE) && !db_table_exists('access')) {
-    include_once 'includes/install.inc';
-    install_goto('install.php');
-  }
-}
-
 function _drupal_bootstrap($phase) {
   global $conf, $user, $db_prefix;
 
@@ -1472,10 +1439,6 @@ function _drupal_bootstrap($phase) {
       // those using APC or memcached.
       require_once variable_get('lock_inc', './includes/lock.inc');
       lock_init();
-      
-      // Detect if an installation is present.
-      detect_installation_or_run_installer();
-
       break;
 
     case DRUPAL_BOOTSTRAP_ACCESS:
@@ -1751,7 +1714,7 @@ function drupal_session_commit() {
   if (empty($user->uid) && empty($_SESSION)) {
     if (drupal_session_started() && drupal_save_session()) {
       // Destroy empty anonymous sessions.
-      drupal_session_destroy();
+      session_destroy();
     }
   }
   else if (drupal_save_session()) {
@@ -1891,20 +1854,4 @@ function drupal_generate_test_ua($prefix) {
 function drupal_is_cli() {
   return ((!isset($_SERVER['SERVER_SOFTWARE']) || $_SERVER['SERVER_SOFTWARE'] == 'PHP CLI')
     && (php_sapi_name() == 'cli' || (is_numeric($_SERVER['argc']) && $_SERVER['argc'] > 0)));
-}
-
-/**
- * Destroys all data registered to a session.
- *
- * Placed in bootstrap.inc instead of session.inc as session.inc may be
- * overridden by other session persistance layers (eg., memcache).
- *
- * @ingroup php_wrappers
- */
-function drupal_session_destroy() {
-  session_destroy();
-  
-  // Workaround PHP 5.2 fatal error "Failed to initialize storage module".
-  // @see http://bugs.php.net/bug.php?id=32330
-  session_set_save_handler('sess_open', 'sess_close', 'sess_read', 'sess_write', 'sess_destroy_sid', 'sess_gc');
 }

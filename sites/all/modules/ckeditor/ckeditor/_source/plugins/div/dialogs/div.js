@@ -140,8 +140,8 @@
 			var containedBlocks = [], block;
 
 			// Get all ranges from the selection.
-			var selection = editor.document.getSelection(),
-				ranges = selection.getRanges();
+			var selection = editor.document.getSelection();
+			var ranges = selection.getRanges();
 			var bookmarks = selection.createBookmarks();
 			var i, iterator;
 
@@ -330,13 +330,7 @@
 								{
 									var styleName;
 									if ( ( styleName = this.getValue() ) )
-									{
-										var style = styles[ styleName ];
-										var customData = element.getCustomData( 'elementStyle' ) || '';
-
-										style.applyToObject( element );
-										element.setCustomData( 'elementStyle', customData + style._.definition.attributes.style );
-									}
+										styles[ styleName ].applyToObject( element );
 								}
 							},
 							{
@@ -392,8 +386,9 @@
 											commit : function( element )
 											{
 												// Merge with 'elementStyle', which is of higher priority.
-												var merged = this.getValue() + ( element.getCustomData( 'elementStyle' ) || '' );
-												element.setAttribute( 'style', merged );
+												var value = this.getValue(),
+														merged = [ value, element.getAttribute( 'style' ) ].join( ';' );
+												value && element.setAttribute( 'style', merged );
 											}
 										}
 								]
@@ -437,7 +432,7 @@
 			],
 			onLoad : function()
 			{
-				setupFields.call( this );
+				setupFields.call(this);
 
 				// Preparing for the 'elementStyle' field.
 				var dialog = this,
@@ -489,6 +484,7 @@
 			},
 			onOk : function()
 			{
+				editor.fire( 'saveSnapshot' );
 				if ( command == 'editdiv' )
 					containers = [ this._element ];
 				else
@@ -503,14 +499,12 @@
 					// Remove empty 'style' attribute.
 					!containers[ i ].getAttribute( 'style' ) && containers[ i ].removeAttribute( 'style' );
 				}
+				editor.fire( 'saveSnapshot' );
 
 				this.hide();
 			},
 			onHide : function()
 			{
-				// Remove style only when editing existing DIV. (#6315)
-				if ( command == 'editdiv' )
-					this._element.removeCustomData( 'elementStyle' );
 				delete this._element;
 			}
 		};

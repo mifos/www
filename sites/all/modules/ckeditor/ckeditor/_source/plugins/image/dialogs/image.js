@@ -250,10 +250,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 			switchLockRatio( this, false );	// Unlock.
 		};
 
-		var numbering = function( id )
-			{
-				return CKEDITOR.tools.getNextId() + '_' + id;
-			},
+		var numbering = function( id ){ return id + CKEDITOR.tools.getNextNumber(); },
 			btnLockSizesId = numbering( 'btnLockSizes' ),
 			btnResetSizeId = numbering( 'btnResetSize' ),
 			imagePreviewLoaderId = numbering( 'ImagePreviewLoader' ),
@@ -541,6 +538,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 													field.setValue( url );		// And call this.onChange()
 													// Manually set the initial value.(#4191)
 													field.setInitValue();
+													field.focus();
 												}
 											},
 											commit : function( type, element )
@@ -577,7 +575,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 							id : 'txtAlt',
 							type : 'text',
 							label : editor.lang.image.alt,
-							accessKey : 'T',
+							accessKey : 'A',
 							'default' : '',
 							onChange : function()
 							{
@@ -666,7 +664,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 																			element.setStyle( 'width',  oImageOriginal.$.width + 'px');
 																	}
 																	else
-																		element.setStyle( 'width', CKEDITOR.tools.cssLength( value ) );
+																		element.setStyle( 'width', value + 'px');
 																}
 																else if ( type == CLEANUP )
 																{
@@ -717,7 +715,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 																			element.setStyle( 'height', oImageOriginal.$.height + 'px' );
 																	}
 																	else
-																		element.setStyle( 'height',  CKEDITOR.tools.cssLength( value ) );
+																		element.setStyle( 'height', value + 'px' );
 																}
 																else if ( type == CLEANUP )
 																{
@@ -1127,7 +1125,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 							{
 								action : 'Browse',
 								target: 'Link:txtUrl',
-								url: editor.config.filebrowserImageBrowseLinkUrl
+								url: editor.config.filebrowserImageBrowseLinkUrl || editor.config.filebrowserBrowseUrl
 							},
 							style : 'float:right',
 							hidden : true,

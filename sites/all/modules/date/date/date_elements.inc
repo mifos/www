@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.46.2.2.2.68 2010/08/12 21:31:07 karens Exp $
+//$Id: date_elements.inc,v 1.46.2.2.2.66 2009/09/16 11:07:18 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -47,6 +47,10 @@ function _date_field_update($op, &$node, $field, &$items, $teaser, $page) {
     //$node->$field_name = array(); // Not sure about this, CCK should handle it.
     return;
   }
+  $format = $field['type'] == DATE_ISO ? DATE_FORMAT_ISO : DATE_FORMAT_UNIX;
+  $timezone = date_get_timezone($field['tz_handling'], array_key_exists('timezone', $items[0]) ? $items[0]['timezone'] : '');
+  $db_info = content_database_info($field);
+  $columns = array_keys($db_info['columns']);
 
   $values = $items;
   foreach ($values as $delta => $item) {
@@ -560,7 +564,8 @@ function date_input_format($element, $field) {
  *  Theme from/to date combination on form.
  */
 function theme_date_combo($element) {
-  $field = content_fields($element['#field_name'], $element['#type_name']);
+  $fields = content_fields();
+  $field = $fields[$element['#field_name']];
   if (!$field['todate']) {
     return $element['#children'];
   }

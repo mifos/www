@@ -1,52 +1,52 @@
 <?php
-// $Id: linkit.admin.inc,v 1.3.2.4 2010/10/24 12:58:40 anon Exp $
+// $Id: linkit.admin.inc,v 1.3 2010/06/25 10:29:08 anon Exp $
 
 /**
  * @file
  * Admin page callbacks for the Linkit module.
  */
 
+/**
+ * Form configure the Linikt.
+ */
 function linkit_admin_settings() {
   
-  $settings = variable_get('linkit_node', array('display_settings' => array(), 'content_types' => array()));
+  $settings = variable_get('linkit_node', array());
 
-  $node_display_settings = array(
-    'nid' => t('Display node id (nid)'),
-    'content_type' => t('Display node content type'),
-    'status' => t('Display node published status'),
-    'language' => t('Display node language'),
-    'created' => t('Display node created time'),
-    'changed' => t('Display node changed time'),
-    'show_unpublished' => t('Show unpublished nodes in the result'),
-  );
-
-  if(module_exists('book')) {
-    $node_display_settings += array('show_books' => t('Display the book a node belong to'));
-  }
-  
-  $form['linkit_node'] = array(
+  $form['node'] = array(
     '#type' => 'fieldset',
     '#title' => t('Node settings'),
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
     '#description' => t('Linkit node settings'),
-    '#tree' => TRUE,
   );
 
-  $form['linkit_node']['display_settings']  = array(
+  $form['node']['linkit_node'] = array(
     '#title' => t('Information to display in the autocomplete field'),
     '#type' => 'checkboxes',
-    '#options' => $node_display_settings,
-    '#default_value' => $settings['display_settings'],
+    '#options' => array(
+      'nid' => t('Display node id (nid)'),
+      'content_type' => t('Display node content type'),
+      'status' => t('Display node published status'),
+      'language' => t('Display node language'),
+      'created' => t('Display node created time'),
+      'changed' => t('Display node changed time'),
+      'show_unpublished' => t('Show unpublished nodes in the result'),
+    ),
+    '#default_value' => $settings,
   );
 
-  $form['linkit_node']['content_types'] = array(
-    '#title' => t('Include this content types in the search result'),
-    '#type' => 'checkboxes',
-    '#options' => node_get_types('names'),
-    '#default_value' => $settings['content_types'], 
-    '#description' => t('If none is checked, all content types will be present in the search result.'),
-  );
+  $form['submit'] = array('#type' => 'submit', '#value' => t('Save'));
 
-  return system_settings_form($form);
+  return $form;
+}
+
+
+function linkit_admin_settings_submit($form, &$form_state) {
+  foreach($form_state['values'] AS $key => $value) {
+    if(strpos($key, 'linkit_') !== FALSE) {
+      variable_set($key, $value);
+    }
+  }
+  drupal_set_message(t('Settings has been saved.'));
 }

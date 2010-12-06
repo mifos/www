@@ -10,8 +10,8 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 		if ( !formElement || formElement.type != CKEDITOR.NODE_ELEMENT || formElement.getName() != 'form' )
 			return [];
 
-		var hijackRecord = [],
-			hijackNames = [ 'style', 'className' ];
+		var hijackRecord = [];
+		var hijackNames = [ 'style', 'className' ];
 		for ( var i = 0 ; i < hijackNames.length ; i++ )
 		{
 			var name = hijackNames[i];
@@ -129,12 +129,12 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 		init : function( editor )
 		{
 			var lang = editor.lang;
-			var mainDocument = CKEDITOR.document,
-				mainWindow = mainDocument.getWindow();
+			var mainDocument = CKEDITOR.document;
+			var mainWindow = mainDocument.getWindow();
 
 			// Saved selection and scroll position for the editing area.
-			var savedSelection,
-				savedScroll;
+			var savedSelection;
+			var savedScroll;
 
 			// Saved scroll position for the outer window.
 			var outerScroll;
@@ -194,14 +194,6 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 							container.setCustomData( 'maximize_saved_styles', saveStyles( container, true ) );
 
 							// Hide scroll bars.
-							var viewPaneSize = mainWindow.getViewPaneSize();
-							var styles =
-								{
-									overflow : 'hidden',
-									width : ( CKEDITOR.env.opera ? viewPaneSize.width : 0 ) + 'px',
-									height : ( CKEDITOR.env.opera ? viewPaneSize.height - 16 : 0 ) + 'px'
-								};
-
 							if ( CKEDITOR.env.ie )
 							{
 								mainDocument.$.documentElement.style.overflow =
@@ -209,12 +201,13 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 							}
 							else
 							{
-								mainDocument.getBody().setStyles( styles );
+								mainDocument.getBody().setStyles(
+									{
+										overflow : 'hidden',
+										width : '0px',
+										height : '0px'
+									} );
 							}
-
-							// #4023: [Opera] Maximize plugin
-							if ( CKEDITOR.env.opera )
-								mainDocument.getBody().getParent().setStyles( styles );
 
 							// Scroll to the top left (IE needs some time for it - #4923).
 							CKEDITOR.env.ie ?
@@ -222,6 +215,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 								mainWindow.$.scrollTo( 0, 0 );
 
 							// Resize and move to top left.
+							var viewPaneSize = mainWindow.getViewPaneSize();
 							container.setStyle( 'position', 'absolute' );
 							container.$.offsetLeft;			// SAFARI BUG: See #2066.
 							container.setStyles(
@@ -232,10 +226,6 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 								} );
 
 							shim =  createIframeShim( container );		// IE6 select element penetration when maximized. (#4459)
-
-							// Add cke_maximized class before resize handle since that will change things sizes (#5580)
-							container.addClass( 'cke_maximized' );
-
 							resizeHandler();
 
 							// Still not top left? Fix it. (Bug #174)
@@ -249,6 +239,8 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 							// Fixing positioning editor chrome in Firefox break design mode. (#5149)
 							CKEDITOR.env.gecko && refreshCursor( editor );
 
+							// Add cke_maximized class.
+							container.addClass( 'cke_maximized' );
 						}
 						else if ( this.state == CKEDITOR.TRISTATE_ON )	// Restore from fullscreen if the state is on.
 						{
@@ -339,11 +331,10 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 					command : 'maximize'
 				} );
 
-			// Restore the command state after mode change, unless it has been changed to disabled (#6467)
+			// Restore the command state after mode change.
 			editor.on( 'mode', function()
 				{
-					var command = editor.getCommand( 'maximize' );
-					command.setState( command.state == CKEDITOR.TRISTATE_DISABLED ? CKEDITOR.TRISTATE_DISABLED : savedState );
+					editor.getCommand( 'maximize' ).setState( savedState );
 				}, null, null, 100 );
 		}
 	} );

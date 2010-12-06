@@ -32,9 +32,9 @@ settings[basic_zen_tabs]             = 1
 settings[basic_wireframe]            = 0
 settings[basic_block_editing]        = 1
 settings[basic_rebuild_registry]     = 0
-; Information added by drupal.org packaging script on 2010-04-27
-version = "6.x-2.10"
+; Information added by drupal.org packaging script on 2009-10-28
+version = "6.x-2.9"
 core = "6.x"
 project = "basic"
-datestamp = "1272402606"
+datestamp = "1256756703"
 

@@ -1,5 +1,5 @@
 <?php 
-// $Id: linkit_permissions.module,v 1.1.2.1 2010/08/27 16:56:03 anon Exp $
+// $Id: linkit_permissions.module,v 1.1 2010/03/05 18:20:24 anon Exp $
 
 /**
  * @file
@@ -12,7 +12,7 @@
 function linkit_permissions_perm() {
   $perms = array('create all links');
   foreach (module_invoke_all('linkit_info_plugins') as $plugin) {
-    $perms[] = 'create '. check_plain($plugin['type']) .' links';
+    $perms[] = 'create '.check_plain($plugin['type']).' links';
   }
   return $perms;
 }
