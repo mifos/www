@@ -1,5 +1,5 @@
 <?php
-// $Id: node_export.module,v 1.1.2.21 2010/02/24 23:28:07 danielb Exp $
+// $Id: node_export.module,v 1.1.2.30 2010/11/02 06:01:31 danielb Exp $
 
 /**
  * @file
@@ -47,7 +47,7 @@ function node_export_menu() {
     'access callback' => 'node_export_access',
     'access arguments' => array(1),
     'page callback' => 'node_export_node_export',
-    'page arguments' => array(1),
+    'page arguments' => array(1, 3),
     'title' => 'Export',
     'weight' => 5,
     'type' => MENU_LOCAL_TASK,
@@ -138,7 +138,7 @@ function node_export_node_operations() {
 /**
  * Callback for 'node_export' node operation.
  */
-function node_export_node_bulk($nids, $return_code = FALSE) {
+function node_export_node_bulk($nids, $return_code = FALSE, $format = NULL) {
 
   $nodes = array();
   foreach ($nids as $nid) {
@@ -148,14 +148,22 @@ function node_export_node_bulk($nids, $return_code = FALSE) {
   // Let other modules do special fixing up.
   // The function signature is: hook_node_export_node_bulk_alter(&$nodes, $op).
   // Where $op is 'export'.
-  drupal_alter('node_export_node_bulk', $nodes, 'export');
+  drupal_alter('node_export_node_bulk', $nodes, 'export', $format);
 
-  $node_codes = array();
-  foreach ($nodes as $node) {
-    $node_codes[] = node_export_node_export($node, TRUE, 1);
+  // Allow other modules to take over this entire process. Typically the module
+  // would respond if $format was set to something it recognises.
+  $node_code = FALSE;
+  drupal_alter('node_export_node_bulk_encode', $node_code, $nodes, $format);
+
+  // Default handling of bulk node code.
+  if ($node_code === FALSE) {
+    $node_codes = array();
+    foreach ($nodes as $node) {
+      $node_codes[] = node_export_node_export($node, TRUE, 1);
+    }
+    $node_code = "array(\n  ". implode(",\n  ", $node_codes) .",\n)";
   }
 
-  $node_code = "array(\n  ". implode(",\n  ", $node_codes) .",\n)";
   if ($return_code) {
     return $node_code;
   }
@@ -362,8 +370,10 @@ function node_export_settings() {
 /**
  *  Exports a node - populate a node code form
  *  set $return_code to TRUE to not return form but the code instead.
+ *  set $format to some string if encoding should be handled by some module that
+ *  will recognise the string.
  */
-function node_export_node_export($original_node, $return_code = FALSE, $iteration = 0) {
+function node_export_node_export($original_node, $return_code = FALSE, $iteration = 0, $format = NULL) {
   if (isset($original_node->nid)) {
     global $user;
 
@@ -400,8 +410,9 @@ function node_export_node_export($original_node, $return_code = FALSE, $iteratio
       // Let other modules do special fixing up.
       // The function signature is: hook_node_export_node_alter(&$node, $original_node, $method)
       // Where $method is 'export'
-      drupal_alter('node_export_node', $node, $original_node, 'export');
-      $node_code = node_export_node_encode($node, $iteration);
+      drupal_alter('node_export_node', $node, $original_node, 'export', $format);
+      $node = node_export_remove_recursion($node);
+      $node_code = node_export_node_encode($node, $iteration, $format);
       if ($return_code) {
         return $node_code;
       }
@@ -493,6 +504,7 @@ function node_export_theme() {
  */
 function node_export_import($node_code, $method = NULL, $redirect = TRUE, $msg_func = 'drupal_set_message', $msg_t = 't') {
   $import = node_export_node_decode($node_code);
+  $import = node_export_restore_recursion($import);
   $types_exist = node_export_import_types_check($import);
   if ($types_exist) {
     $count = 0;
@@ -532,6 +544,7 @@ function node_export_import($node_code, $method = NULL, $redirect = TRUE, $msg_f
         if ($redirect) {
           drupal_goto('node/'. $new_nid .'/edit');
         }
+        return TRUE;
       }
       else if ($method == 'prepopulate') {
         include_once(drupal_get_path('module', 'node') .'/node.pages.inc');
@@ -597,7 +610,7 @@ function node_export_import_form($form_state) {
   );
   $form['upload']['file'] = array(
     '#type' => 'file',
-    '#description' => t('To clear this field, <a href="@reset">reset the form</a>.', array('@reload' => url($_GET['q'])))
+    '#description' => t('To clear this field, <a href="@reset">reset the form</a>.', array('@reset' => url($_GET['q'])))
   );
   $form['paste'] = array(
     '#type' => 'fieldset',
@@ -834,7 +847,20 @@ function node_export_node_clone($original_node, $mode) {
 /**
  * Build node code string recursively
  */
-function node_export_node_encode($var, $iteration = 0) {
+function node_export_node_encode($var, $iteration = 0, $format = NULL) {
+
+  // Allow other modules to take over this entire process before the first
+  // iteration.  Typically the module would respond if $format was set to
+  // something it recognises.
+  if ($iteration == 0) {
+    $return = FALSE;
+    drupal_alter('node_export_node_encode', $return, $var, $format);
+    if ($return !== FALSE) {
+      return $return;
+    }
+  }
+
+  // Default node encoding.
   $tab = '';
   for ($i = 0; $i < $iteration; $i++) {
     $tab = $tab ."  ";
@@ -857,7 +883,8 @@ function node_export_node_encode($var, $iteration = 0) {
   }
   else {
     if (is_string($var)) {
-      return "'". addslashes($var) ."'";
+      // Escape single quotes so we don't accidentally exit the string.
+      return "'". strtr($var, array("'" => "\\'")) ."'";
     }
     elseif (is_numeric($var)) {
       return $var;
@@ -875,6 +902,15 @@ function node_export_node_encode($var, $iteration = 0) {
  * Evaluate and return decoded string.
  */
 function node_export_node_decode($string) {
+
+  // Allow other modules to take over this entire process.
+  $return = FALSE;
+  drupal_alter('node_export_node_decode', $return, $string);
+  if ($return !== FALSE) {
+    return $return;
+  }
+
+  // Default node decoding.
   $array = eval('return '. $string .';');
   $return = node_export_node_decode_objects($array);
   return $return;
@@ -887,9 +923,6 @@ function node_export_node_decode_objects($array) {
   foreach ($array as $k => $v) {
     if (is_array($v)) {
       $array[$k] = node_export_node_decode_objects($v);
-    }
-    if (is_string($v)) {
-      $array[$k] = stripslashes($v);
     }
   }
   if ($array['#_export_node_encode_object']) {
@@ -932,4 +965,56 @@ function node_export_get_menu($node) {
     return $node->menu;
   }
 
+}
+
+
+/**
+ * Remove recursion problem from an object or array.
+ */
+function node_export_remove_recursion($o) {
+   static  $replace;
+   if (!isset($replace)) {
+   $replace = create_function(
+         '$m',
+         '$r="\x00{$m[1]}ecursion_export_node_";return \'s:\'.strlen($r.$m[2]).\':"\'.$r.$m[2].\'";\';'
+      );
+   }
+   if (is_array($o) || is_object($o)) {
+      $re = '#(r|R):([0-9]+);#';
+      $serialize = serialize($o);
+      if (preg_match($re, $serialize)) {
+         $last = $pos = 0;
+         while (false !== ($pos = strpos($serialize, 's:', $pos))) {
+            $chunk = substr($serialize, $last, $pos - $last);
+            if (preg_match($re, $chunk)) {
+               $length = strlen($chunk);
+               $chunk = preg_replace_callback($re, $replace, $chunk);
+               $serialize = substr($serialize, 0, $last) . $chunk . substr($serialize, $last + ($pos - $last));
+               $pos += strlen($chunk) - $length;
+            }
+            $pos += 2;
+            $last = strpos($serialize, ':', $pos);
+            $length = substr($serialize, $pos, $last - $pos);
+            $last += 4 + $length;
+            $pos = $last;
+         }
+         $serialize = substr($serialize, 0, $last) . preg_replace_callback($re, $replace, substr($serialize, $last));
+         $o = unserialize($serialize);
+      }
+   }
+   return $o;
+}
+
+
+/**
+ * Restore recursion to an object or array.
+ */
+function node_export_restore_recursion($o) {
+    return unserialize(
+        preg_replace(
+            '#s:[0-9]+:"\x00(r|R)ecursion_export_node_([0-9]+)";#',
+            '\1:\2;',
+            serialize($o)
+        )
+    );
 }

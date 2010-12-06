@@ -1,5 +1,5 @@
 <?php
-// $Id: linkit.install,v 1.2 2010/06/20 15:38:06 anon Exp $
+// $Id: linkit.install,v 1.2.2.4 2010/10/24 12:52:27 anon Exp $
 
 /**
  * @file
@@ -22,19 +22,35 @@ function linkit_requirements($phase) {
 
   switch ($phase) {
   case 'runtime':
-    break;
-  case 'install':
-    if(!module_exists('pathfilter') && !module_exists('pathologic')) {
-      $requirements['linkit_dependencies'] = array(
-        'title' => $t('Linkit'),
-        'severity' => REQUIREMENT_ERROR,
-        'description' => $t('The Linkit module requires <a href="@pathfilter">pathfilter</a> <strong>OR</strong> <a href="@pathologic">pathologic</a>, be sure you have <strong>ONE</strong> of this modules installed.', array(
+    if (!module_exists('pathfilter') && !module_exists('pathologic')) {
+      $severity = REQUIREMENT_ERROR; 
+      $value = t('Please install pathfilter <strong>OR</strong> pathologic');
+    }
+    else {
+      $severity = REQUIREMENT_OK; 
+      $value = t('Ok');
+    }
+    $requirements['linkit_dependencies'] = array(
+        'title' => t('Linkit'),
+        'severity' => $severity,
+        'value' => $value,
+        'description' =>  t('To parse "internal:" links <a href="@pathfilter">pathfilter</a> <strong>OR</strong> <a href="@pathologic">pathologic</a> most be installed.', array(
           '@pathfilter' => 'http://drupal.org/project/pathfilter',
           '@pathologic' => 'http://drupal.org/project/pathologic'
         )),
       );
-    }
     break;
   }
   return $requirements;
+}
+
+/**
+ * Create a new variable and add the old settings to it.
+ */
+function linkit_update_6100() {
+  $ret = array();
+  $old = variable_get('linkit_node', array());
+  $new = array('display_settings' => $old);
+  variable_set('linkit_node', $new);
+  return $ret;  
 }

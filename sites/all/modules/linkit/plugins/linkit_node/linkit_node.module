@@ -1,5 +1,5 @@
 <?php 
-// $Id: linkit_node.module,v 1.11 2010/06/26 17:25:20 anon Exp $
+// $Id: linkit_node.module,v 1.11.2.4 2010/10/24 12:52:27 anon Exp $
 
 /**
  * @file
@@ -13,30 +13,55 @@
 function linkit_node_linkit_load_plugins($string) {
   $matches = array();
   
-  $settings = variable_get('linkit_node', array());
- 
+  $settings = variable_get('linkit_node', array('display_settings' => array(), 'content_types' => array()));
+  
   $fields = array('n.nid', 'n.title'); // default fields
-
-  if($settings['content_type']) {
-    $fields[] = 'n.type';
+  $from = array('{node} n'); // default from
+  $where = array(); // default where
+  
+  if ($settings['display_settings']['content_type']) {
+    $from[] = 'INNER JOIN {node_type} nt ON nt.type = n.type';
+    $fields[] = 'nt.name AS content_type';
   }
-  if($settings['status']) {
+  if ($settings['display_settings']['status']) {
     $fields[] = 'n.status';
   }
-  if($settings['language']) {
+  if ($settings['display_settings']['language']) {
     $fields[] = 'n.language';
   } 
-  if($settings['created']) {
+  if ($settings['display_settings']['created']) {
     $fields[] = 'n.created';
   }
-  if($settings['changed']) {
+  if ($settings['display_settings']['changed']) {
     $fields[] = 'n.changed';
   }
+  if ($settings['display_settings']['show_books'] && module_exists('book')) {
+    $from[] = 'LEFT JOIN {book} b ON b.nid = n.nid';
+    $fields[] = 'b.bid';
+  }
+  if ($settings['display_settings']['show_unpublished']) {
+    $where[] = "AND n.status = 1";
+  }
 
-  $where_status = $settings['show_unpublished'] ? "" : "AND n.status = 1";
-  
+  // Prebuild the SQL query
+  $sql = array();
+  $sql[] = "SELECT %s";
+  $sql[] = "FROM " . implode(" ", $from);
+  $sql[] = "WHERE LOWER(n.title) LIKE LOWER('%%%s%%') %s";
+
+   // Content type check
+  if ($allowed_content_types = array_filter($settings['content_types'])) {
+    $allowed_content_types = implode("', '", $allowed_content_types);
+    // Special treatment!!
+    // If we push this to the $where array, the single-quotes will be
+    // escaped and result in a SQL error. 
+    // I asked chx if its ok to use the content type machine name
+    // "as it is" in this query and he said ok and I trust him.
+    $sql[] = " AND n.type IN ('" . $allowed_content_types . "')";
+  }
+
   // Get nodes
-  $result = db_query_range(db_rewrite_sql("SELECT %s FROM {node} n WHERE LOWER(n.title) LIKE LOWER('%%%s%%') %s"), implode(",", $fields), $string, $where_status, 0, 10);
+  $result = db_query_range(db_rewrite_sql(implode(" ", $sql)), implode(",", $fields), $string, implode(" ", $where), 0, 10);
   $i = 0;
   while ($node = db_fetch_object($result)) {
     $matches['node'][$i] = array(
@@ -46,30 +71,41 @@ function linkit_node_linkit_load_plugins($string) {
         'type' => 'Node',
       ),
     );
- 
-    if($settings['nid']) {
+
+    // Add the node nid
+    if ($settings['display_settings']['nid']) {
       $matches['node'][$i]['information']['nid'] = $node->nid;
     } 
-    if($settings['content_type']) {
-      $matches['node'][$i]['information']['content type'] = $node->type;
+    // Add the node content type
+    if ($settings['display_settings']['content_type']) {
+      $matches['node'][$i]['information']['content type'] = $node->content_type;
     } 
-    if($settings['status']) {
+    // Add the node status
+    if ($settings['display_settings']['status']) {
       $matches['node'][$i]['information']['status'] = $node->status ? 'published' : 'unpublished';
     }
-    if($settings['language']) {
+    // Add the node language
+    if ($settings['display_settings']['language']) {
       $matches['node'][$i]['information']['language'] = $node->language ? $node->language : '-';
     } 
-    if($settings['created']) {
+    // Add the node created time
+    if ($settings['display_settings']['created']) {
       $matches['node'][$i]['information']['created'] = $node->created ? format_date($node->created, 'small') : '-';
     } 
-    if($settings['changed']) {
+    // Add the node changed time
+    if ($settings['display_settings']['changed']) {
       $matches['node'][$i]['information']['changed'] = $node->changed ? format_date($node->changed, 'small') : '-';
     } 
-
+    
+    // Add Title of the book a node belong to
+    if ($settings['display_settings']['show_books'] && $node->bid) {
+      $book_node = node_load($node->bid);
+      $matches['node'][$i]['information']['book'] = $book_node->title;
+    } 
 
     $i++;
   }
-
+  
   return $matches;
 }
 
@@ -78,13 +114,13 @@ function linkit_node_linkit_load_plugins($string) {
  */
 function linkit_node_linkit_get_search_styled_link($string) {
   // Node links created with Linkit will always begin with "internal:"
-  if(strpos($string, 'internal:') === FALSE) {
+  if (strpos($string, 'internal:') === FALSE) {
     return;
   }
 
   // Check to see that the link really is a node link
   $splitted_string = explode('/', str_replace('internal:', '', $string));
-  if($splitted_string[0] != 'node') {
+  if ($splitted_string[0] != 'node') {
     return;
   }
 
@@ -93,7 +129,7 @@ function linkit_node_linkit_get_search_styled_link($string) {
   $node = db_fetch_object($result);
   
   // No reault or no node was found
-  if(!$result || !$node) {
+  if (!$result || !$node) {
     return;
   }
 

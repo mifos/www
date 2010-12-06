@@ -5,9 +5,9 @@ core = 6.x
 package = Linkit
 dependencies[] = "linkit"
 dependencies[] = "views"
-; Information added by drupal.org packaging script on 2010-06-26
-version = "6.x-1.4"
+; Information added by drupal.org packaging script on 2010-10-31
+version = "6.x-1.7"
 core = "6.x"
 project = "linkit"
-datestamp = "1277574009"
+datestamp = "1288543566"
 

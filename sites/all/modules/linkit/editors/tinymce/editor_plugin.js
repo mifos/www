@@ -1,4 +1,4 @@
-// $Id: editor_plugin.js,v 1.3 2010/06/02 20:47:03 anon Exp $
+// $Id: editor_plugin.js,v 1.5 2010/07/20 22:56:34 anon Exp $
 
 (function() {
 	tinymce.create('tinymce.plugins.linkit', {
@@ -28,7 +28,6 @@
 				var p;
         p = tinymce.DOM.getParent(n, 'A');
         if (!p || !p.name) {
-          cm.setDisabled('linkit', !p && co);
           cm.setActive('linkit', !!p);
         }
 			});
@@ -37,8 +36,8 @@
 		getInfo : function() {
 			return {
 				longname : 'Linkit',
-				author : 'Anon-Design // Emil Stjerneman',
-				authorurl : 'http://www.anon-design.se',
+				author : 'Emil Stjerneman',
+				authorurl : 'http://www.stjerneman.com',
 				infourl : 'http://drupal.org/project/linkit',
 				version : tinymce.majorVersion + "." + tinymce.minorVersion
 			};
