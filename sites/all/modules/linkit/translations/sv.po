@@ -1,0 +1,249 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Linkit\n"
+"POT-Creation-Date: 2010-10-29 09:32+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Peter Törnstrand <peter@happiness.se>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Swedish\n"
+"X-Poedit-Country: SWEDEN\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: linkit-dashboard.tpl.php:23
+msgid "Insert internal or external link"
+msgstr "Infoga intern eller extern länk"
+
+#: linkit.admin.inc:14
+msgid "Display node id (nid)"
+msgstr "Visa nod-id (nid)"
+
+#: linkit.admin.inc:15
+msgid "Display node content type"
+msgstr "Visa nodens innehållsstyp"
+
+#: linkit.admin.inc:16
+msgid "Display node published status"
+msgstr "Visa nodens publiseringsstatus"
+
+#: linkit.admin.inc:17
+msgid "Display node language"
+msgstr "Visa nodens språk"
+
+#: linkit.admin.inc:18
+msgid "Display node created time"
+msgstr "Visa tid då noden skapades"
+
+#: linkit.admin.inc:19
+msgid "Display node changed time"
+msgstr "Visa tid då noden uppdaterades"
+
+#: linkit.admin.inc:20
+msgid "Show unpublished nodes in the result"
+msgstr "Visa opublicerade noder i resultatet"
+
+#: linkit.admin.inc:24
+msgid "Display the book a node belong to"
+msgstr "Visa den bok noden tillhör"
+
+#: linkit.admin.inc:29
+msgid "Node settings"
+msgstr "Nodinställningar"
+
+#: linkit.admin.inc:32
+msgid "Linkit node settings"
+msgstr "Linkit node-inställningar"
+
+#: linkit.admin.inc:37
+msgid "Information to display in the autocomplete field"
+msgstr "Information att visa i det automatiskt kompletterande fältet"
+
+#: linkit.admin.inc:44
+msgid "Include this content types in the search result"
+msgstr "Inkludera denna innehållstyp i resultatet"
+
+#: linkit.admin.inc:48
+msgid "If none is checked, all content types will be present in the search result."
+msgstr "Om ingen är markerad kommer alla innehållstyper att visas i sökresultatet."
+
+#: linkit.module:59
+msgid "The Linkit module requires <a href=\"@pathfilter\">pathfilter</a> <strong>OR</strong> <a href=\"@pathologic\">pathologic</a> to parse \"internal:\" links. Be sure you have <strong>ONE</strong> of this modules installed."
+msgstr "Linkit-modulen kräver <a href=\"@pathfilter\">Pathfilter</a> <strong>ELLER</strong> <a href=\"@pathologic\">Pathologic</a> för att tolka \"internal:\"-länkar. Förvisa dig om att du har <strong>EN</strong> av dessa moduler installerad."
+
+#: linkit.module:242
+msgid "Link to"
+msgstr "Länka till"
+
+#: linkit.module:243
+msgid "Search for your internal content <b>OR</b> type the URL (http://www.example.com)"
+msgstr "Sök efter internt innehåll <strong>ELLER</strong> skriv in en fullständig URL (http://www.exempel.se)"
+
+#: linkit.module:254
+msgid "Browse server"
+msgstr "Bläddra på servern"
+
+#: linkit.module:266
+msgid "Attributes"
+msgstr "Attributer"
+
+#: linkit.module:275
+msgid "Title"
+msgstr ""
+
+#: linkit.module:283
+msgid "ID"
+msgstr ""
+
+#: linkit.module:291
+msgid "Class"
+msgstr ""
+
+#: linkit.module:299
+msgid "Rel"
+msgstr ""
+
+#: linkit.module:307
+msgid "Accesskey"
+msgstr ""
+
+#: linkit.module:315
+msgid "Anchor"
+msgstr ""
+
+#: linkit.module:320
+msgid "Without the hash (#)"
+msgstr "Utan nummertecken (#)"
+
+#: linkit.module:325
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: linkit.module:330
+msgid "Insert"
+msgstr "Infoga"
+
+#: linkit.module:344;353;361;16
+#: linkit.install:34
+#: linkit.info:0;0
+#: plugins/linkit_node/linkit_node.info:0
+#: plugins/linkit_permissions/linkit_permissions.info:0
+#: plugins/linkit_taxonomy/linkit_taxonomy.info:0
+#: plugins/linkit_user/linkit_user.info:0
+#: plugins/linkit_views/linkit_views.info:0
+msgid "Linkit"
+msgstr ""
+
+#: linkit.module:72
+msgid "administer linkit"
+msgstr ""
+
+#: linkit.module:17
+msgid "Dashboard"
+msgstr "Kontrollpanel"
+
+#: linkit.module:25
+msgid "Link to node"
+msgstr "Länka till nod"
+
+#: linkit.module:33
+msgid "Get search result styled link"
+msgstr "Länk för att få sökresultat stilade"
+
+#: linkit.module:40
+msgid "Linkit settings"
+msgstr "Linkit-inställningar"
+
+#: linkit.module:41
+msgid "Configure Linkit"
+msgstr "Konfiguerera Linkit"
+
+#: linkit.install:27
+msgid "Please install pathfilter <strong>OR</strong> pathologic"
+msgstr "Var god installera Pathfilter <strong>ELLER</strong> Pathologic"
+
+#: linkit.install:31
+msgid "Ok"
+msgstr "Ok"
+
+#: linkit.install:37
+msgid "To parse \"internal:\" links <a href=\"@pathfilter\">pathfilter</a> <strong>OR</strong> <a href=\"@pathologic\">pathologic</a> most be installed."
+msgstr "För att tolka \"internal:\"-länkar måste någon av modulerna<a href=\"@pathfilter\">Pathfilter</a> <strong>ELLER</strong> <a href=\"@pathologic\">Pathologic</a> vara installerade."
+
+#: linkit.info:0
+msgid "Linkit module provides an easy way for users to link to internal nodes, views and files by search with an autocomplete field."
+msgstr "Linkit tillhandahåller ett enkelt sätt för användare att länka till interna noder, vyer och filer via ett automatiskt kompletterande sökfält."
+
+#: linkit.js:0
+msgid "Loading path..."
+msgstr "Laddar sökväg..."
+
+#: linkit.js:0
+msgid "<em class=\"notice\">Notice: No selection element was found, your link text will appear as the item title you are linking to.</em>"
+msgstr "<em class=\"notice\">Notis: Inget valt element kunde hittas, din länktext kommer att bli densamma som innehållet du länkar till.</em>"
+
+#: editors/fckeditor/linkit/linkitDialog.js:0
+msgid "No URL"
+msgstr "Ingen URL"
+
+#: plugins/linkit_node/linkit_node.info:0
+msgid "Linkit Node"
+msgstr ""
+
+#: plugins/linkit_node/linkit_node.info:0
+msgid "Extend Linkit with node links"
+msgstr "Utöka Linkit med nodlänkar"
+
+#: plugins/linkit_permissions/linkit_permissions.module:13
+msgid "create all links"
+msgstr ""
+
+#: plugins/linkit_permissions/linkit_permissions.module:14
+msgid "linkit_info_plugins"
+msgstr ""
+
+#: plugins/linkit_permissions/linkit_permissions.module:15
+msgid "create "
+msgstr ""
+
+#: plugins/linkit_permissions/linkit_permissions.module:15
+msgid "type"
+msgstr ""
+
+#: plugins/linkit_permissions/linkit_permissions.module:15
+msgid " links"
+msgstr ""
+
+#: plugins/linkit_permissions/linkit_permissions.info:0
+msgid "Linkit Permissions"
+msgstr ""
+
+#: plugins/linkit_permissions/linkit_permissions.info:0
+msgid "Extend Linkit with permissions for plugins"
+msgstr "Utöka Linkit med stöd för rättigheter"
+
+#: plugins/linkit_taxonomy/linkit_taxonomy.info:0
+msgid "Linkit Taxonomy"
+msgstr ""
+
+#: plugins/linkit_taxonomy/linkit_taxonomy.info:0
+msgid "Extend Linkit with taxonomy links"
+msgstr "Utöka Linkit med stöd för taxanomilänkar"
+
+#: plugins/linkit_user/linkit_user.info:0
+msgid "Linkit User"
+msgstr ""
+
+#: plugins/linkit_user/linkit_user.info:0
+msgid "Extend Linkit with user links"
+msgstr "Utöka Linkit med stöd för användarlänkar"
+
+#: plugins/linkit_views/linkit_views.info:0
+msgid "Linkit Views"
+msgstr ""
+
+#: plugins/linkit_views/linkit_views.info:0
+msgid "Extend Linkit with views links"
+msgstr "Utöka Linkit med stöd för views"
+
