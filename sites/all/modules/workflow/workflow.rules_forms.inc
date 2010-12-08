@@ -1,5 +1,5 @@
 <?php
-// $Id: workflow.rules_forms.inc,v 1.1.2.1 2010/02/19 22:30:31 jvandyk Exp $
+// $Id: workflow.rules_forms.inc,v 1.1.2.2 2010/10/25 01:56:45 jvandyk Exp $
 
 /**
  * @file
@@ -61,4 +61,45 @@ function workflow_check_transition_label($settings, $argument_labels) {
     }
   }
   return t('Check workflow transition from @from to @to', array('@from' => implode(', ',$from), '@to' => implode(', ',$to)));
+}
+
+/**
+ * Configuration form for check state condition.
+ */
+function workflow_check_state_form($settings, &$form) {
+  $options = array();
+  $options['ANY'] = t('Any state');
+  foreach (workflow_get_all() as $wid => $workflow) {
+    $options[$workflow] = array();
+    foreach (workflow_get_states($wid) as $sid => $state) {
+      $options[$workflow][$sid] = $state;
+    }
+  }
+  $form['settings']['state'] = array(
+    '#type' => 'select',
+    '#title' => t('State'),
+    '#options' => $options,
+    '#multiple'=> TRUE,
+    '#default_value' => isset($settings['state']) ? $settings['state'] : array(),
+    '#required' => TRUE,
+  );
+}
+
+/**
+ * Label callback for check state condition.
+ */
+function workflow_check_state_label($settings, $argument_labels) {
+  if (in_array('ANY', $settings['state'])) {
+    $settings['state'] = array('ANY');
+  }
+  $states = array();
+  foreach ($settings['state'] as $state) {
+    if ($state != 'ANY') {
+        $temp = workflow_get_state($state);
+        $states[] = $temp['state']; 
+    } else {
+        $states[] = t('Any state');
+    }
+  }
+  return t('Check if content workflow state is @state', array('@state' => implode(', ',$states)));
 }

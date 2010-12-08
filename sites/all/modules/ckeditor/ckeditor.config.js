@@ -1,4 +1,4 @@
-// $Id: ckeditor.config.js,v 1.2.2.7 2010/03/11 12:39:54 wwalc Exp $
+// $Id: ckeditor.config.js,v 1.2.2.10 2010/09/27 12:37:20 dczepierga Exp $
 
 /*
  WARNING: clear browser's cache after you modify this file.
@@ -8,7 +8,7 @@ CKEDITOR.editorConfig = function(config) {
   config.indentClasses = [ 'rteindent1', 'rteindent2', 'rteindent3', 'rteindent4' ];
 
   // [ Left, Center, Right, Justified ]
-  //mfindlay 6/28/10 config.justifyClasses = [ 'rteleft', 'rtecenter', 'rteright', 'rtejustify' ];
+  config.justifyClasses = [ 'rteleft', 'rtecenter', 'rteright', 'rtejustify' ];
 
   // The minimum editor width, in pixels, when resizing it with the resize handle.
   config.resize_minWidth = 450;
@@ -46,8 +46,8 @@ CKEDITOR.editorConfig = function(config) {
     ['Format'],
     ['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],
     ['NumberedList','BulletedList','-','Outdent','Indent','Blockquote'],
-    ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
-    ['Linkit','Link','Unlink','Anchor','LinkToNode', 'LinkToMenu'],
+    ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiRtl','BidiLtr'],
+    ['Link','Unlink','Anchor','LinkToNode', 'LinkToMenu'],
     ['DrupalBreak', 'DrupalPageBreak']
    ];
 
@@ -56,7 +56,7 @@ CKEDITOR.editorConfig = function(config) {
   * if you change the name of DrupalBasic, you have to update
   * CKEDITOR_FORCE_SIMPLE_TOOLBAR_NAME in ckeditor.module
   */
-  config.toolbar_DrupalBasic = [ [ 'Format', '-', 'Bold', 'Italic', '-', 'NumberedList','BulletedList', '-', 'Linkit','Link', 'Unlink', 'Image' ] ];
+  config.toolbar_DrupalBasic = [ [ 'Format', '-', 'Bold', 'Italic', '-', 'NumberedList','BulletedList', '-', 'Link', 'Unlink', 'Image' ] ];
 
   /*
    * This toolbar is dedicated to users with "Full HTML" access some of commands
@@ -71,8 +71,8 @@ CKEDITOR.editorConfig = function(config) {
       '/',
       ['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],
       ['NumberedList','BulletedList','-','Outdent','Indent','Blockquote'],
-      ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
-      ['Linkit','Link','Unlink','Anchor','LinkToNode', 'LinkToMenu'],
+      ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiRtl','BidiLtr'],
+      ['Link','Unlink','Anchor','LinkToNode', 'LinkToMenu'],
       '/',
       ['Format','Font','FontSize'],
       ['TextColor','BGColor'],
@@ -131,7 +131,4 @@ CKEDITOR.editorConfig = function(config) {
   // 'IMCE' plugin. If IMCE module is enabled, you may uncomment lines below and add an 'IMCE' button to selected toolbar. 
   //config.extraPlugins += (config.extraPlugins ? ',imce' : 'imce' );
   //CKEDITOR.plugins.addExternal('imce', Drupal.settings.ckeditor.module_path + '/plugins/imce/');
-  // Linkit plugin.
-config.extraPlugins += (config.extraPlugins ? ',Linkit' : 'Linkit' );
-CKEDITOR.plugins.addExternal('Linkit', Drupal.settings.basePath + 'sites/all/modules/linkit/editors/ckeditor/');
 };

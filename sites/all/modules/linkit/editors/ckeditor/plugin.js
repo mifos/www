@@ -1,4 +1,4 @@
-// $Id: plugin.js,v 1.2 2010/03/28 23:03:10 anon Exp $
+// $Id: plugin.js,v 1.4 2010/07/29 23:17:56 anon Exp $
 
 /**
  * @file Plugin for inserting links with Linkit
@@ -32,7 +32,8 @@
 
   function insertLink(params, editor) {
     this.fakeObj = false;
-
+    var link_text = params.link_text;
+    delete  params.link_text;
     var selection = editor.getSelection(),
     ranges = selection.getRanges(),
     element = null;
@@ -63,7 +64,7 @@
       var selection = editor.getSelection(), ranges = selection.getRanges();
       
       if ( ranges.length == 1 && ranges[0].collapsed ) {
-        var text = new CKEDITOR.dom.text( params.href, editor.document );
+        var text = new CKEDITOR.dom.text( link_text, editor.document );
         ranges[0].insertNode( text );
         ranges[0].selectNodeContents( text );
         selection.selectRanges( ranges );

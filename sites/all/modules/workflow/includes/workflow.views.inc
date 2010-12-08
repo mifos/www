@@ -1,5 +1,5 @@
 <?php
-// $Id: workflow.views.inc,v 1.1.2.1 2009/06/05 21:37:23 jvandyk Exp $
+// $Id: workflow.views.inc,v 1.1.2.4 2010/10/27 02:35:17 jvandyk Exp $
 /**
  * @file
  * Provide views data and handler information for workflow.module.
@@ -68,6 +68,8 @@ function workflow_views_data() {
       'handler' => 'views_handler_argument_numeric',
       'click sortable' => TRUE,
       'numeric' => TRUE,
+      'name table' => 'workflow_states',
+      'name field' => 'state',
     ),
     'filter' => array(
       'handler' => 'workflow_views_handler_filter_sid',
@@ -98,6 +100,24 @@ function workflow_views_data() {
       'numeric' => TRUE,
     ),
   );
+
+  // time
+  $data['workflow_node']['stamp'] = array(
+    'title' => t('Current time'), // Appears in views UI.
+    'help' => t('The time at which the node moved to the current state.'),
+    'field' => array(
+      'handler' => 'views_handler_field_date',
+      'click sortable' => TRUE,
+     ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_date',
+      'numeric' => TRUE,
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort_date',
+    ),
+  );
+
 
   // time
   $data['workflow_scheduled_transition']['scheduled'] = array(

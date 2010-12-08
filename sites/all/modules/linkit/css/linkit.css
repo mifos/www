@@ -1,3 +1,5 @@
+/* $Id: linkit.css,v 1.1.2.4 2010/10/22 22:51:37 anon Exp $ */
+
 body#linkit { padding:1em; }
 
 #linkit .auto-item-info {
@@ -12,12 +14,7 @@ body#linkit { padding:1em; }
   float:left;
 }
 
-#linkit fieldset.collapsible .form-item { width:45%; }
-#linkit fieldset.collapsible .form-item .form-text { width:100%; }
-#linkit fieldset.collapsible .form-item  { float:left; }
-
-#linkit #edit-id-wrapper,
-#linkit #edit-rel-wrapper { margin-left:2em; }
+#edit-link-wrapper .description { clear:both; }
 
 span.throbber {
   height: 15px;
@@ -25,4 +22,10 @@ span.throbber {
   padding-left:20px;
   background: transparent url(../../../../../misc/throbber.gif) no-repeat 0px -18px;
   display:block;
+}
+
+input#edit-link.with_imce {
+  float:left;
+  margin-right:10px;
+  width:75%;
 }

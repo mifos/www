@@ -1,5 +1,5 @@
 <?php
-// $Id: workflow_access.module,v 1.6 2008/08/18 03:04:13 jvandyk Exp $
+// $Id: workflow_access.module,v 1.6.2.2 2010/10/27 20:35:31 jvandyk Exp $
 
 /**
  * @file 
@@ -37,12 +37,30 @@ function workflow_access_node_access_records($node) {
         'gid'          => ($grant->rid == -1) ? $node->uid : $grant->rid,
         'grant_view'   => $grant->grant_view,
         'grant_update' => $grant->grant_update,
-        'grant_delete' => $grant->grant_delete
+        'grant_delete' => $grant->grant_delete,
+        'priority'     => 0,
       ); 
     }
   }
 
   return $grants;
+}
+
+/**
+ * Implementation of hook_node_access_explain().
+ */
+function workflow_access_node_access_explain($row) {
+  static $interpretations = array();
+  switch ($row->realm) {
+    case 'workflow_access_owner':
+      $interpretations[$row->gid] = t('Workflow access: author of the content may access');
+      break;
+    case 'workflow_access':
+      $roles = user_roles();
+      $interpretations[$row->gid] = t('Workflow access: %role may access', array('%role' => $roles[$row->gid]));
+      break;
+  }
+  return (!empty($interpretations[$row->gid]) ? $interpretations[$row->gid] : NULL);
 }
 
 /**

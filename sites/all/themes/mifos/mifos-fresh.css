@@ -542,7 +542,8 @@ h1#logo a {
   font-size:30px;
   margin:0 auto;
   padding:0 0 0 35px;
-  width:135px;
+  text-align:left;
+  width:190px;
 }
 #block-block-1 p.download-description { color:#838383; margin:0; padding:15px; }
 #block-block-1 p a {
