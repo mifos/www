@@ -1,19 +1,24 @@
-/** ABOUT DEFAULT STYLES
----------------------------------
-*  default.css is used to establish general rules, browser reset, or Admin User interface Styles
+/* About Default Styles
+ * ---------------------
+ * default.css is used to establish general rules, browser reset, or admin user interface styles.
+ *
+ * Browser Reset
+ * -------------
+ * For a more complete reset, go to http://developer.yahoo.com/yui/reset/ */
+/* line 9, ../sass/default.sass */
+* {
+  margin: 0;
+  padding: 0;
+}
 
-   BROWSER RESET
----------------------------------
-*  For a more complete reset, go to http://developer.yahoo.com/yui/reset/
-*/
-
-* { margin: 0; padding: 0; }
-
-/** Clear Floats Without Structural Markup: 
----------------------------------
-*  http://www.positioniseverything.net/easyclearing.html
-*/
-
+/* Clear Floats Without Structural Markup
+ * ---------------------------------------
+ * http://www.positioniseverything.net/easyclearing.html */
+/* line 17, ../sass/default.sass */
+.clearfix {
+  display: inline-block;
+}
+/* line 19, ../sass/default.sass */
 .clearfix:after {
   content: ".";
   display: block;
@@ -22,55 +27,79 @@
   visibility: hidden;
 }
 
-.clearfix { display: inline-block; }
+/* Hides from IE-mac \ */
+/* line 27, ../sass/default.sass */
+* html .clearfix {
+  height: 1%;
+}
 
-/* Hides from IE-mac \*/
-* html .clearfix { height: 1%; }
-.clearfix { display: block; }
+/* line 30, ../sass/default.sass */
+.clearfix {
+  display: block;
+}
+
 /* End hide from IE-mac */
-
 /* clear classes */
+/* line 36, ../sass/default.sass */
+.clearleft, .clearl, .cleft {
+  clear: left;
+}
 
-.clearleft, .clearl, .cleft { clear: left; }
-.clearright, .clearr, .cright { clear: right; }
-.clear, .clearboth, .clearall{ clear: both; }
+/* line 39, ../sass/default.sass */
+.clearright, .clearr, .cright {
+  clear: right;
+}
+
+/* line 42, ../sass/default.sass */
+.clear, .clearboth, .clearall {
+  clear: both;
+}
 
 /* Float classes */
+/* line 46, ../sass/default.sass */
+.floatleft, .fleft, .floatl {
+  float: left;
+  margin: 0 10px 5px 0;
+}
 
-.floatleft, .fleft, .floatl { float: left; margin: 0 10px 5px 0; }
-.floatright, .fright, .floatr { float: right; margin: 0 0 5px 10px; }
+/* line 50, ../sass/default.sass */
+.floatright, .fright, .floatr {
+  float: right;
+  margin: 0 0 5px 10px;
+}
 
-/** "Skip to Main Content" link
----------------------------------
-*  This link useful for both visually impaired people and those with mobility impairments
-*  who cannot use a mouse. http://www.webaim.org/techniques/css/invisiblecontent/
-*/
-
-#skip a, #skip a:hover, #skip a:visited {
+/* "Skip to Main Content" link
+ * ---------------------------
+ * This link useful for both visually impaired people and those with mobility impairments
+ * who cannot use a mouse. http://www.webaim.org/techniques/css/invisiblecontent/ */
+/* line 60, ../sass/default.sass */
+#skip a:link, #skip a:hover, #skip a:visited {
   position: absolute;
-  left:-10000px;
-  top:auto;
+  left: -10000px;
+  top: auto;
   width: 1px;
   height: 1px;
   overflow: hidden;
 }
+/* line 67, ../sass/default.sass */
 #skip a:active, #skip a:focus {
   position: static;
   width: auto;
   height: auto;
 }
 
-/* bug fix with views 2 edit links */
-
+/* bug fix with views 2 edit links. */
+/* line 73, ../sass/default.sass */
 div.view div.views-admin-links {
-	width:auto;
+  width: auto;
 }
 
-/** Rollover edit links for blocks */
-
+/* Rollover edit links for blocks. */
+/* line 77, ../sass/default.sass */
 div.block {
   position: relative;
 }
+/* line 79, ../sass/default.sass */
 div.block .edit {
   display: none;
   position: absolute;
@@ -79,67 +108,74 @@ div.block .edit {
   z-index: 40;
   padding: 3px 8px 0;
   font-size: 10px;
-  line-height:16px;
-  background-color: #fff;
-  border:1px solid #ccc;
-  /*let's get fancy !*/
+  line-height: 16px;
+  background-color: white;
+  border: 1px solid #cccccc;
+  /*let's get fancy! */
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
-  -moz-box-shadow: 0 1px 3px #888;
-  -webkit-box-shadow: -1px 1px 2px #666;
+  -moz-box-shadow: 0 1px 3px #888888;
+  -webkit-box-shadow: -1px 1px 2px #666666;
 }
+/* line 95, ../sass/default.sass */
 div.block .edit a {
-  display:block;
-  border:0;
-  padding:0;
-  margin:0;
+  display: block;
+  border: 0;
+  padding: 0;
+  margin: 0;
 }
+/* line 100, ../sass/default.sass */
 div.block:hover .edit {
   display: block;
 }
 
-/** WIREFRAMES STYLE
-------------------------------------*/
-
-.wireframe-mode #header,
-.wireframe-mode #content-top,
-.wireframe-mode #content-top>*,
-.wireframe-mode #content-header,
-.wireframe-mode #content-header>*,
-.wireframe-mode #content-area,
-.wireframe-mode #content-area>*,
-.wireframe-mode #content-bottom,
-.wireframe-mode #content-bottom>*,
-.wireframe-mode #primary,
-.wireframe-mode #secondary,
-.wireframe-mode #sidebar-left-inner,
-.wireframe-mode #sidebar-right-inner,
-.wireframe-mode .block{
+/* Wireframe styles. */
+/* line 105, ../sass/default.sass */
+.with-wireframes #header,
+.with-wireframes #content-top,
+.with-wireframes #content-top > *,
+.with-wireframes #content-header,
+.with-wireframes #content-header > *,
+.with-wireframes #content-area,
+.with-wireframes #content-area > *,
+.with-wireframes #content-bottom,
+.with-wireframes #content-bottom > *,
+.with-wireframes #primary,
+.with-wireframes #secondary,
+.with-wireframes #sidebar-left-inner,
+.with-wireframes #sidebar-right-inner,
+.with-wireframes .block {
   padding: 2px;
-  border: 1px solid #bbb;
+  border: 1px solid #bbbbbb;
 }
-.wireframe-mode .node {
-  border-bottom: 1px solid #bbb;
-  margin-bottom:10px;
+/* line 121, ../sass/default.sass */
+.with-wireframes .node {
+  border-bottom: 1px solid #bbbbbb;
+  margin-bottom: 10px;
 }
-.wireframe-mode .block {
-  margin-bottom:3px;
+/* line 124, ../sass/default.sass */
+.with-wireframes .block {
+  margin-bottom: 3px;
 }
-.wireframe-mode #content-top,
-.wireframe-mode #content-header,
-.wireframe-mode #content-area,
-.wireframe-mode #content-bottom {
-  margin:0 3px 3px;
+/* line 126, ../sass/default.sass */
+.with-wireframes #content-top,
+.with-wireframes #content-header,
+.with-wireframes #content-area,
+.with-wireframes #content-bottom {
+  margin: 0 3px 3px;
 }
-.wireframe-mode #footer {
+/* line 131, ../sass/default.sass */
+.with-wireframes #footer {
   margin-top: 3px;
   padding: 2px;
-  border: 1px solid #ccc;
+  border: 1px solid #cccccc;
 }
-.wireframe-mode.with-navigation #content, 
-.wireframe-mode.with-navigation .sidebar  {
-  margin-top:50px;
+/* line 136, ../sass/default.sass */
+.with-wireframes.with-navigation #content,
+.with-wireframes.with-navigation .sidebar {
+  margin-top: 50px;
 }
-.wireframe-mode #navigation {
-  height:50px;
+/* line 139, ../sass/default.sass */
+.with-wireframes #navigation {
+  height: 50px;
 }

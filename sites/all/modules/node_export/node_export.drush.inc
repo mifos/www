@@ -1,5 +1,5 @@
 <?php
-// $Id: node_export.drush.inc,v 1.1.2.12 2010/11/11 05:20:15 danielb Exp $
+// $Id: node_export.drush.inc,v 1.1.2.14 2010/11/29 04:43:16 danielb Exp $
 
 /**
  * @file
@@ -26,6 +26,8 @@ function node_export_drush_command() {
       '--translate' => "Filter for 'translate'; A boolean value (0 or 1) indicating whether the node translation needs to be updated.",
       '--language' => "Filter for 'language'; The language code (e.g. de or en-US) of this node.",
       '--type' => "Filter for 'type'; The machine-readable name (e.g. story or page) of the type of this node.",
+      '--sql' => "Filter by SQL (EXPERIMENTAL); An SQL query string that returns nids (e.g. \"SELECT nid FROM nodes WHERE nid < 10\").",
+      '--php' => "Filter by PHP (EXPERIMENTAL); PHP that prints or returns, an array or CSV string of nids (e.g. \"custom_get_my_nids();\"). Don't include PHP tags.",
     ),
     'examples' => array(
       'drush node-export-export 45 46 47 --file=filename' =>
@@ -52,24 +54,6 @@ function node_export_drush_command() {
       //  'Import nodes from the file with the given filename.',
     ),
   );
-  /*
-  $items['node-export-type'] = array(
-    'callback' => 'node_export_drush_callback_export_type',
-    'description' => "Export all nodes of the given node type.",
-    'arguments' => array(
-      'type' => "The node type to export.",
-    ),
-    'options' => array(
-      '--file' => "The filename of the output file.  If supplied, the node code will be exported to that file, otherwise it will export to stdout.",
-    ),
-    'examples' => array(
-      'drush node-export-type story --file=filename' =>
-        "Export all nodes of type 'story' to the file with supplied filename.",
-      //'drush node-export-type story > filename' =>
-      //  "Export all nodes of type 'story' to the file with supplied filename.  NOTE: Error messages may be output to the file.",
-    ),
-  );
-  */
 
   // Add aliases for usability.
   node_export_drush_command_add_alias($items, 'node-export-export', 'node-export');
@@ -199,9 +183,29 @@ function node_export_drush_callback_export() {
     }
   }
 
-  // TODO: Add $nid_filters for nids that come from taxonomy (? vids, tids, terms ?) - using taxonomy_select_nodes()
-  // TODO: Add $nid_filters for nids that come from PHP code / custom functions
-  // TODO: Add $nid_filters for nids that come from an SQL query
+  // Handle SQL option.
+  $sql = drush_get_option('sql');
+  if ($sql) {
+    $result = db_query($sql);
+    while ($row = db_fetch_array($result)) {
+      $nid_filters['sql'][] = $row['nid'];
+    }
+  }
+
+  // Handle PHP option.
+  $php = drush_get_option('php');
+  if ($php) {
+    $result = drupal_eval("<?php " . $php . " ?>");
+    if (is_array($result)) {
+      $nid_filters['php'] = $result;
+    }
+    else {
+       $nid_filters['php'] = explode(
+         ",",
+         str_replace(array("\n", "\r", "\t", " "), '', $result)
+       );
+    }
+  }
 
   if (count($nid_filters) > 1) {
      // Compute the intersect of all $nid_filters if there are more than one.
@@ -283,29 +287,3 @@ function node_export_drush_callback_import() {
 
 }
 
-/**
- * Drush command callback.
- *
- * Export nodes of the provided type.
-
-function node_export_drush_callback_export_type($type) {
-  if ($type == NULL) {
-    drush_set_error('DRUSH_NOT_COMPLETED', "Please supply the node type.");
-  }
-
-  $nids = array();
-  $sql = "SELECT nid FROM {node} WHERE type = '%s'";
-  $rs = db_query($sql, $type);
-
-  while ($row = db_fetch_array($rs)) {
-    $nids[] = $row['nid'];
-  }
-
-  if (!empty($nids)) {
-    call_user_func_array('node_export_drush_callback_export', $nids);
-  }
-  else {
-    drush_set_error('DRUSH_NOT_COMPLETED', "No nodes found of type '$type'.");
-  }
-}
-*/

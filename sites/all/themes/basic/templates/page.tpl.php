@@ -6,8 +6,8 @@
     <title><?php print $head_title; ?></title>
     <?php print $head; ?>
     <?php print $styles; ?>
-    <!--[if lte IE 6]><style type="text/css" media="all">@import "<?php print $base_path . path_to_theme() ?>/css/ie6.css";</style><![endif]-->
-    <!--[if IE 7]><style type="text/css" media="all">@import "<?php print $base_path . path_to_theme() ?>/css/ie7.css";</style><![endif]-->
+    <!--[if lte IE 6]><style type="text/css" media="all">@import "<?php print $base_path . path_to_theme() ?>/css/ie6.css"</style><![endif]-->
+    <!--[if IE 7]><style type="text/css" media="all">@import "<?php print $base_path . path_to_theme() ?>/css/ie7.css"</style><![endif]-->
     <?php print $scripts; ?>
   </head>
 
@@ -46,7 +46,7 @@
         </div>
       <?php endif; ?>
 
-      <?php print $search_box; ?>
+      <?php // Uncomment to add the search box.// print $search_box; ?>
 
     </div> <!-- /header -->
 

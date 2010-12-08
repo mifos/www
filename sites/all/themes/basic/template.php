@@ -150,6 +150,18 @@ function basic_preprocess_node(&$vars, $hook) {
   $vars['classes'] = implode(' ', $classes); // Concatenate with spaces
 }
 
+function basic_preprocess_comment_wrapper(&$vars) {
+  $classes = array();
+  $classes[] = 'comment-wrapper';
+  
+  // Provide skinr support.
+  if (module_exists('skinr')) {
+    $classes[] = $vars['skinr'];
+  }
+  $vars['classes'] = implode(' ', $classes);
+}
+
+
 /*
  *	This function create the EDIT LINKS for blocks and menus blocks.
  *	When overing a block (except in IE6), some links appear to edit
@@ -375,13 +387,40 @@ function basic_id_safe($string) {
   return $string;
 }
 
-/*
- *  Return a themed breadcrumb trail.
- *	Alow you to customize the breadcrumb markup
- */
-
+/**
+* Return a themed breadcrumb trail.
+*
+* @param $breadcrumb
+* An array containing the breadcrumb links.
+* @return
+* A string containing the breadcrumb output.
+*/
 function basic_breadcrumb($breadcrumb) {
-  if (!empty($breadcrumb)) {
-    return '<div class="breadcrumb">'. implode(' » ', $breadcrumb) .'</div>';
+  // Determine if we are to display the breadcrumb.
+  $show_breadcrumb = theme_get_setting('basic_breadcrumb');
+  if ($show_breadcrumb == 'yes' || $show_breadcrumb == 'admin' && arg(0) == 'admin') {
+
+    // Optionally get rid of the homepage link.
+    $show_breadcrumb_home = theme_get_setting('basic_breadcrumb_home');
+    if (!$show_breadcrumb_home) {
+      array_shift($breadcrumb);
+    }
+
+    // Return the breadcrumb with separators.
+    if (!empty($breadcrumb)) {
+      $breadcrumb_separator = theme_get_setting('basic_breadcrumb_separator');
+      $trailing_separator = $title = '';
+      if (theme_get_setting('basic_breadcrumb_title')) {
+        if ($title = drupal_get_title()) {
+          $trailing_separator = $breadcrumb_separator;
+        }
+      }
+      elseif (theme_get_setting('basic_breadcrumb_trailing')) {
+        $trailing_separator = $breadcrumb_separator;
+      }
+      return '<div class="breadcrumb">' . implode($breadcrumb_separator, $breadcrumb) . "$trailing_separator$title</div>";
+    }
   }
+  // Otherwise, return an empty string.
+  return '';
 }

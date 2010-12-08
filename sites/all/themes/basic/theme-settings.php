@@ -20,6 +20,49 @@ function basic_settings($saved_settings, $subtheme_defaults = array()) {
     '#prefix'        => '<strong>' . t('Zen Tabs:') . '</strong>',
   );
 
+  $form['basic_breadcrumb'] = array(
+    '#type'          => 'fieldset',
+    '#title'         => t('Breadcrumb settings'),
+    '#attributes'    => array('id' => 'basic-breadcrumb'),
+  );
+  $form['basic_breadcrumb']['basic_breadcrumb'] = array(
+    '#type'          => 'select',
+    '#title'         => t('Display breadcrumb'),
+    '#default_value' => $settings['basic_breadcrumb'],
+    '#options'       => array(
+                          'yes'   => t('Yes'),
+                          'admin' => t('Only in admin section'),
+                          'no'    => t('No'),
+                        ),
+  );
+  $form['basic_breadcrumb']['basic_breadcrumb_separator'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Breadcrumb separator'),
+    '#description'   => t('Text only. Don’t forget to include spaces.'),
+    '#default_value' => $settings['basic_breadcrumb_separator'],
+    '#size'          => 5,
+    '#maxlength'     => 10,
+    '#prefix'        => '<div id="div-basic-breadcrumb-collapse">', // jquery hook to show/hide optional widgets
+  );
+  $form['basic_breadcrumb']['basic_breadcrumb_home'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Show home page link in breadcrumb'),
+    '#default_value' => $settings['basic_breadcrumb_home'],
+  );
+  $form['basic_breadcrumb']['basic_breadcrumb_trailing'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Append a separator to the end of the breadcrumb'),
+    '#default_value' => $settings['basic_breadcrumb_trailing'],
+    '#description'   => t('Useful when the breadcrumb is placed just before the title.'),
+  );
+  $form['basic_breadcrumb']['basic_breadcrumb_title'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Append the content title to the end of the breadcrumb'),
+    '#default_value' => $settings['basic_breadcrumb_title'],
+    '#description'   => t('Useful when the breadcrumb is not placed just before the title.'),
+    '#suffix'        => '</div>', // #div-zen-breadcrumb
+  );
+
   $form['basic_wireframe'] = array(
     '#type'          => 'checkbox',
     '#title'         => t('Display borders around main layout elements'),
@@ -55,7 +98,7 @@ function _basic_theme(&$existing, $type, $theme, $path) {
   // This function applies to every hook.
   $functions[0] = $theme . '_preprocess';
   // Inspect the preprocess functions for every hook in the theme registry.
-  // @TODO: When PHP 5 becomes required (Zen 7.x), use the following faster
+  // @TODO: When PHP 5 becomes required (Basic 7.x), use the following faster
   // implementation: foreach ($existing AS $hook => &$value) {}
   foreach (array_keys($existing) AS $hook) {
     // Each theme has two possible preprocess functions that can act on a hook.

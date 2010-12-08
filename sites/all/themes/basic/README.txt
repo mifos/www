@@ -1,4 +1,3 @@
-
 Introduction to Basic
 
 BASIC was originally developed for internal use to develop themes at Raincity Studios (Vancouver)
@@ -34,13 +33,23 @@ Installation
 - if you want to change the name of the theme from 'basic' to another name like 'mytheme',
 follow these steps (to do BEFORE enabling the theme) :
 
-	- rename the theme folder to 'mytheme'
-	- rename basic.info to mytheme.info
-	- Edit basic.info and change the name, description, projet (can be deleted)
-	- In basic.info replace [basic_block_editing] and [basic_rebuild_registry]
-	  by [mytheme_block_editing] and [mytheme_rebuild_registry]
+
+	- Edit basic.info and change the name, description, project (can be deleted)
+	- In basic.info, replace the following instances of "basic_" to "mytheme_"
+    - [basic_zen_tabs]
+    - [basic_wireframe]
+    - [basic_block_editing]
+    - [basic_rebuild_registry]
+    - [basic_breadcrumb]
+    - [basic_breadcrumb_separator]
+    - [basic_breadcrumb_home]
+    - [basic_breadcrumb_trailing]
+    - [basic_breadcrumb_title]
+	  
 	- In template.php change each iteration of 'basic' to 'mytheme'
 	- In theme-settings.php change each iteration of 'basic' to 'mytheme'
+	- rename the theme folder to 'mytheme'
+	- rename basic.info to mytheme.info
 
 __________________________________________________________________________________________
 

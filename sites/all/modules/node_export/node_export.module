@@ -1,5 +1,5 @@
 <?php
-// $Id: node_export.module,v 1.1.2.30 2010/11/02 06:01:31 danielb Exp $
+// $Id: node_export.module,v 1.1.2.33 2010/12/01 00:57:31 danielb Exp $
 
 /**
  * @file
@@ -267,6 +267,21 @@ function node_export_settings() {
     '#type' => 'fieldset',
     '#title' => t('General settings'),
   );
+
+  $format_handlers = node_export_format_handlers();
+  if (!empty($format_handlers)) {
+    $format_options = array(NULL => t('Default node code'));
+    foreach ($format_handlers as $format_handler => $format) {
+      $format_options[$format_handler] = $format['#title'];
+    }
+    $form['basic']['node_export_format'] = array(
+      '#type' => 'radios',
+      '#title' => t('Format to use when exporting a node'),
+      '#options' => $format_options,
+      '#default_value' => variable_get('node_export_format', NULL),
+    );
+  }
+
   $form['basic']['node_export_method'] = array(
     '#type' => 'radios',
     '#title' => t('Method to use when importing a node'),
@@ -821,6 +836,10 @@ function node_export_node_clone($original_node, $mode) {
     if (variable_get('node_export_reset_path_'. $node->type, TRUE)) {
       $node->path = NULL;
     }
+    elseif (module_exists('pathauto')) {
+      // Prevent pathauto from creating a new path alias.
+      $node->pathauto_perform_alias = FALSE;
+    }
 
     if (variable_get('node_export_reset_book_mlid_'. $node->type, TRUE) && isset($node->book['mlid'])) {
       $node->book['mlid'] = NULL;
@@ -875,7 +894,7 @@ function node_export_node_encode($var, $iteration = 0, $format = NULL) {
     $code = "array(". ($empty ? '' : "\n");
     foreach ($var as $key => $value) {
       $out = $tab ."  '". $key ."' => ". node_export_node_encode($value, $iteration) .",\n";
-      drupal_alter('node_export_node_encode', $out, $tab, $key, $value, $iteration);
+      drupal_alter('node_export_node_encode_line', $out, $tab, $key, $value, $iteration);
       $code .= $out;
     }
     $code .= ($empty ? '' : $tab) .")";
@@ -1017,4 +1036,19 @@ function node_export_restore_recursion($o) {
             serialize($o)
         )
     );
+}
+
+/**
+ * Get a list of possible format handlers (other than the default).
+ *
+ * @return
+ *   An array of format handlers from hook implementations.
+ * @see hook_node_export_format_handlers()
+ */
+function node_export_format_handlers() {
+  static $format_handlers;
+  if (empty($format_handlers)) {
+    $format_handlers = module_invoke_all('node_export_format_handlers');
+  }
+  return $format_handlers;
 }
