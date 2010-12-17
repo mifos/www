@@ -47,7 +47,7 @@ CKEDITOR.editorConfig = function(config) {
     ['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],
     ['NumberedList','BulletedList','-','Outdent','Indent','Blockquote'],
     ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiRtl','BidiLtr'],
-    ['Link','Unlink','Anchor','LinkToNode', 'LinkToMenu'],
+    ['Linkit','Link','Unlink','Anchor','LinkToNode', 'LinkToMenu'],
     ['DrupalBreak', 'DrupalPageBreak']
    ];
 
@@ -72,7 +72,7 @@ CKEDITOR.editorConfig = function(config) {
       ['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],
       ['NumberedList','BulletedList','-','Outdent','Indent','Blockquote'],
       ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiRtl','BidiLtr'],
-      ['Link','Unlink','Anchor','LinkToNode', 'LinkToMenu'],
+      ['Linkit','Link','Unlink','Anchor','LinkToNode', 'LinkToMenu'],
       '/',
       ['Format','Font','FontSize'],
       ['TextColor','BGColor'],
@@ -131,4 +131,8 @@ CKEDITOR.editorConfig = function(config) {
   // 'IMCE' plugin. If IMCE module is enabled, you may uncomment lines below and add an 'IMCE' button to selected toolbar. 
   //config.extraPlugins += (config.extraPlugins ? ',imce' : 'imce' );
   //CKEDITOR.plugins.addExternal('imce', Drupal.settings.ckeditor.module_path + '/plugins/imce/');
+  
+  // Linkit plugin.
+  config.extraPlugins += (config.extraPlugins ? ',Linkit' : 'Linkit' );
+  CKEDITOR.plugins.addExternal('Linkit', Drupal.settings.basePath + 'sites/all/modules/linkit/editors/ckeditor/');
 };
