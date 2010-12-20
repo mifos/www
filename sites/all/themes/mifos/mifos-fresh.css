@@ -34,9 +34,13 @@ h1, h2, h3, h4, h5, h6 {
 .book-navigation ul li a {
   text-decoration: none;
 }
-p, ul, ol, dl, pre, th, td, fieldset, blockquote, div, span {
+p, ul, ol, dl, th, td, fieldset, blockquote, div, span {
   font-family: 'PTSansRegular', Helvetica, Arial, "Bitstream Vera Sans", sans-serif;
 }
+
+/** Pre should be formatted with a monospaced font. **/
+pre {font-family: "Courier New", monospace;}
+
 a, a:link, a:visited { color:#58b4df; }
 
 #skip-to-nav { display:none; }
