@@ -1,0 +1,12 @@
+; $Id: linkit_file.info,v 1.1.2.1 2010/11/16 23:04:34 anon Exp $
+name = Linkit File
+description = Extend Linkit with files
+core = 6.x
+package = Linkit
+dependencies[] = "linkit"
+; Information added by drupal.org packaging script on 2010-12-28
+version = "6.x-1.8"
+core = "6.x"
+project = "linkit"
+datestamp = "1293502275"
+

@@ -1,0 +1,48 @@
+<?php 
+// $Id: linkit_file.module,v 1.1.2.1 2010/11/16 23:04:34 anon Exp $
+
+/**
+ * @file
+ * Extend Linkit with files.
+ */
+
+
+/**
+ * Implementation of hook_linkit_load_plugins().
+ */
+function linkit_file_linkit_load_plugins($string) {
+  $matches = array();
+  
+  // Get files.
+  $result = db_query_range("SELECT f.fid, f.filename, f.filepath FROM {files} f WHERE f.filename LIKE LOWER('%%%s%%%') AND f.status = 1", $string, 0, 10);
+  while ($file = db_fetch_object($result)) {
+    $matches['file'][] = array(
+      'title' => $file->filename,
+      'path' => file_create_url($file->filepath),
+      'information' => array(
+        'type' => 'File',
+      ),
+    );
+  }
+
+  return $matches;
+}
+
+/**
+ * Implementation of hook_linkit_get_search_styled_link().
+ */
+function linkit_file_linkit_get_search_styled_link($string) {
+  return;
+}
+
+/**
+ * Implementation of hook_linkit_info_plugins().
+ * 
+ * This is used by linkit_permissions
+ */
+function linkit_file_linkit_info_plugins() {
+  $return['linkit_file'] = array(
+    'type' => 'file',
+  );
+  return $return;
+}
