@@ -3,9 +3,9 @@ name = Linkit
 description = Linkit module provides an easy way for users to link to internal nodes, views and files by search with an autocomplete field.
 core = 6.x
 package = Linkit
-; Information added by drupal.org packaging script on 2010-10-31
-version = "6.x-1.7"
+; Information added by drupal.org packaging script on 2010-12-28
+version = "6.x-1.8"
 core = "6.x"
 project = "linkit"
-datestamp = "1288543566"
+datestamp = "1293502275"
 

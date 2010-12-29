@@ -1,5 +1,5 @@
 <?php 
-// $Id: linkit_node.module,v 1.11.2.4 2010/10/24 12:52:27 anon Exp $
+// $Id: linkit_node.module,v 1.11.2.8 2010/11/24 22:33:16 anon Exp $
 
 /**
  * @file
@@ -13,8 +13,11 @@
 function linkit_node_linkit_load_plugins($string) {
   $matches = array();
   
-  $settings = variable_get('linkit_node', array('display_settings' => array(), 'content_types' => array()));
+  $settings = variable_get('linkit_node', array());
   
+  // Prevent "PHP notice: Undefined variable"
+  _linkit_node_get_default_settings($settings);
+
   $fields = array('n.nid', 'n.title'); // default fields
   $from = array('{node} n'); // default from
   $where = array(); // default where
@@ -82,7 +85,7 @@ function linkit_node_linkit_load_plugins($string) {
     } 
     // Add the node status
     if ($settings['display_settings']['status']) {
-      $matches['node'][$i]['information']['status'] = $node->status ? 'published' : 'unpublished';
+      $matches['node'][$i]['information']['status'] = $node->status ? t('published') : t('unpublished');
     }
     // Add the node language
     if ($settings['display_settings']['language']) {
@@ -146,4 +149,26 @@ function linkit_node_linkit_info_plugins() {
     'type' => 'node',
   );
   return $return;
+}
+
+/**
+ * Prevent "PHP notice: Undefined variable" by merging the settings 
+ * with the defule values
+ */
+function _linkit_node_get_default_settings(&$settings) {
+  // Merge settings with the default settings
+  $settings += array(
+    'display_settings' => array(
+      'nid' => 0,
+      'content_type' => 0,
+      'status' => 0,
+      'language' => 0,
+      'created' => 0,
+      'changed' => 0,
+      'show_unpublished' => 0,
+      'show_books' => 0,
+    ), 
+    'content_types' => array(
+    ),
+  );
 }

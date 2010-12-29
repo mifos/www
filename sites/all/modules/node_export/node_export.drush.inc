@@ -1,5 +1,5 @@
 <?php
-// $Id: node_export.drush.inc,v 1.1.2.14 2010/11/29 04:43:16 danielb Exp $
+// $Id: node_export.drush.inc,v 1.1.2.15 2010/12/09 05:53:56 danielb Exp $
 
 /**
  * @file
@@ -26,8 +26,6 @@ function node_export_drush_command() {
       '--translate' => "Filter for 'translate'; A boolean value (0 or 1) indicating whether the node translation needs to be updated.",
       '--language' => "Filter for 'language'; The language code (e.g. de or en-US) of this node.",
       '--type' => "Filter for 'type'; The machine-readable name (e.g. story or page) of the type of this node.",
-      '--sql' => "Filter by SQL (EXPERIMENTAL); An SQL query string that returns nids (e.g. \"SELECT nid FROM nodes WHERE nid < 10\").",
-      '--php' => "Filter by PHP (EXPERIMENTAL); PHP that prints or returns, an array or CSV string of nids (e.g. \"custom_get_my_nids();\"). Don't include PHP tags.",
     ),
     'examples' => array(
       'drush node-export-export 45 46 47 --file=filename' =>
@@ -180,30 +178,6 @@ function node_export_drush_callback_export() {
     $result = db_query($query, $args);
     while ($row = db_fetch_array($result)) {
       $nid_filters['filters'][] = $row['nid'];
-    }
-  }
-
-  // Handle SQL option.
-  $sql = drush_get_option('sql');
-  if ($sql) {
-    $result = db_query($sql);
-    while ($row = db_fetch_array($result)) {
-      $nid_filters['sql'][] = $row['nid'];
-    }
-  }
-
-  // Handle PHP option.
-  $php = drush_get_option('php');
-  if ($php) {
-    $result = drupal_eval("<?php " . $php . " ?>");
-    if (is_array($result)) {
-      $nid_filters['php'] = $result;
-    }
-    else {
-       $nid_filters['php'] = explode(
-         ",",
-         str_replace(array("\n", "\r", "\t", " "), '', $result)
-       );
     }
   }
 

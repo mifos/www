@@ -1,5 +1,5 @@
 <?php 
-// $Id: linkit.module,v 1.1.2.11 2010/10/26 23:37:07 anon Exp $
+// $Id: linkit.module,v 1.1.2.14 2010/11/25 22:50:43 anon Exp $
 
 /**
  * @file
@@ -50,7 +50,7 @@ function linkit_menu() {
 }
 
 /**
- * Implementation of hook_init()
+ * Implementation of hook_init().
  */
 function linkit_init() {
   // Check that we have pathfilter or pathologic installed to parse the "internal:" links
@@ -60,7 +60,7 @@ function linkit_init() {
           '@pathfilter' => 'http://drupal.org/project/pathfilter',
           '@pathologic' => 'http://drupal.org/project/pathologic',
         )
-       ), 'warning');
+      ), 'warning');
     }
   }
 }
@@ -119,7 +119,7 @@ function template_preprocess_linkit_dashboard(&$variables) {
 }
 
 /**
- * Creates the dashboard
+ * Creates the dashboard.
  */
 function linkit_dashboard_page($editor) {
   module_invoke('admin_menu', 'suppress');
@@ -166,7 +166,7 @@ function linkit_dashboard_page($editor) {
 }
 
 /**
- * Autocomplete callback function
+ * Autocomplete callback function.
  */
 function linkit_autocomplete($string = NULL) {
   $matches = array();
@@ -184,6 +184,9 @@ function linkit_autocomplete($string = NULL) {
       }
     }
   }
+
+  // hook_linkit_load_plugins_alter() , let other modules change the matches array
+  drupal_alter('linkit_load_plugins', $matches);
   
   $results = array();
   foreach ($matches AS $match) {
@@ -194,7 +197,9 @@ function linkit_autocomplete($string = NULL) {
     // Get the extra information text
     $information = array();
     foreach ($match['information'] AS $extra_info_key => $extra_info_val) {
-      $information[] = $extra_info_key . ':<span>' . $extra_info_val . '</span>';
+      // Coder is telling us that "The first parameter to t() should be a literal string. There should be no variables, concatenation, constants or other non-literal strings there"
+      // But the "$extra_info_key" is hard coded and cant be change by users or administratios so its ok to use t() this way.
+      $information[] = t(drupal_ucfirst($extra_info_key)) . ':<span>' . $extra_info_val . '</span>';
     }
     
     // Build the text
@@ -206,11 +211,7 @@ function linkit_autocomplete($string = NULL) {
     $text .= '</div>';
     $results[$val] = $text;
   }
-  
-  // Show MAX 10 matches
-  if (count($results) > 10) {
-    $results = array_slice($results, 0, 10);
-  }
+ 
 
   drupal_json($results);
 }

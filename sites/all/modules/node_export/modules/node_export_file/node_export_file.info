@@ -4,9 +4,9 @@ description = "Export helper module for handling files (CCK FileField, Upload, a
 dependencies[] = node_export
 version = VERSION
 core = 6.x
-; Information added by drupal.org packaging script on 2010-12-01
-version = "6.x-2.23"
+; Information added by drupal.org packaging script on 2010-12-09
+version = "6.x-2.24"
 core = "6.x"
 project = "node_export"
-datestamp = "1291170815"
+datestamp = "1291874138"
 

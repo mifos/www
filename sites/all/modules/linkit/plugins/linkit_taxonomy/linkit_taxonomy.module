@@ -1,5 +1,5 @@
 <?php 
-// $Id: linkit_taxonomy.module,v 1.7.2.1 2010/08/27 16:56:03 anon Exp $
+// $Id: linkit_taxonomy.module,v 1.7.2.2 2010/11/24 22:20:47 anon Exp $
 
 /**
  * @file
@@ -12,17 +12,48 @@
  */
 function linkit_taxonomy_linkit_load_plugins($string) {
   $matches = array();
-  
+
+  $settings = variable_get('linkit_term', array());
+
+  // Prevent "PHP notice: Undefined variable"
+  _linkit_taxonomy_get_default_settings($settings);
+
+  $fields = array('t.name', 't.tid '); // default fields
+  $from = array('{term_data} t'); // default from
+  $where = array(); // default where
+
+ // Prebuild the SQL query
+  $sql = array();
+  $sql[] = "SELECT %s";
+  $sql[] = "FROM " . implode(" ", $from);
+  $sql[] = "WHERE LOWER(t.name) LIKE LOWER('%%%s%%') %s";
+
   // Get terms
-  $result = db_query_range(db_rewrite_sql("SELECT t.name, t.tid FROM {term_data} t WHERE LOWER(t.name) LIKE LOWER('%%%s%%')", 't', 'tid'), $string, 0, 10);
+  $result = db_query_range(db_rewrite_sql(implode(" ", $sql), 't', 'tid'), implode(",", $fields), $string, implode(" ", $where), 0, 10);
+  $i = 0;
   while ($term = db_fetch_object($result)) {
-    $matches['taxonomy'][] = array(
+    $matches['taxonomy'][$i] = array(
       'title' => $term->name,
       'path' => 'internal:taxonomy/term/' . $term->tid,
       'information' => array(
         'type' => 'Taxonomy',
       ),
     );
+    // Add the taxonomy path
+    if ($settings['display_settings']['show_parent']) {
+      // Possible to find all parents to the root level, for now this isnt really pretty to put in
+      // $parents = taxonomy_get_parents_all($term->tid);
+
+      // The API says "Find all parents of a given term ID." but thats not true
+      // It is only returning the very next parent
+      $parents = taxonomy_get_parents($term->tid);
+      
+      if (count($parents)) {
+        $current = current($parents);
+        $matches['taxonomy'][$i]['information']['parent'] = $current->name;
+      }
+    } 
+    $i++;
   }
   return  $matches;
 }
@@ -64,4 +95,17 @@ function linkit_taxonomy_linkit_info_plugins() {
     'type' => 'taxonomy',
   );
   return $return;
+}
+
+/**
+ * Prevent "PHP notice: Undefined variable" by merging the settings 
+ * with the defule values
+ */
+function _linkit_taxonomy_get_default_settings(&$settings) {
+  // Merge settings with the default settings
+  $settings += array(
+    'display_settings' => array(
+      'show_parent' => 0,
+    ), 
+  );
 }

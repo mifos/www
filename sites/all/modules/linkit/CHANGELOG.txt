@@ -1,7 +1,20 @@
-// $Id: CHANGELOG.txt,v 1.38.2.18 2010/10/31 16:09:59 anon Exp $
+// $Id: CHANGELOG.txt,v 1.38.2.26 2010/12/28 02:08:11 anon Exp $
 Linkit x.x-x.x, xxxx-xx-xx
 
-Linkit 6.x-1.7, xxxx-xx-xx
+
+Linkit 6.x-1.8, 2010-12-28
+------------------------------
+#963254 by blixxxa: Added support for link to files
+#958912 by anon: Fixed warning: array_filter() [function.array-filter]: The 
+  first argument should be an array in .../linkit_node.module on line 53.
+#958912 by anon: Fixed better way to handle missing settings variables
+#973082 by robbertnl, anon: Show taxonomy term parent in search result
+by anon: Added t() function to some strings that should have it
+by anon: Only show settings for enabled modules
+by anon: Added support for other modules to alter the results from all linkit 
+  plugins
+
+Linkit 6.x-1.7, 2010-10-31
 ------------------------------
 Changed by anon: Changed mainterns in README.txt
 #855436, #939448, #941320 Fixed by anon: Installation problems when both 
