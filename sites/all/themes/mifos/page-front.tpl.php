@@ -161,7 +161,7 @@
               <div id="content_right_sidebar"><?php echo $content_right ?></div>
             <?php endif ?>
 
-            <?php print $content; ?>
+            <?php print $banner_view; ?>
           </div>
           <img src="<?php echo base_path() . path_to_theme() ?>/images/banner_left.png" alt="" class="content-bottom-banner" />
           <div class="clear"></div>
