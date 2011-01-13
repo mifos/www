@@ -112,10 +112,16 @@ function mifos_preprocess(&$vars, $hook) {
  *   An array of variables to pass to the theme template.
  * @param $hook
  *   The name of the template being rendered ("page" in this case.)
+ *
+ * There's a flaw in views_slideshow that prevents it from rotating
+ * when you try to embed the view as a block in a page. The workaround
+ * is to create and store the view and reload javascript here,
+ * and then print it in the page template.
+ * See http://drupal.org/node/325353.
  */
-/* -- Delete this line if you want to use this function
 function mifos_preprocess_page(&$vars, $hook) {
-  $vars['sample_variable'] = t('Lorem ipsum.');
+  $vars['banner_view'] = views_embed_view('banner', 'block_1');
+  $vars['scripts'] = drupal_get_js();
 }
 // */
 
