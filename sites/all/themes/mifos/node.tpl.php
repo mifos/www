@@ -69,18 +69,6 @@
   <div class="content">
     <?php print $content; ?>
     
-    <?php if($node->nid == 43): ?>
-      <h3><?php echo l('In Production Deployments', 'deployments/in-production') ?></h3>
-      <?php echo views_embed_view('deployments', 'block_1', 'in-production'); ?>
-      
-      <h3><?php echo l('In Progress Deployments', 'deployments/in-progress') ?></h3>
-      <?php echo views_embed_view('deployments', 'block_1', 'in-progress'); ?>
-      
-      <?php $customer_view = views_get_view('customer_table'); ?>
-      <h3><?php echo l($customer_view->get_title()) ?></h3>
-      <?php echo views_embed_view('customer_table', 'block_1'); ?>
-    <?php endif; ?>
-    
     <?php if ($node->nid == 55): ?>
       <?php if ($logged_in): ?>
         <!-- allow a logged in user to submit their own -->
