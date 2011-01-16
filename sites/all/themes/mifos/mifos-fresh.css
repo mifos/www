@@ -798,8 +798,15 @@ h1#logo a {
 /*=========================================
         VOLUNTEER PROJECT LIST
 
-  Unlike content types, 
-=========================================*/
+  Issue MIFOSADMIN-256 requires that view "Volunteer_projects_list"
+  display all field labels in-line to the left of their content. By default, Views
+  displays labels in-line only for text CCK fields -- When the field is a complex
+  value the field value is placed below the label (in this case, fields duration,
+  mentor, and specialist.
+  
+  This is fixed by floating the label and field value to the left and then clearing
+  the float afterward (otherwise the next value floats to the same line).
+========================================*/
 .view-Volunteer-projects-list div.views-field-field-duration-value > label.views-label-field-duration-value {
 	float:left; 
 	margin-right: .5em; 
