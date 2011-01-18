@@ -796,6 +796,64 @@ h1#logo a {
 .field-field-av-name, .field-field-mentor-name { font-size:16px; font-weight:bold; }
 
 /*=========================================
+        VOLUNTEER PROJECT LIST
+
+  Issue MIFOSADMIN-256 requires that view "Volunteer_projects_list"
+  display all field labels in-line to the left of their content. By default, Views
+  displays labels in-line only for text CCK fields -- When the field is a complex
+  value the field value is placed below the label (in this case, fields duration,
+  mentor, and specialist.
+  
+  This is fixed by floating the label and field value to the left and then clearing
+  the float afterward (otherwise the next value floats to the same line).
+========================================*/
+.view-Volunteer-projects-list div.views-field-field-duration-value > label.views-label-field-duration-value {
+	float:left; 
+	margin-right: .5em; 
+}
+.view-Volunteer-projects-list div.views-field-field-duration-value > div.field-content {
+	float:left;
+}
+.view-Volunteer-projects-list div.views-field-field-duration-value:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+.view-Volunteer-projects-list div.views-field-field-mentor-profile-node-nid > label.views-label-field-mentor-profile-node-nid {
+	float:left; 
+	margin-right: .5em; 
+}
+.view-Volunteer-projects-list div.views-field-field-mentor-profile-node-nid > div.field-content {
+	float:left;
+}
+.view-Volunteer-projects-list div.views-field-field-mentor-profile-node-nid:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+.view-Volunteer-projects-list div.views-field-field-mifos-specialist-url .field-content {
+	font-weight:bold;
+}
+.view-Volunteer-projects-list div.views-field-field-mifos-specialist-url > .field-content {
+	display:block;
+	float:right;
+}
+.view-Volunteer-projects-list div.views-field-field-mifos-specialist-url:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+/*
+.views-label-field-duration-value { color:red; float:left; margin-right: .5em; }
+.views-field-field-duration-value .field-content { color:blue; float:left; }
+*/
+/*=========================================
                   VIDEOS
 =========================================*/
 /** Added content area for videos **/
