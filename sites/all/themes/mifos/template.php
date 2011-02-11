@@ -120,7 +120,7 @@ function mifos_preprocess(&$vars, $hook) {
  * See http://drupal.org/node/325353.
  */
 function mifos_preprocess_page(&$vars, $hook) {
-  $vars['banner_view'] = views_embed_view('front_page_banner', 'block_1');
+  $vars['banner_view'] = views_embed_view('banner', 'block_1');
   $vars['scripts'] = drupal_get_js();
 }
 // */
