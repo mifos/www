@@ -1,4 +1,4 @@
-// $Id: linkitDialog.js,v 1.4.2.1 2010/10/22 23:26:57 anon Exp $
+// $Id: linkitDialog.js,v 1.4.2.2 2011/02/07 17:45:03 anon Exp $
 
 /**
  * @file Linkit ckeditor dialog helper
@@ -65,7 +65,7 @@ var LinkitDialog = {
     var link_text_matches = $('#edit-link').val().match(/(.*)\[path:.*\]/i);
     link_text = (link_text_matches == null) ? $('#edit-link').val() : link_text_matches[1].replace(/^\s+|\s+$/g, '');
 
-    var params = { 'href' : href , 'link_text' : link_text };
+    var params = { 'href' : href , 'link_text' : link_text, 'data-cke-saved-href' : href };
     
     $("fieldset fieldset input[id!='edit-anchor']").each(function() {
       if($(this).val() != "") {

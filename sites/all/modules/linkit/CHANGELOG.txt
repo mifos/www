@@ -1,6 +1,24 @@
-// $Id: CHANGELOG.txt,v 1.38.2.26 2010/12/28 02:08:11 anon Exp $
+// $Id: CHANGELOG.txt,v 1.38.2.35 2011/02/07 18:29:38 anon Exp $
 Linkit x.x-x.x, xxxx-xx-xx
 
+Linkit 6.x-1.9, 2011-02-07
+------------------------------
+#908466 by anon: Fixed so links to terms is created properly.
+#955356 by Magnus: Imported translations to localization server and removed 
+  CVS files.
+#1022940 by anon, fietserwin: Undefined index: show_books in 
+  linkit_node_linkit_load_plugins().
+#1019048 by anon, binford2k: Fixed array structure for plugins in 
+  linkit_wysiwyg_plugin.
+#1030936 by johannesdr, anon: Fixed/Added more reliable path strings for 
+  FCKeditor and CKeditor.
+#1027500 by anon: Fixed IMCE integration assumes clean URLs to be enabled.
+[bug] [#1044632] by anon: Fixed Drupal.settings is overwritten when IMCE is 
+    enabled.
+[bug] [#1053400] by anon: Fixed issue when links wasnt edited accurate in 
+  CKeditor.
+[bug] [#1050980] by vikfroberg, anon: Fixed Linkit geteditresult conflict with
+  devel page execution.
 
 Linkit 6.x-1.8, 2010-12-28
 ------------------------------

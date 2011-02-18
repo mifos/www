@@ -1,16 +1,13 @@
-; $Id: xmlsitemap_user.info,v 1.2.4.4 2010/02/11 02:23:42 davereid Exp $
+; $Id: xmlsitemap_user.info,v 1.2.2.4 2009/05/05 21:53:44 earnie Exp $
 name = XML sitemap user
-description = Adds user profile links to the sitemap.
+description = Add user profile links to the sitemap.
 package = XML sitemap
 dependencies[] = xmlsitemap
-core = 6.x
-files[] = xmlsitemap_user.module
-files[] = xmlsitemap_user.install
-files[] = xmlsitemap_user.test
+core = "6.x"
 
-; Information added by drupal.org packaging script on 2010-04-30
-version = "6.x-2.0-beta1"
+; Information added by drupal.org packaging script on 2010-01-27
+version = "6.x-1.2"
 core = "6.x"
 project = "xmlsitemap"
-datestamp = "1272601507"
+datestamp = "1264572909"
 

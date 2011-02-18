@@ -1,4 +1,4 @@
-/* $Id: linkit.js,v 1.4.2.1 2010/10/22 22:52:21 anon Exp $ */
+/* $Id: linkit.js,v 1.4.2.2 2011/01/24 18:24:56 anon Exp $ */
 
 /*
  * Linkit javascript lib 
@@ -36,7 +36,7 @@ var linkit_helper = {
    * IMCE integration
    */
   openFileBrowser : function () {
-    window.open(Drupal.settings.basePath + 'imce?app=Linkit|url@edit-link', '', 'width=760,height=560,resizable=1');
+    window.open(decodeURIComponent(Drupal.settings.linkit.IMCEurl), '', 'width=760,height=560,resizable=1');
   },
   
   /*

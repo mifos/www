@@ -1,4 +1,4 @@
-; $Id: README.txt,v 1.2 2010/04/03 01:25:59 anon Exp $
+; $Id: README.txt,v 1.2.2.1 2011/01/23 22:11:30 anon Exp $
 
 ##############################################
 ## ONLY if you use ckeditor WITHOUT wysiwyg ##
@@ -25,4 +25,4 @@ Do the following steps to add Linkit button to the CKEditor toolbar:
       
       // Linkit plugin.
       config.extraPlugins += (config.extraPlugins ? ',Linkit' : 'Linkit' );
-      CKEDITOR.plugins.addExternal('Linkit', Drupal.settings.basePath + 'sites/all/modules/linkit/editors/ckeditor/');
+      CKEDITOR.plugins.addExternal('Linkit', Drupal.settings.basePath + Drupal.settings.linkit.modulepath + '/editors/ckeditor/');

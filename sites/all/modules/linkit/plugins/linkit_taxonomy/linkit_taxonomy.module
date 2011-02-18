@@ -1,5 +1,5 @@
 <?php 
-// $Id: linkit_taxonomy.module,v 1.7.2.2 2010/11/24 22:20:47 anon Exp $
+// $Id: linkit_taxonomy.module,v 1.7.2.3 2011/01/04 21:50:36 anon Exp $
 
 /**
  * @file
@@ -18,7 +18,7 @@ function linkit_taxonomy_linkit_load_plugins($string) {
   // Prevent "PHP notice: Undefined variable"
   _linkit_taxonomy_get_default_settings($settings);
 
-  $fields = array('t.name', 't.tid '); // default fields
+  $fields = array('t.name', 't.tid', 't.vid', 't.description', 't.weight'); // default fields
   $from = array('{term_data} t'); // default from
   $where = array(); // default where
 
@@ -34,7 +34,7 @@ function linkit_taxonomy_linkit_load_plugins($string) {
   while ($term = db_fetch_object($result)) {
     $matches['taxonomy'][$i] = array(
       'title' => $term->name,
-      'path' => 'internal:taxonomy/term/' . $term->tid,
+      'path' => 'internal:' . taxonomy_term_path($term),
       'information' => array(
         'type' => 'Taxonomy',
       ),
@@ -69,20 +69,24 @@ function linkit_taxonomy_linkit_get_search_styled_link($string) {
 
   // Check to see that the link really is a term link
   $splitted_string = explode('/', str_replace('internal:', '', $string));
-  if ($splitted_string[0] != 'taxonomy') {
-    return;
+  if (!is_numeric($splitted_string[count($splitted_string)-1])) {
+    return ;
   }
-
-  // This is a term link created with Linkit, try to grab the title and path now. 
-  $result = db_query(db_rewrite_sql("SELECT td.tid, td.name FROM {term_data} td WHERE td.tid = %d"), $splitted_string[2]);
-  $term = db_fetch_object($result);
-
-  // No reault or no term was found
-  if (!$result || !$term) {
-    return;
+  
+  // Try to get a term object
+  $term = taxonomy_get_term($splitted_string[count($splitted_string)-1]);
+  // taxonomy_get_term is returns an object
+  if (!is_object($term)) {
+    return ;
   }
-
-  return check_plain($term->name) . ' [path:internal:taxonomy/term/' . $term->tid . ']';
+  
+  // Ok, this looks like a term, get the path
+  $path = taxonomy_term_path($term);
+  
+  // If $path is the same as the provided $string, we have a match.
+  if ($path == str_replace('internal:', '', $string)) {
+    return check_plain($term->name) . ' [path:internal:' . taxonomy_term_path($term) . ']';
+  }  
 }
 
 /**

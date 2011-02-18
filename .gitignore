@@ -2,3 +2,7 @@ backup/
 robots.txt
 sites/*/files
 sites/*/settings.php
+# Ignore top-level .txt files except PRESSFLOW.txt, which
+# identifies the Pressflow release
+*.txt
+!PRESSFLOW.txt
