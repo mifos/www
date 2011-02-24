@@ -1,5 +1,5 @@
 <?php 
-// $Id: linkit.module,v 1.1.2.14 2010/11/25 22:50:43 anon Exp $
+// $Id: linkit.module,v 1.1.2.19 2011/02/07 18:27:01 anon Exp $
 
 /**
  * @file
@@ -137,6 +137,12 @@ function linkit_dashboard_page($editor) {
       'linkit' => array('ajaxcall' => url('admin/linkit/geteditresult')),
     );
 
+    // Check if we have IMCE and access to it.
+    $imce = module_invoke('imce', 'access');
+    if($imce) {
+      $settings['linkit']['IMCEurl'] = url('imce', array('query' => array('app' => 'Linkit|url@edit-link')));
+    }
+
     drupal_add_js($settings, 'setting');
   }
   drupal_add_js(drupal_get_path('module', 'linkit') . '/linkit.js');
@@ -217,13 +223,13 @@ function linkit_autocomplete($string = NULL) {
 }
 
 function linkit_search_styled_link() {
-  $matches = array();
-  $string = check_plain($_GET['string']);
-  if ($string) {
+  drupal_set_header('Content-Type: text/plain; charset=utf-8');
+  if (isset($_GET['string'])) {
+    $string = check_plain($_GET['string']);
     $matches = module_invoke_all('linkit_get_search_styled_link', $string);
+
+    echo (isset($matches[0]) ? $matches[0] : '');
   }
-  echo $matches[0];
-  die();
 }
 
 function _linkit_form() {
@@ -336,8 +342,9 @@ function _linkit_form() {
 }
 
 function linkit_wysiwyg_plugin($editor, $version) {
-
+  $plugins = array();
   _linkit_add_settings('wysiwyg_' . $editor);
+
   switch ($editor) {
     case 'tinymce':      
       $plugins['linkit'] = array(
@@ -371,14 +378,30 @@ function linkit_wysiwyg_plugin($editor, $version) {
 
 function _linkit_add_settings($editor) {
   static $editor_settings_added = array();
+  static $global_settings_added = FALSE;
 
   if (!isset($editor_settings_added[$editor])) {
     $editor_settings_added[$editor] = TRUE;
     
     // Add popup url
     $settings = array(
-      'linkit' => array('url' => array($editor => url('admin/linkit/dashboard/' . $editor))),
+      'linkit' => array(
+        'url' => array($editor => url('admin/linkit/dashboard/' . $editor)),
+      ),
     );
     drupal_add_js($settings, 'setting');
+  }
+
+  if (!$global_settings_added) {
+    $global_settings_added = TRUE;
+
+    // Add global settings for Linkit
+    $settings = array(
+      'linkit' => array(
+        'modulepath' => drupal_get_path('module', 'linkit'),
+      ),
+    );
+    drupal_add_js($settings, 'setting');
+    
   }
 }
