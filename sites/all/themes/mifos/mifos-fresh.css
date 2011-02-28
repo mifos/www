@@ -963,3 +963,43 @@ ul.group-tabs li a:hover, ul.group-tabs li a.current { background-color:#868686;
 .node-teaser .terms {
   display: none;
 }
+
+/*=========================================
+       FRONT PAGE BANNER
+Theming the Views Slideshow to overlay headline
+on top of the image.
+
+=========================================*/
+
+#views_slideshow_singleframe_teaser_section_front_page_banner-page_1 div div.views-row {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+  border-bottom: none;
+}
+
+#transparency {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  width: 558px;
+  height: 110px;
+  background-color: #000;
+  filter:alpha(opacity=40);
+  opacity: 0.4;
+  -moz-opacity: 0.4;
+}
+
+#banner-overlay {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  width: 538px;
+  height: 100px;
+  color: #fff;
+}
+
+.views_slideshow_singleframe_slide div.views-row {
+  margin-bottom: 0px;
+  padding-bottom: 20px;
+  border-bottom: none;
+}
