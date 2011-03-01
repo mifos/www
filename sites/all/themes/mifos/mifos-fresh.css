@@ -1000,6 +1000,6 @@ on top of the image.
 
 .views_slideshow_singleframe_slide div.views-row {
   margin-bottom: 0px;
-  padding-bottom: 20px;
+  padding-bottom: 0px;
   border-bottom: none;
 }
