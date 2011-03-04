@@ -565,8 +565,16 @@ h1#logo a {
 /*=========================================
                 HOMEPAGE
 =========================================*/
-.front #homepage-content { float:left; margin-right:4%; padding:0 0 15px 0; position:relative; width:48%; }
-.front #homepage-content .content-bottom-banner { position:absolute; top:0; left:-25px; }
+.front #homepage-content { 
+  float:left;
+  margin-right:4%; 
+  padding:0 0 15px 0; 
+  position:relative; width:48%; 
+}
+.front #homepage-content .content-bottom-banner { 
+  position:absolute; top:0; 
+  left:-25px; 
+}
 
 .front #content-header h1.title {
   background-color:#58b4df;
@@ -971,35 +979,67 @@ on top of the image.
 
 =========================================*/
 
-#views_slideshow_singleframe_teaser_section_front_page_banner-page_1 div div.views-row {
-  margin-bottom: 0px;
-  padding-bottom: 0px;
-  border-bottom: none;
+.front #homepage-content {
+    margin: 0 4% 15px 0;
+    padding: 0;
 }
 
-#transparency {
+.front #banner-overlay-background {
   position: absolute;
-  bottom: 10px;
-  left: 10px;
-  width: 558px;
-  height: 110px;
+  bottom: 5px;
+  left: 0px;
+  width: 100%;
+  height: 80px;
   background-color: #000;
   filter:alpha(opacity=40);
   opacity: 0.4;
   -moz-opacity: 0.4;
 }
 
-#banner-overlay {
+.front #banner-overlay {
   position: absolute;
-  bottom: 20px;
-  left: 20px;
-  width: 538px;
-  height: 100px;
+  bottom: 5px;
+  left: 0px;
+  height: 80px;
+  width: 100%;
   color: #fff;
 }
 
-.views_slideshow_singleframe_slide div.views-row {
-  margin-bottom: 0px;
-  padding-bottom: 0px;
-  border-bottom: none;
+.front #content .front-page-banner h1.title {
+	background-color: #58B4DF;
+	border: medium none;
+	color: #FFFFFF;
+	line-height: 130%;
+	padding: 0 0 0 10px;
+}
+
+.front #content .front-page-banner h1.title a {
+	color: #FFFFFF;
+}
+.front #banner-overlay div.banner-headline{
+  margin-left: 10px;
+  width: 70%;
+  float:left;
+}
+
+.front #banner-overlay div.banner-headline p{
+  margin-left: 10px;
+  font-size: 1em;
+}
+
+.front #banner-overlay div.banner-read-more {
+  width: 25%;
+  float: right;
+}
+
+.front #banner-overlay div.banner-read-more a{
+  display: block;
+  width: 80px;
+  background-color: #000;
+  color: #fff;
+  padding: 8px;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 1.1em;
 }

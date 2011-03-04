@@ -61,7 +61,7 @@ function front_page_banner_views_default_views() {
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
-        'make_link' => 1,
+        'make_link' => 0,
         'path' => '[field_banner_link_url]',
         'link_class' => '',
         'alt' => '',
@@ -81,14 +81,14 @@ function front_page_banner_views_default_views() {
       'empty_zero' => 0,
       'link_to_node' => 0,
       'label_type' => 'none',
-      'format' => 'slideshow_image_default',
+      'format' => 'banner_image_default',
       'multiple' => array(
         'group' => TRUE,
         'multiple_number' => '',
         'multiple_from' => '',
         'multiple_reversed' => FALSE,
       ),
-      'exclude' => 0,
+      'exclude' => 1,
       'id' => 'field_banner_image_fid',
       'table' => 'node_data_field_banner_image',
       'field' => 'field_banner_image_fid',
@@ -174,7 +174,7 @@ function front_page_banner_views_default_views() {
       'label' => '',
       'alter' => array(
         'alter_text' => 1,
-        'text' => 'Read more...',
+        'text' => 'read more',
         'make_link' => 1,
         'path' => '[field_banner_link_url]',
         'link_class' => '',
@@ -212,11 +212,14 @@ function front_page_banner_views_default_views() {
       'label' => '',
       'alter' => array(
         'alter_text' => 1,
-        'text' => '<div id="transparency"></div>
+        'text' => '<h1 class="title">[title]</h1>
+[field_banner_image_fid]
+<div id="banner-overlay-background"></div>
 <div id="banner-overlay">
-  <h2>[title]</h2>
-  [field_banner_headline_value] [field_banner_link_url_1]
-</div>',
+  <div class="banner-headline">[field_banner_headline_value]</div>
+  <div class="banner-read-more">[field_banner_link_url_1]</div>
+</div>
+',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -259,6 +262,20 @@ function front_page_banner_views_default_views() {
       'field' => 'type',
       'relationship' => 'none',
     ),
+    'promote' => array(
+      'operator' => '=',
+      'value' => '1',
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'promote',
+      'table' => 'node',
+      'field' => 'promote',
+      'relationship' => 'none',
+    ),
   ));
   $handler->override_option('access', array(
     'type' => 'none',
@@ -292,7 +309,7 @@ function front_page_banner_views_default_views() {
       'pager_type' => 'Numbered',
       'pager_hover' => '2',
       'pager_click_to_page' => 0,
-      'image_count' => '2',
+      'image_count' => '0',
       'items_per_slide' => '1',
       'effect' => 'fade',
       'sync' => '1',
@@ -306,11 +323,9 @@ function front_page_banner_views_default_views() {
     'views_slideshow_thumbnailhover-prefix' => '',
     'views_slideshow_thumbnailhover' => array(
       'main_fields' => array(
-        'field_banner_image_fid' => 0,
         'body' => 0,
       ),
       'breakout_fields' => array(
-        'field_banner_image_fid' => 0,
         'body' => 0,
       ),
       'teasers_last' => 1,
@@ -339,6 +354,11 @@ function front_page_banner_views_default_views() {
         'cleartypenobg' => 'false',
       ),
     ),
+  ));
+  $handler->override_option('row_options', array(
+    'inline' => array(),
+    'separator' => '',
+    'hide_empty' => 1,
   ));
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->override_option('path', 'banner');

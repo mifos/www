@@ -14,7 +14,7 @@ function front_page_banner_imagecache_default_presets() {
           'action' => 'imagecache_scale_and_crop',
           'data' => array(
             'width' => '578',
-            'height' => '250',
+            'height' => '240',
           ),
         ),
       ),
