@@ -1,5 +1,4 @@
 <?php
-// $Id: i18n.module,v 1.41.2.50 2010/09/09 12:23:48 jareyero Exp $
 
 /**
  * @file
@@ -134,13 +133,22 @@ function i18n_menu() {
     'weight' => 10,
   );
   $items['admin/settings/language/i18n/configure'] = array(
-    'title' => 'Multilingual system',
+    'title' => 'Options',
     'description' => 'Configure extended options for multilingual content and translations.',
     //'page callback' => 'drupal_get_form',
     //'page arguments' => array('i18n_admin_settings'),
     //'access arguments' => array('administer site configuration'),
     'file' => 'i18n.admin.inc',
     'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  $items['admin/settings/language/i18n/variables'] = array(
+    'title' => 'Variables',
+    'description' => 'Multilingual variables.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('i18n_admin_variables_form'),
+    'access arguments' => array('administer site configuration'),
+    'file' => 'i18n.admin.inc',
+    'type' => MENU_LOCAL_TASK,
   );
   // Autocomplete callback for nodes
   $items['i18n/node/autocomplete'] = array(

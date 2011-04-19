@@ -1,5 +1,5 @@
 ﻿/*
-Copyright (c) 2003-2010, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2011, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 
@@ -146,6 +146,16 @@ if ( !CKEDITOR.env )
 			env.ie8Compat = document.documentMode == 8;
 
 			/**
+			 * Indicates that CKEditor is running on Internet Explorer 9's standards mode.
+			 * @name CKEDITOR.env.ie9Compat
+			 * @type Boolean
+			 * @example
+			 * if ( CKEDITOR.env.ie9Compat )
+			 *     alert( "IE9, the beauty of the web!" );
+			 */
+			env.ie9Compat = document.documentMode == 9;
+
+			/**
 			 * Indicates that CKEditor is running on an IE7-like environment, which
 			 * includes IE7 itself and IE8's IE7 document mode.
 			 * @name CKEDITOR.env.ie7Compat
@@ -241,7 +251,6 @@ if ( !CKEDITOR.env )
 				env.ie ? 'ie' :
 				env.gecko ? 'gecko' :
 				env.opera ? 'opera' :
-				env.air ? 'air' :
 				env.webkit ? 'webkit' :
 				'unknown' );
 
@@ -261,6 +270,9 @@ if ( !CKEDITOR.env )
 
 		if ( env.gecko && version < 10900 )
 			env.cssClass += ' cke_browser_gecko18';
+
+		if ( env.air )
+			env.cssClass += ' cke_browser_air';
 
 		return env;
 	})();

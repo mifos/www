@@ -1,5 +1,4 @@
 <?php
-// $Id: location.inc,v 1.1.2.2 2009/02/13 11:34:13 robrechtj Exp $
 
 /**
  * @file
@@ -34,7 +33,7 @@ function location_node_import_fields($type) {
             'title' => $fieldtitle,
             'group' => t('Location'),
             'has_multiple' => $settings['multiple']['max'] > 1,
-            'is_required' => $settings['multiple']['min'] > 0,
+            'map_required' => $settings['multiple']['min'] > 0,
             'default_value' => $settings['form']['fields'][$fieldname]['default'],
             'weight' => $settings['form']['fields'][$fieldname]['weight'],
           );

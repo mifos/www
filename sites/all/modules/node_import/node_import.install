@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 /**
  * @file
@@ -7,11 +6,39 @@
  */
 
 /**
+ * Minimum Drupal version Node import will work with.
+ *
+ * We need Drupal 6.5 or later because we need the patch of
+ * http://drupal.org/node/180063 : No way to flush form errors
+ * during iterative programatic form submission.
+ *
+ * Without this patch, we can't do multiple drupal_execute()s
+ * in one page request. This is a requirement for validating
+ * reliable and for generating previews.
+ *
+ * This patch was included in Drupal 6.5, see:
+ * http://drupal.org/node/318701.
+ *
+ * @ingroup node_import_constants
+ */
+define('NODE_IMPORT_MINIMUM_DRUPAL', '6.5');
+
+/**
+ * Minimum DateAPI version Node import will work with.
+ *
+ * To avoid problems with parsing dates, node import uses DateAPI
+ * module. This constant defines the minimum version of DateAPI
+ * that will work.
+ *
+ * @ingroup node_import_contants
+ */
+define('NODE_IMPORT_MINIMUM_DATEAPI', '5.2');
+
+/**
  * Implementation of hook_install().
  */
 function node_import_install() {
   drupal_install_schema('node_import');
-  file_check_directory(file_create_path(variable_get('node_import:directory', 'imports')), FILE_CREATE_DIRECTORY, 'node_import:directory');
 }
 
 /**
@@ -20,7 +47,8 @@ function node_import_install() {
 function node_import_uninstall() {
   drupal_uninstall_schema('node_import');
 
-  variable_del('node_import:ftp:directory');
+  variable_del('node_import:ftp:directory'); // Wrongly named, should be ':directory' only
+  variable_del('node_import:directory');
   variable_del('node_import:ftp:enabled');
   variable_del('node_import:ftp:user');
   variable_del('node_import:ftp:extensions');
@@ -59,9 +87,6 @@ function node_import_update_6000() {
   if (db_table_exists('node_import_mappings')) {
     db_drop_table($result, 'node_import_mappings');
   }
-
-  // Make sure the directory exists.
-  file_check_directory(file_create_path(variable_get('node_import:directory', 'imports')), FILE_CREATE_DIRECTORY, 'node_import:directory');
 
   // The recommendation is not to use drupal_install_schema() in
   // hook_update_N() (see: http://drupal.org/node/150220) so we
@@ -236,7 +261,40 @@ function node_import_update_6000() {
  */
 function node_import_update_6100() {
   $result = array();
+
   menu_rebuild();
+
+  return $result;
+}
+
+/**
+ * Implementation of hook_update_N().
+ *
+ * 6.x-1.0-rc4 to 6.x-1.0-rc5:
+ * - rename the offset column to file_offset for pgsql (#384944).
+ */
+function node_import_update_6101() {
+  $result = array();
+
+  db_change_field($result, 'node_import_tasks', 'offset', 'file_offset', array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0));
+  db_drop_primary_key($result, 'node_import_status');
+  db_change_field($result, 'node_import_status', 'offset', 'file_offset', array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0), array('primary key' => array('taskid', 'file_offset')));
+
+  return $result;
+}
+
+/**
+ * Implementation of hook_update_N().
+ *
+ * 6.x-1.0-rc4 to 6.x-1.0-rc5:
+ * - rebuild menu for admin/content/node_import/list/files.
+ * - rebuild menu for admin/content/node_import/list/tasks.
+ */
+function node_import_update_6102() {
+  $result = array();
+
+  menu_rebuild();
+
   return $result;
 }
 
@@ -330,7 +388,7 @@ function node_import_schema() {
         'serialize' => TRUE,
       ),
 
-      'offset' => array(
+      'file_offset' => array(
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
@@ -367,7 +425,7 @@ function node_import_schema() {
         'not null' => TRUE,
         'default' => 0,
       ),
-      'offset' => array(
+      'file_offset' => array(
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
@@ -393,7 +451,7 @@ function node_import_schema() {
         'default' => 0,
       ),
     ),
-    'primary key' => array('taskid', 'offset'),
+    'primary key' => array('taskid', 'file_offset'),
   );
 
   return $schema;
@@ -407,12 +465,21 @@ function node_import_requirements($phase) {
   $t = get_t();
 
   // Check minimum Drupal version.
-  require_once(dirname(__FILE__) .'/node_import.module');
-  if ($phase == 'install' && version_compare(VERSION, NODE_IMPORT_MINIMUM_DRUPAL) < 0) {
-    $requirements['drupal'] = array(
+  if (($phase == 'install' || $phase == 'runtime') && version_compare(VERSION, NODE_IMPORT_MINIMUM_DRUPAL) < 0) {
+    $requirements['node_import:minimum_drupal'] = array(
       'title' => $t('Drupal version'),
-      'description' => $t('Node import module needs Drupal %version or later.', array('%version' => NODE_IMPORT_MINIMUM_DRUPAL)),
+      'description' => $t('Node import module requires Drupal %version or later (currently %drupal_version installed).', array('%version' => NODE_IMPORT_MINIMUM_DRUPAL, '%drupal_version' => VERSION)),
       'value' => VERSION,
+      'severity' => REQUIREMENT_ERROR,
+    );
+  }
+
+  // Check minimum DateAPI version.
+  if ($phase == 'runtime' && variable_get('date_api_version', 0) < NODE_IMPORT_MINIMUM_DATEAPI) {
+    $requirements['node_import:minimum_dateapi'] = array(
+      'title' => $t('DateAPI version'),
+      'description' => $t('Node import module requires DateAPI module %version or later (currently %date_version installed).', array('%version' => NODE_IMPORT_MINIMUM_DATEAPI, '%date_version' => variable_get('date_api_version', 0))),
+      'value' => variable_get('date_api_version', 0),
       'severity' => REQUIREMENT_ERROR,
     );
   }

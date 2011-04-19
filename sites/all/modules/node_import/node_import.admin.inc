@@ -1,5 +1,4 @@
 <?php
-// $Id: node_import.admin.inc,v 1.1.2.31 2009/02/14 10:23:16 robrechtj Exp $
 
 /**
  * @file
@@ -12,11 +11,9 @@ drupal_add_css(drupal_get_path('module', 'node_import') .'/node_import.css');
 /**
  * Lists the available import tasks and shows their progress.
  */
-function node_import_list_form(&$form_state) {
+function node_import_list_tasks_form(&$form_state) {
   $form = array();
 
-  // ------------------------------------------------------------
-  // List available files so users can delete or visit them.
   $tasks = node_import_list_tasks(TRUE);
   $form['tasks'] = array(
     '#type' => 'item',
@@ -38,15 +35,22 @@ function node_import_list_form(&$form_state) {
     }
   }
 
-  // ------------------------------------------------------------
-  // List available files so users can delete them.
+  $form['buttons'] = array(
+    'add_task_button' => array(
+      '#type' => 'markup',
+      '#value' => l(t('New import'), 'admin/content/node_import/add'),
+    ),
+  );
+
+  return $form;
+}
+
+function node_import_list_files_form(&$form_state) {
+  $form = array();
+
   $files = node_import_list_files(TRUE);
   $form['files'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Uploaded files'),
-    '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
-    '#description' => t('You can delete files you no longer need here.'),
+    '#type' => 'item',
     '#theme' => 'node_import_file_select',
   );
 
@@ -68,17 +72,37 @@ function node_import_list_form(&$form_state) {
     }
   }
 
-  $form['files']['delete_files_button'] = array(
+  $form['buttons'] = array(
+    'delete_button' => array(
+      '#type' => 'submit',
+      '#value' => t('Delete selected files'),
+      '#submit' => array('node_import_list_files_form_submit_delete'),
+      '#disabled' => empty($files),
+    ),
+  );
+
+  $form['#attributes'] = array('enctype' => 'multipart/form-data');
+
+  $form['upload'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Upload file'),
+    '#description' => t('<strong>The file you are uploading must be in UTF8 encoding.</strong>'),
+    '#collapsible' => TRUE,
+    '#collapsed' => !empty($files),
+  );
+  $form['upload']['file_upload'] = array(
+    '#type' => 'file',
+  );
+  $form['upload']['file_upload_button'] = array(
     '#type' => 'submit',
-    '#value' => t('Delete selected files'),
-    '#submit' => array('node_import_list_form_submit_delete_files'),
-    '#disabled' => empty($files),
+    '#value' => t('Upload file'),
+    '#submit' => array('node_import_add_form_submit_upload_file'),
   );
 
   return $form;
 }
 
-function node_import_list_form_submit_delete_files($form, &$form_state) {
+function node_import_list_files_form_submit_delete($form, &$form_state) {
   $files = node_import_list_files();
   foreach ((array)$form_state['values']['fid'] as $fid => $selected) {
     if (isset($files[$fid]) && $selected) {
@@ -86,6 +110,17 @@ function node_import_list_form_submit_delete_files($form, &$form_state) {
       db_query("DELETE FROM {files} WHERE fid = %d", $fid);
       file_delete($files[$fid]->filepath);
     }
+  }
+}
+
+function node_import_list_files_form_submit_upload_file($form, &$form_state) {
+  $validators = array();
+
+  $dest = node_import_directory();
+
+  if (($file = file_save_upload('file_upload', $validators, $dest, FILE_EXISTS_RENAME))) {
+    drupal_set_message(t('New file %name uploaded to %path.', array('%name' => $file->filename, '%path' => $file->filepath)));
+    file_set_status($file, FILE_STATUS_PERMANENT);
   }
 }
 
@@ -113,7 +148,7 @@ function node_import_add_form(&$form_state) {
   $pages = array(
     'intro' => array(
       'title' => t('Introduction'),
-      'description' => t('The <em>Node import</em> module allows you to import content (such as users, vocabularies, terms or nodes) into your site from a tabular file (such as Comma or Tab Separated Values files). This wizard guides you through a number of steps to configure such an import.') .' '. theme('advanced_help_topic', 'node_import', 'new-import', t('[more help]')),
+      'description' => t('The <em>Node import</em> module allows you to import content (such as users, vocabularies, terms or nodes) into your site from a tabular file (such as Comma or Tab Separated Values files). This wizard guides you through a number of steps to configure such an import.') . (module_exists('advanced_help') ? ' ' . theme('advanced_help_topic', 'node_import', 'new-import', t('[more help]')) : ''),
     ),
     'type' => array(
       'title' => t('Select content type'),
@@ -121,7 +156,7 @@ function node_import_add_form(&$form_state) {
     ),
     'file' => array(
       'title' => t('Select file'),
-      'description' => t('Select the file which contains the data to import. You can select a previously uploaded file or upload a new file now.') . ((variable_get('node_import:ftp:enabled', 0) != 0 && (variable_get('node_import:ftp:user', 0) == $user->uid || variable_get('node_import:ftp:user', 0) == 0) ? ' '. t('Alternatively, you can upload a new file to %path using FTP (or other means). Press %reload after this FTP upload has finished to inform this form about this newly uploaded file.', array('%path' => file_create_path(variable_get('node_import:directory', 'imports')), '%reload' => t('Reload'))) : '')),
+      'description' => t('Select the file which contains the data to import. You can select a previously uploaded file or upload a new file now.') . ((variable_get('node_import:ftp:enabled', 0) != 0 && (variable_get('node_import:ftp:user', 0) == $user->uid || variable_get('node_import:ftp:user', 0) == 0) ? ' '. t('Alternatively, you can upload a new file to %path using FTP (or other means). Press %reload after this FTP upload has finished to inform this form about this newly uploaded file.', array('%path' => node_import_directory(), '%reload' => t('Reload'))) : '')),
     ),
     'file_options' => array(
       'title' => t('Set file options'),
@@ -226,6 +261,7 @@ function node_import_add_form(&$form_state) {
     $form['upload'] = array(
       '#type' => 'fieldset',
       '#title' => t('Upload file'),
+      '#description' => t('<strong>The file you are uploading must be in UTF8 encoding.</strong>'),
       '#collapsible' => TRUE,
       '#collapsed' => !empty($files),
     );
@@ -335,33 +371,24 @@ function node_import_add_form(&$form_state) {
     $map_optional = array('' => t('- None -')) + $map;
     foreach ($fields as $fieldname => $fieldinfo) {
       if ($fieldinfo['is_mappable']) {
-        if (empty($fieldinfo['columns'])) {
-          $form['map'][$fieldname] = array(
-            '#title' => $fieldinfo['title'],
-            '#node_import-group' => $fieldinfo['group'],
-            '#type' => 'select',
-            '#options' => $fieldinfo['map_required'] ? $map_required : $map_optional,
-            '#multiple' => $fieldinfo['has_multiple'] || $fieldinfo['has_hierarchy'],
-            '#default_value' => isset($values['map'][$fieldname]) ? $values['map'][$fieldname] : '',
-          );
+        $description = '';
+        if (count($fieldinfo['tips']) > 1) {
+          $description = $form[$fieldname]['#description'] = '<ul class="tips">';
+          $description .= '<li>' . implode('</li><li>', $fieldinfo['tips']) . '</li>';
+          $description .= '</ul>';
         }
-        else {
-          $form['map'][$fieldname] = array(
-            '#title' => $fieldinfo['title'],
-            '#node_import-group' => $fieldinfo['group'],
-          );
-          foreach ($fieldinfo['columns'] as $colname => $colinfo) {
-            if ($colinfo['is_mappable']) {
-              $form['map'][$fieldname][$colname] = array(
-                '#title' => $colinfo['title'],
-                '#type' => 'select',
-                '#options' => $colinfo['map_required'] ? $map_required : $map_optional,
-                '#multiple' => $colinfo['has_multiple'],
-                '#default_value' => isset($values['map'][$fieldname][$colname]) ? $values['map'][$fieldname][$colname] : '',
-              );
-            }
-          }
+        else if (!empty($fieldinfo['tips'])) {
+          $description = implode('', $fieldinfo['tips']);
         }
+        $form['map'][$fieldname] = array(
+          '#title' => $fieldinfo['title'],
+          '#description' => $description,
+          '#node_import-group' => $fieldinfo['group'],
+          '#type' => 'select',
+          '#options' => $fieldinfo['map_required'] ? $map_required : $map_optional,
+          '#multiple' => $fieldinfo['has_multiple'] || $fieldinfo['has_hierarchy'],
+          '#default_value' => isset($values['map'][$fieldname]) ? $values['map'][$fieldname] : '',
+        );
       }
     }
 
@@ -541,11 +568,10 @@ function node_import_add_form_validate_next($form, &$form_state) {
 function node_import_add_form_submit_upload_file($form, &$form_state) {
   $validators = array();
 
-  $dest = file_create_path(variable_get('node_import:directory', 'imports'));
-  $file = file_save_upload('file_upload', $validators, $dest, FILE_EXISTS_RENAME);
+  $dest = node_import_directory();
 
   if (($file = file_save_upload('file_upload', $validators, $dest, FILE_EXISTS_RENAME))) {
-    drupal_set_message(t('New file uploaded to %filename.', array('%filename' => $file->filepath)));
+    drupal_set_message(t('New file %name uploaded to %path.', array('%name' => $file->filename, '%path' => $file->filepath)));
     file_set_status($file, FILE_STATUS_PERMANENT);
     $form_state['values']['fid'] = $file->fid;
   }
@@ -625,11 +651,11 @@ function node_import_add_form_submit_reload($form, &$form_state) {
 
     $i = variable_get('node_import:number_of_samples', 5);
     $num_cols = 0;
-    $offset = 0;
+    $file_offset = 0;
     $data = array();
     while ($i > 0 && is_array($data)) {
       $i--;
-      list($offset, $data) = node_import_read_from_file($file->filepath, $offset, $form_state['storage']['file_options']);
+      list($file_offset, $data) = node_import_read_from_file($file->filepath, $file_offset, $form_state['storage']['file_options']);
       if (is_array($data)) {
         $samples[] = $data;
         $num_cols = max($num_cols, count($data));
@@ -671,10 +697,10 @@ function node_import_add_form_submit_reload($form, &$form_state) {
     $preview_count = $form_state['storage']['preview_count'];
     $has_headers = $form_state['storage']['has_headers'];
 
-    $offset = 0;
+    $file_offset = 0;
     $data = array();
     if ($has_headers) {
-      list($offset, $data) = node_import_read_from_file($file->filepath, $offset, $form_state['storage']['file_options']);
+      list($file_offset, $data) = node_import_read_from_file($file->filepath, $file_offset, $form_state['storage']['file_options']);
     }
 
     global $node_import_can_continue;
@@ -685,7 +711,7 @@ function node_import_add_form_submit_reload($form, &$form_state) {
 
     while ($preview_count > 0 && is_array($data) && $node_import_can_continue) {
       $preview_count--;
-      list($offset, $data) = node_import_read_from_file($file->filepath, $offset, $form_state['storage']['file_options']);
+      list($file_offset, $data) = node_import_read_from_file($file->filepath, $file_offset, $form_state['storage']['file_options']);
       if (is_array($data)) {
         $previews[] = node_import_create($form_state['storage']['type'], $data, $form_state['storage']['map'], $form_state['storage']['defaults'], $form_state['storage']['options'], TRUE);
       }
@@ -881,7 +907,7 @@ function node_import_view_form(&$form_state, $task) {
       '#submit' => array('node_import_view_form_submit_delete'),
     ),
 
-    'new_task' => array(
+    'add_task_button' => array(
       '#type' => 'markup',
       '#value' => l(t('New import'), 'admin/content/node_import/add'),
     ),
@@ -930,7 +956,7 @@ function node_import_view_form_submit_download($form, &$form_state) {
       break;
   }
 
-  $sql .= " ORDER BY offset ASC";
+  $sql .= " ORDER BY file_offset ASC";
 
   header('Content-Type: '. $mime);
   header('Content-Disposition: attachment; filename='. $filename);
@@ -951,7 +977,7 @@ function node_import_view_form_submit_download($form, &$form_state) {
 
   $result = db_query($sql, $task['taskid']);
   while (($row = db_fetch_object($result))) {
-    list($offset, $data) = node_import_read_from_file($task['file']->filepath, $row->offset, $file_options);
+    list($file_offset, $data) = node_import_read_from_file($task['file']->filepath, $row->file_offset, $file_options);
     if ($objid) {
       array_unshift($data, $row->objid);
     }
@@ -1017,8 +1043,6 @@ function node_import_delete_form_submit($form, &$form_state) {
 function node_import_settings_form(&$form_state) {
   $form = array();
 
-  file_check_directory(file_create_path(variable_get('node_import:directory', 'imports')), FILE_CREATE_DIRECTORY, 'node_import:directory');
-
   $form['node_import:directory'] = array(
     '#type' => 'textfield',
     '#title' => t('Import directory'),
@@ -1027,6 +1051,10 @@ function node_import_settings_form(&$form_state) {
     '#field_prefix' => variable_get('file_directory_path', 'sites/default/files') .'/',
     '#field_suffix' => '/',
   );
+
+  if (function_exists('theme_token_help')) {
+    $form['node_import:directory']['#description'] .= theme('token_help', 'user');
+  }
 
   $form['ftp'] = array(
     '#type' => 'fieldset',
@@ -1199,15 +1227,17 @@ function theme_node_import_field_table($form) {
   foreach (element_children($form) as $child) {
     if (!isset($form[$child]['#type']) || $form[$child]['#type'] != 'value') {
       $title = check_plain($form[$child]['#title']);
+      $description = $form[$child]['#description'];
       $group = isset($form[$child]['#node_import-group']) ? $form[$child]['#node_import-group'] : '';
       unset($form[$child]['#title']);
+      unset($form[$child]['#description']);
 
       if (!isset($groups[$group])) {
         $groups[$group] = array();
       }
 
       $groups[$group][] = array(
-        check_plain($title),
+        check_plain($title) . '<div class="description">'. $description .'</div>',
         drupal_render($form[$child]),
       );
     }
@@ -1294,7 +1324,7 @@ function node_import_debug_report($task) {
     $row->errors = unserialize($row->errors);
     print '$row_status = '; var_dump($row);
 
-    list($offset, $data) = node_import_read_from_file($task['file']->filepath, $row->offset, $task['file_options']);
+    list($file_offset, $data) = node_import_read_from_file($task['file']->filepath, $row->file_offset, $task['file_options']);
     print '$data = '; var_dump($data);
   }
   print "\n";

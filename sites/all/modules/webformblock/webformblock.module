@@ -1,5 +1,5 @@
 <?php
-// $Id: webformblock.module,v 1.1.2.2 2009/06/26 14:18:05 budda Exp $
+// $Id$
 
 /**
  * @file
@@ -128,7 +128,7 @@ function webformblock_list() {
 function webformblock_view($nid) {
   $node = node_load(array('nid' => $nid));
       
-  $block_subject = $node->title;
+  $block_subject = check_plain($node->title);
   $node->title = '';
 
   $anchorname = form_clean_id(str_replace('/', '', strtolower( drupal_get_path_alias('node/' . $node->nid) )));

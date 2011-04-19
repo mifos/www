@@ -1,5 +1,4 @@
 <?php
-// $Id: comment.inc,v 1.1.4.9 2009/01/15 20:51:37 robrechtj Exp $
 
 /**
  * @file
@@ -24,6 +23,7 @@ function comment_node_import_fields($type) {
         COMMENT_NODE_READ_ONLY => t('Read only'),
         COMMENT_NODE_READ_WRITE => t('Read/Write'),
       ),
+      'default_value' => variable_get('comment_'. $node_type, COMMENT_NODE_READ_WRITE),
     );
   }
 

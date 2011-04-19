@@ -1,5 +1,4 @@
 <?php
-// $Id: user.inc,v 1.1.2.9 2009/02/25 22:18:35 robrechtj Exp $
 
 /**
  * @file
@@ -13,26 +12,10 @@ function user_node_import_types() {
   return array(
     'user' => array(
       'title' => t('Users'),
-      'can_create' => 'node_import_can_create_user',
+      'can_create' => user_access('administer users'),
       'create' => 'node_import_create_user',
     )
   );
-}
-
-/**
- * Check if the user can create users.
- *
- * @param $type
- *   String. Node_import $type.
- *
- * @return
- *   TRUE if the user can create users. FALSE otherwise.
- */
-function node_import_can_create_user($type) {
-  if ($type === 'user') {
-    return user_access('administer users');
-  }
-  return FALSE;
 }
 
 /**
@@ -117,7 +100,7 @@ function user_node_import_options($type, $options, $fields, $map) {
 
   if ($type === 'user') {
     $options = array(
-      'never' => t('Threat records without password as error'),
+      'never' => t('Treat records without password as an error'),
       'always' => t('Generate password for each record (even if set in the file)'),
       'empty' => t('Generate password for records with empty password'),
     );

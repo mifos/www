@@ -1,5 +1,4 @@
 <?php
-// $Id: i18nstrings.module,v 1.8.2.56 2010/08/12 02:06:20 mirodietiker Exp $
 
 /**
  * @file
@@ -213,7 +212,7 @@ function i18nstrings_translate_edit_form_submit($form, &$form_state) {
   foreach ($form_state['values']['translations'] as $key => $value) {
     if (!empty($value)) {
       // An update has been made, so we assume the translation is now current.
-      db_query("UPDATE {locales_target} SET status = %d WHERE lid = %d AND language = '%s'", I18NSTRINGS_STATUS_CURRENT, $lid, $key);
+      db_query("UPDATE {locales_target} SET i18n_status = %d WHERE lid = %d AND language = '%s'", I18NSTRINGS_STATUS_CURRENT, $lid, $key);
     }
   }
 }
@@ -445,7 +444,7 @@ function i18nstrings_add_string($name, $string, $format = NULL) {
     if ($source->source != $string) {
       // String has changed
       db_query("UPDATE {locales_source} SET source = '%s', location = '%s' WHERE lid = %d", $string, $location, $source->lid);
-      db_query("UPDATE {locales_target} SET status = %d WHERE lid = %d", I18NSTRINGS_STATUS_UPDATE, $source->lid);
+      db_query("UPDATE {locales_target} SET i18n_status = %d WHERE lid = %d", I18NSTRINGS_STATUS_UPDATE, $source->lid);
       $status = SAVED_UPDATED;
     }
     elseif ($source->location != $location) {
@@ -596,6 +595,16 @@ function i18nstrings_remove_string($context, $string = NULL) {
     db_query("DELETE FROM {locales_source} WHERE lid = %d", $source->lid);
     cache_clear_all('locale:'. $context->textgroup .':', 'cache', TRUE);
     return SAVED_DELETED;
+  }
+}
+
+/**
+ * Remove a string translation for a given context and language.
+ */
+function i18nstrings_remove_translation($context, $langcode) {
+  $context = i18nstrings_context($context);
+  if ($source = i18nstrings_get_source($context)) {
+    db_query("DELETE FROM {locales_target} WHERE lid = %d AND language = '%s'", $source->lid, $langcode);
   }
 }
 
@@ -758,12 +767,12 @@ function i18nstrings_context($context, $string = NULL, $format = 0) {
   }
   else {
     // Split the name in four parts, remaining elements will be in the last one
-    $parts = split(':', $context);
+    $parts = explode(':', $context);
     $context = new Stdclass();
     $context->textgroup = array_shift($parts);
     $context->type = array_shift($parts);
     $context->objectid = $parts ? array_shift($parts) : '';
-    // Ramaining elements glued again with ':'
+    // Remaining elements glued again with ':'
     $context->property = $parts ? implode(':', $parts) : '';
     $context->format = $format;
     $context->location = i18nstrings_location($context);

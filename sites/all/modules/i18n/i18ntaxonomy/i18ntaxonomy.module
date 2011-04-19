@@ -1,5 +1,4 @@
 <?php
-// $Id: i18ntaxonomy.module,v 1.5.2.51 2010/09/09 23:54:56 mirodietiker Exp $
 
 /**
  * @file
@@ -834,10 +833,12 @@ function i18ntaxonomy_translate_terms($taxonomy, $langcode, $fullterms = TRUE) {
  * @return
  *   Array of terms with the right ones localized.
  */
-function i18ntaxonomy_localize_terms($terms, $fields = array('name')) {
+function i18ntaxonomy_localize_terms($terms, $fields = array('name', 'description')) {
   $localize = i18ntaxonomy_vocabulary(NULL, I18N_TAXONOMY_LOCALIZE);
   foreach ($terms as $index => $term) {
     if (in_array($term->vid, $localize)) {
+      // Clone objects just in case one of them is saved later
+      $terms[$index] = clone $term;
       foreach ($fields as $property) {
         $terms[$index]->$property = i18nstrings("taxonomy:term:$term->tid:$property", $term->$property);
       }

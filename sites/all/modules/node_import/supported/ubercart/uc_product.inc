@@ -1,10 +1,15 @@
 <?php
-// $Id: uc_product.inc,v 1.1.2.2 2009/02/25 21:16:10 robrechtj Exp $
 
 /**
  * @file
  * Support for the Ubercart Product module.
  */
+
+if (!function_exists('uc_product_is_product')) {
+  function uc_product_is_product($type) {
+    return uc_product_node_is_product($type);
+  }
+}
 
 /**
  * Implementation of hook_node_import_fields().
@@ -12,7 +17,7 @@
 function uc_product_node_import_fields($type) {
   $fields = array();
 
-  if (($node_type = node_import_type_is_node($type)) !== FALSE && uc_product_node_is_product($node_type)) {
+  if (($node_type = node_import_type_is_node($type)) !== FALSE && uc_product_is_product($node_type)) {
     $fields['model'] = array(
       'title' => t('SKU'),
       'group' => t('Product information'),

@@ -1,5 +1,4 @@
 <?php
-// $Id: taxonomy.inc,v 1.7.2.10 2009/01/15 20:05:52 robrechtj Exp $
 
 /**
  * @file
@@ -17,7 +16,7 @@ function taxonomy_node_import_types() {
   // Import taxonomy vocabularies.
   $types['vocabulary'] = array(
     'title' => t('Vocabularies'),
-    'can_create' => 'node_import_can_create_taxonomy',
+    'can_create' => user_access('administer taxonomy'),
     'create' => 'node_import_create_taxonomy',
   );
 
@@ -26,29 +25,12 @@ function taxonomy_node_import_types() {
     $types['term:'. $vid] = array(
       'title' => t('Terms of %name vocabulary', array('%name' => $vocabulary->name)),
       'vocabulary' => $vocabulary,
-      'can_create' => 'node_import_can_create_taxonomy',
+      'can_create' => user_access('administer taxonomy'),
       'create' => 'node_import_create_taxonomy',
     );
   }
 
   return $types;
-}
-
-/**
- * Check if the user can create terms or vocabularies.
- *
- * @param $type
- *   String. Node_import $type.
- *
- * @return
- *   TRUE if the user can create this content type, FALSE
- *   otherwise.
- */
-function node_import_can_create_taxonomy($type) {
-  if ($type == 'vocabulary' || strpos($type, 'term:') === 0) {
-    return user_access('administer taxonomy');
-  }
-  return FALSE;
 }
 
 /**
@@ -319,7 +301,6 @@ function taxonomy_node_import_fields($type) {
     // Copy from taxonomy_form_alter().
     $c = db_query(db_rewrite_sql("SELECT v.* FROM {vocabulary} v INNER JOIN {vocabulary_node_types} n ON v.vid = n.vid WHERE n.type = '%s' ORDER BY v.weight, v.name", 'v', 'vid'), $node_type);
 
-    $vocabularies = array();
     while ($vocabulary = db_fetch_object($c)) {
       $fields['taxonomy:'. $vocabulary->vid] = array(
         'title' => $vocabulary->name,
@@ -347,6 +328,7 @@ function taxonomy_node_import_fields_alter(&$fields, $type) {
       if (!$vocab->tags) {
         $fields[$fieldname]['preprocess'][] = 'node_import_check_taxonomy_term';
       }
+      $fields[$fieldname]['tips'][] = t('Taxonomy term (by tid, name or synonym).');
     }
   }
 }
@@ -420,7 +402,7 @@ function node_import_check_taxonomy_term(&$value, $field, $options, $preview, $o
       // parent (or the parent will be created). So stop.
     }
     else if (($tid = db_result(db_query("SELECT td.tid FROM {term_data} td, {term_hierarchy} th WHERE td.vid = %d AND th.parent = %d AND td.tid = th.tid AND (td.tid = %d OR LOWER(td.name) = '%s')", $vocab->vid, $value, (is_numeric($child) && intval($child) > 0) ? $child : -1, $child))) ||
-             ($tid = db_result(db_query("SELECT td.tid FROM {term_data) td, {term_hierarchy} th, {term_synonym} ts WHERE td.vid = %d AND th.parent = %d AND td.tid = th.tid AND td.tid = ts.tid AND LOWER(ts.name) = '%s'", $vocab->vid, $value, $child)))) {
+             ($tid = db_result(db_query("SELECT td.tid FROM {term_data} td, {term_hierarchy} th, {term_synonym} ts WHERE td.vid = %d AND th.parent = %d AND td.tid = th.tid AND td.tid = ts.tid AND LOWER(ts.name) = '%s'", $vocab->vid, $value, $child)))) {
       $value = $tid;
     }
     else {

@@ -1,5 +1,4 @@
 <?php
-// $Id: nodereference.inc,v 1.1.2.1 2009/02/23 21:54:41 robrechtj Exp $
 
 /**
  * @file
@@ -23,7 +22,7 @@ function nodereference_node_import_fields($type) {
           $fields[$cck_fieldname]['title'] = $fieldinfo['widget']['label'];
           $fields[$cck_fieldname]['input_format'] = 'node_reference';
           $fields[$cck_fieldname]['output_format'] = ($fieldinfo['widget']['type'] == 'nodereference_autocomplete' ? 'name' : 'nid');
-          $fields[$cck_fieldname]['is_required'] = $fieldinfo['required'];
+          $fields[$cck_fieldname]['map_required'] = $fieldinfo['required'];
           break;
 
         default:

@@ -1,4 +1,10 @@
-// $Id: CHANGELOG.txt,v 1.15.4.100 2010/09/09 14:47:16 jareyero Exp $
+
+6.x-1.7 to 6.x-1.8
+------------------
+- Replaced obsoleted 'split' function by 'explode' (PHP 5.3), #871706
+- Renamed locales_target 'status' field to i18n_status, for compatibility with other modules, #857442
+- Added page overview for multilingual variables, help clean up of leftover values, #905428
+- #782018 by plach | Jose Reyero: Fixed Child Items not showing in String Search
 
 6.x-1.6 to 6.x-1.7
 ------------------

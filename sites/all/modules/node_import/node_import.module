@@ -1,28 +1,9 @@
 <?php
-// $Id: node_import.module,v 1.51.2.15 2009/02/14 10:23:16 robrechtj Exp $
 
 /**
  * @file
  * Let users import content from CSV or TSV file.
  */
-
-/**
- * Minimum Drupal version Node import will work with.
- *
- * We need Drupal 6.5 or later because we need the patch of
- * http://drupal.org/node/180063 : No way to flush form errors
- * during iterative programatic form submission.
- *
- * Without this patch, we can't do multiple drupal_execute()s
- * in one page request. This is a requirement for validating
- * reliable and for generating previews.
- *
- * This patch was included in Drupal 6.5, see:
- * http://drupal.org/node/318701.
- *
- * @ingroup node_import_constants
- */
-define('NODE_IMPORT_MINIMUM_DRUPAL', '6.5');
 
 /**
  * Implementation of hook_perm().
@@ -43,7 +24,7 @@ function node_import_menu() {
     'access callback' => 'user_access',
     'access arguments' => array('import content'),
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('node_import_list_form'),
+    'page arguments' => array('node_import_list_tasks_form'),
     'file' => 'node_import.admin.inc',
   );
 
@@ -51,6 +32,22 @@ function node_import_menu() {
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => -10,
     'title' => 'List',
+  );
+
+  $items['admin/content/node_import/list/tasks'] = array(
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -10,
+    'title' => 'Tasks',
+  );
+
+  $items['admin/content/node_import/list/files'] = array(
+    'type' => MENU_LOCAL_TASK,
+    'title' => 'Files',
+    'access callback' => 'user_access',
+    'access arguments' => array('import content'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('node_import_list_files_form'),
+    'file' => 'node_import.admin.inc',
   );
 
   $items['admin/content/node_import/add'] = array(

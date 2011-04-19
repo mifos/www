@@ -1,5 +1,4 @@
 <?php
-// $Id: number.inc,v 1.1.2.2 2009/02/23 21:54:41 robrechtj Exp $
 
 /**
  * @file
@@ -21,7 +20,7 @@ function number_node_import_fields($type) {
       switch ($colname) {
         case 'value':
           $fields[$cck_fieldname]['title'] = $fieldinfo['widget']['label'];
-          $fields[$cck_fieldname]['is_required'] = $fieldinfo['required'];
+          $fields[$cck_fieldname]['map_required'] = $fieldinfo['required'];
           break;
 
         default:
