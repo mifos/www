@@ -963,3 +963,61 @@ ul.group-tabs li a:hover, ul.group-tabs li a.current { background-color:#868686;
 .node-teaser .terms {
   display: none;
 }
+
+/*================================================
+     NEWS LOG
+==================================================*/
+
+.news-entry {
+  clear: both;
+}
+
+.news-entry-posted-by {
+  float: right;
+  width: 60%;
+  text-align: right;
+}
+
+/* not used right now
+.news-entry-more-link {
+  float: left;
+  width: 30%;
+}
+*/
+
+.news-entry-footer {
+  clear:both;
+  background-color: LightGrey ;
+}
+
+.news-entry-footer:after
+{ 
+ content: ".";  
+ display: block; 
+ height: 0; 
+ clear: both; 
+ visibility: hidden; 
+}
+
+.news-entry-comment-count {
+  float: left;
+  width:40%;
+  text-align: left;
+}
+
+/* Make the news log narrower */
+div.view-news-log {
+	width: 80%;
+	margin-left: auto;
+  margin-right: auto;
+}
+	
+
+
+/* Remove bottom border */
+
+.not-front .view-news-log .views-row { 
+	border-bottom:none; 
+	padding-bottom:20px; 
+	margin-bottom:20px;
+}
