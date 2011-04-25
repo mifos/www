@@ -17,10 +17,16 @@
  * - $row: The raw result object from the query, with all data it fetched.
  *
  * @ingroup views_templates
+ * 
+ * KRP: News entry is formatted per instructions at http://mifosforge.jira.com/browse/MIFOSWEB-26.
+ * See <code>sites/all/themes/mifos-fresh.css</code> for layout.
  */
 ?>
 <?php
   //dsm($fields);
+  
+  // the raw field is a Unix timestamp.
+  $date = new DateTime("@{$fields['created']->raw}");
 ?>
 <div class="news-entry">
     <h3 class="news-entry-title"><?php print $fields['title']->content;?></h3>
@@ -30,7 +36,9 @@
         <p class="news-entry-comment-count"><?php print $fields['comment_count']->content;?></p>
         <p class="news-entry-posted-by">
           Posted by <?php print $fields['name']->content;?> 
-          on <?php print $fields['created']->raw;?></p>
+          on <?php print $date->format('F j, Y');?>
+          at <?php print $date->format('g:ia');?>
+        </p>
     </div>
 </div>
 
