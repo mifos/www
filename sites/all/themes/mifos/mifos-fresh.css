@@ -986,8 +986,23 @@ ul.group-tabs li a:hover, ul.group-tabs li a.current { background-color:#868686;
 */
 
 .news-entry-footer {
-  clear:both;
-  background-color: LightGrey ;
+	clear: both;
+  background-color: #C8C8C8;
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: bold;
+  margin: 15px 0 0;
+  overflow: hidden;
+  padding: 5px 10px;
+}
+
+/* make height of gray footer match the footer at the bottom
+   of the full article. The latter does not wrap the content
+   in a <p> tag, and style sheet html-elements.css adds a
+   10 px margin top and bottom to <p> tags.
+*/
+.news-entry-footer p {
+	margin: 0px;
 }
 
 .news-entry-footer:after
