@@ -1,0 +1,359 @@
+$view = new view;
+$view->name = 'news_log';
+$view->description = 'News Log';
+$view->tag = '';
+$view->view_php = '';
+$view->base_table = 'node';
+$view->is_cacheable = FALSE;
+$view->api_version = 2;
+$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+$handler = $view->new_display('default', 'Defaults', 'default');
+$handler->override_option('fields', array(
+  'title' => array(
+    'label' => '',
+    'alter' => array(
+      'alter_text' => 0,
+      'text' => '<h2> <style=\'text-decoration: none;\'>[title]</style></h2>',
+      'make_link' => 0,
+      'path' => '',
+      'link_class' => '',
+      'alt' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'target' => '',
+      'help' => '',
+      'trim' => 0,
+      'max_length' => '',
+      'word_boundary' => 1,
+      'ellipsis' => 1,
+      'html' => 0,
+      'strip_tags' => 0,
+    ),
+    'empty' => '',
+    'hide_empty' => 0,
+    'empty_zero' => 0,
+    'link_to_node' => 1,
+    'exclude' => 0,
+    'id' => 'title',
+    'table' => 'node',
+    'field' => 'title',
+    'override' => array(
+      'button' => 'Override',
+    ),
+    'relationship' => 'none',
+  ),
+  'teaser' => array(
+    'label' => '',
+    'alter' => array(
+      'alter_text' => 0,
+      'text' => '',
+      'make_link' => 0,
+      'path' => '[teaser]',
+      'link_class' => '',
+      'alt' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'target' => '',
+      'help' => '',
+      'trim' => 0,
+      'max_length' => '',
+      'word_boundary' => 1,
+      'ellipsis' => 1,
+      'html' => 0,
+      'strip_tags' => 0,
+    ),
+    'empty' => '',
+    'hide_empty' => 0,
+    'empty_zero' => 0,
+    'exclude' => 0,
+    'id' => 'teaser',
+    'table' => 'node_revisions',
+    'field' => 'teaser',
+    'override' => array(
+      'button' => 'Override',
+    ),
+    'relationship' => 'none',
+  ),
+  'created' => array(
+    'label' => '',
+    'alter' => array(
+      'alter_text' => 0,
+      'text' => '',
+      'make_link' => 0,
+      'path' => '',
+      'link_class' => '',
+      'alt' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'target' => '',
+      'help' => '',
+      'trim' => 0,
+      'max_length' => '',
+      'word_boundary' => 1,
+      'ellipsis' => 1,
+      'html' => 0,
+      'strip_tags' => 0,
+    ),
+    'empty' => '',
+    'hide_empty' => 0,
+    'empty_zero' => 0,
+    'date_format' => 'small',
+    'custom_date_format' => '',
+    'exclude' => 0,
+    'id' => 'created',
+    'table' => 'node',
+    'field' => 'created',
+    'override' => array(
+      'button' => 'Override',
+    ),
+    'relationship' => 'none',
+  ),
+  'field_author_info_nid' => array(
+    'label' => 'Authored by',
+    'alter' => array(
+      'alter_text' => 0,
+      'text' => '',
+      'make_link' => 0,
+      'path' => '',
+      'link_class' => '',
+      'alt' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'target' => '',
+      'help' => '',
+      'trim' => 0,
+      'max_length' => '',
+      'word_boundary' => 1,
+      'ellipsis' => 1,
+      'html' => 0,
+      'strip_tags' => 0,
+    ),
+    'empty' => '',
+    'hide_empty' => 0,
+    'empty_zero' => 0,
+    'link_to_node' => 0,
+    'label_type' => 'widget',
+    'format' => 'default',
+    'multiple' => array(
+      'group' => TRUE,
+      'multiple_number' => '',
+      'multiple_from' => '',
+      'multiple_reversed' => FALSE,
+    ),
+    'exclude' => 0,
+    'id' => 'field_author_info_nid',
+    'table' => 'node_data_field_author_info',
+    'field' => 'field_author_info_nid',
+    'relationship' => 'none',
+  ),
+  'comment_count' => array(
+    'label' => '',
+    'alter' => array(
+      'alter_text' => 0,
+      'text' => 'comment<?php if ([comment_count] != 1) { print "s";} ?>',
+      'make_link' => 0,
+      'path' => '',
+      'link_class' => '',
+      'alt' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'target' => '',
+      'help' => '',
+      'trim' => 0,
+      'max_length' => '',
+      'word_boundary' => 1,
+      'ellipsis' => 1,
+      'html' => 0,
+      'strip_tags' => 0,
+    ),
+    'empty' => '',
+    'hide_empty' => 0,
+    'empty_zero' => 0,
+    'set_precision' => FALSE,
+    'precision' => 0,
+    'decimal' => '.',
+    'separator' => ',',
+    'prefix' => '',
+    'suffix' => '',
+    'exclude' => 0,
+    'id' => 'comment_count',
+    'table' => 'node_comment_statistics',
+    'field' => 'comment_count',
+    'relationship' => 'none',
+    'override' => array(
+      'button' => 'Override',
+    ),
+  ),
+  'view_node' => array(
+    'label' => '',
+    'alter' => array(
+      'alter_text' => 0,
+      'text' => '<div class="news-entry">
+    <h2 class="news-entry-title">[title]</h2>
+    <div class="news-entry-teaser">[teaser]</div>
+    <div class="news-entry-footer">
+        <p class="news-entry-more-link">[view_node]</p>
+        <p class="news-entry-comment-count">[comment_count]</p>
+        <p class="news-entry-posted-by">Posted by[field_author_info_nid] on [created]</p>
+    </div>
+</div>',
+      'make_link' => 0,
+      'path' => '',
+      'link_class' => '',
+      'alt' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'target' => '',
+      'help' => '',
+      'trim' => 0,
+      'max_length' => '',
+      'word_boundary' => 1,
+      'ellipsis' => 1,
+      'html' => 0,
+      'strip_tags' => 0,
+    ),
+    'empty' => '',
+    'hide_empty' => 0,
+    'empty_zero' => 0,
+    'text' => 'Read more...',
+    'exclude' => 0,
+    'id' => 'view_node',
+    'table' => 'node',
+    'field' => 'view_node',
+    'relationship' => 'none',
+  ),
+  'name' => array(
+    'label' => 'Name',
+    'alter' => array(
+      'alter_text' => 0,
+      'text' => '',
+      'make_link' => 0,
+      'path' => '',
+      'link_class' => '',
+      'alt' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'target' => '',
+      'help' => '',
+      'trim' => 0,
+      'max_length' => '',
+      'word_boundary' => 1,
+      'ellipsis' => 1,
+      'html' => 0,
+      'strip_tags' => 0,
+    ),
+    'empty' => '',
+    'hide_empty' => 0,
+    'empty_zero' => 0,
+    'link_to_user' => 1,
+    'overwrite_anonymous' => 0,
+    'anonymous_text' => '',
+    'exclude' => 0,
+    'id' => 'name',
+    'table' => 'users',
+    'field' => 'name',
+    'relationship' => 'none',
+  ),
+));
+$handler->override_option('sorts', array(
+  'created' => array(
+    'order' => 'DESC',
+    'granularity' => 'second',
+    'id' => 'created',
+    'table' => 'node',
+    'field' => 'created',
+    'override' => array(
+      'button' => 'Override',
+    ),
+    'relationship' => 'none',
+  ),
+));
+$handler->override_option('filters', array(
+  'type' => array(
+    'operator' => 'in',
+    'value' => array(
+      'news_story' => 'news_story',
+    ),
+    'group' => '0',
+    'exposed' => FALSE,
+    'expose' => array(
+      'operator' => FALSE,
+      'label' => '',
+    ),
+    'id' => 'type',
+    'table' => 'node',
+    'field' => 'type',
+    'override' => array(
+      'button' => 'Override',
+    ),
+    'relationship' => 'none',
+  ),
+  'status' => array(
+    'operator' => '=',
+    'value' => '1',
+    'group' => '0',
+    'exposed' => FALSE,
+    'expose' => array(
+      'operator' => FALSE,
+      'label' => '',
+    ),
+    'id' => 'status',
+    'table' => 'node',
+    'field' => 'status',
+    'relationship' => 'none',
+  ),
+));
+$handler->override_option('access', array(
+  'type' => 'none',
+));
+$handler->override_option('cache', array(
+  'type' => 'none',
+));
+$handler->override_option('title', 'Community News Log');
+$handler->override_option('css_class', 'admin-menu');
+$handler->override_option('use_more', 0);
+$handler->override_option('use_more_always', 0);
+$handler->override_option('use_more_text', 'Read more...');
+$handler = $view->new_display('page', 'Community News Log', 'page_1');
+$handler->override_option('path', 'community/news');
+$handler->override_option('menu', array(
+  'type' => 'none',
+  'title' => '',
+  'description' => '',
+  'weight' => 0,
+  'name' => 'navigation',
+));
+$handler->override_option('tab_options', array(
+  'type' => 'none',
+  'title' => '',
+  'description' => '',
+  'weight' => 0,
+  'name' => 'navigation',
+));
+$handler = $view->new_display('feed', 'Feed', 'feed_1');
+$handler->override_option('style_plugin', 'rss');
+$handler->override_option('style_options', array(
+  'mission_description' => FALSE,
+  'description' => '',
+));
+$handler->override_option('row_plugin', 'node_rss');
+$handler->override_option('path', 'community/news/feed');
+$handler->override_option('menu', array(
+  'type' => 'none',
+  'title' => '',
+  'description' => '',
+  'weight' => 0,
+  'name' => 'navigation',
+));
+$handler->override_option('tab_options', array(
+  'type' => 'none',
+  'title' => '',
+  'description' => '',
+  'weight' => 0,
+  'name' => 'navigation',
+));
+$handler->override_option('displays', array(
+  'page_1' => 'page_1',
+  'default' => 0,
+));
+$handler->override_option('sitename_title', FALSE);
