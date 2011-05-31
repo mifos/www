@@ -1036,3 +1036,79 @@ div.view-news-log {
 	padding-bottom:20px; 
 	margin-bottom:20px;
 }
+
+
+
+/*================================================
+     EDELSTEIN ANNOUNCEMENT
+==================================================*/
+
+/* Format title like home-page title */
+
+#block-block-39 .title {
+  background-color:#58b4df;
+  border:none;
+  color:#fff;
+  line-height:125%;
+  font-size: 30px;
+}
+
+
+#block-block-39 {
+  float:left;
+  margin:0 1.05% 0 0;
+  min-width:900px;
+  overflow:hidden;
+  width:74.176%;
+}
+
+#block-block-39 .block-inner {
+    -moz-box-shadow: 0 0 15px #999999;
+    margin: 5px;
+    overflow: hidden;
+    padding: 10px;
+}
+
+#block-block-39 #edelstein-image {
+  float: left;
+  margin: 10px 10px 0 0;
+}
+
+#block-block-39 #edelstein-read-more a {
+    background: url("./images/btn_read_more.png") no-repeat scroll 100% 0 transparent;
+    display: block;
+    float: right;
+    font-size: 0;
+    height: 0;
+    margin: 15px 0;
+    overflow: hidden;
+    padding: 21px 0 0;
+    text-indent: -9999px;
+    width: 80px;
+}
+
+#block-block-39 p {
+  margin: .5em 0;
+}
+
+#block-block-39 #edelstein-signature {
+  width: 400px;
+  float: left;
+}
+
+#block-block-39 #edelstein-name {
+  font-size: 25px;
+  margin: .5em 0 .2em 0;
+}
+
+#block-block-39 #edelstein-body {
+  min-width: 500px;
+  width: 700px;
+  float: left;
+}
+
+#block-block-39 #edelstein-title {
+  padding-left: 10px;
+  margin: 0;
+}
+
