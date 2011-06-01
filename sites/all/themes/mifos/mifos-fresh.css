@@ -1059,18 +1059,11 @@ div.view-news-log {
 
 
 #block-block-39 {
-  float:left;
-  margin:0 1.05% 5px 0;
-  min-width:750px;
-  /* overflow:hidden; */
-  width:74.176%;
-}
-
-#block-block-39 .block-inner {
-    /* -moz-box-shadow: 0 0 15px #999999; */
-    /* margin: 5px; */
-    /* overflow: hidden; */
-    /* padding: 10px; */
+    float: left;
+    margin: 0 1.05% 0 0;
+    min-width: 675px;
+    overflow: hidden;
+    width: 74.176%;
 }
 
 #block-block-39 #edelstein-image {
@@ -1095,25 +1088,12 @@ div.view-news-log {
   margin: .5em 0;
 }
 
-#block-block-39 #edelstein-signature {
-  width: 400px;
-  float: left;
-}
-
-#block-block-39 #edelstein-name {
-  font-size: 25px;
-  margin: .5em 0 .2em 0;
+#block-block-39 #edelstein-byline {
+ font-style: italic;
+ font-size: 120%;
 }
 
 #block-block-39 #edelstein-body {
-  min-width: 400px;
-  width: 650px;
-  float: left;
-}
-
-#block-block-39 #edelstein-title {
-  padding-left: 10px;
-  margin: 0;
 }
 
 #content-top {
