@@ -163,7 +163,6 @@
 
             <?php print $content; ?>
           </div>
-          <img src="<?php echo base_path() . path_to_theme() ?>/images/banner_left.png" alt="" class="content-bottom-banner" />
           <div class="clear"></div>
         </div> <!-- homepage-content -->
         
@@ -188,7 +187,6 @@
         <?php if ($content_bottom): ?>
           <div id="content-bottom" class="region region-content_bottom clear-block">
             <?php print $content_bottom; ?>
-            <img src="<?php echo base_path() . path_to_theme() ?>/images/banner_left.png" alt="" class="content-bottom-banner" />
           </div> <!-- /#content-bottom -->
         <?php endif; ?>
 

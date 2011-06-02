@@ -565,7 +565,13 @@ h1#logo a {
 /*=========================================
                 HOMEPAGE
 =========================================*/
-.front #homepage-content { float:left; margin-right:4%; padding:0 0 15px 0; position:relative; width:48%; }
+.front #homepage-content {
+	float:left; 
+	margin-right:3%;
+	margin-left: 10px;
+	padding:0 0 15px 0; 
+	position:relative; width:48%;
+}
 .front #homepage-content .content-bottom-banner { position:absolute; top:0; left:-25px; }
 
 .front #content-header h1.title {
@@ -576,7 +582,10 @@ h1#logo a {
   padding:0 0 0 10px;
 }
 .front #content-area .content { overflow:hidden; }
-.front #content-area .content p { margin:0; padding:0 0 0 10px; }
+.front #content-area .content p {
+	margin:0; 
+	padding:10px 0 0 10px; 
+}
 
 #featured-news-wrapper {
   float:left;
@@ -638,8 +647,8 @@ h1#logo a {
 =========================================*/
 #block-views-feeds-block_1 {
   float:left;
-  margin:0 3% 0 0;
-  width:31%;
+  margin:0 3% 0 10px;
+  width:30.5%;
 }
 #block-views-feeds-block_1 h2 {
   background:#58b4df url('./images/icon_rss.png') no-repeat 0 50%;
@@ -676,7 +685,7 @@ h1#logo a {
 #block-block-8 {
   float:left;
   margin:0 3% 0 0;
-  width:31%;
+  width:30.5%;
 }
 #block-block-8 h2 {
   background:#58b4df url('./images/icon_twitter2.png') no-repeat 0 50%;
@@ -1051,8 +1060,7 @@ div.view-news-log {
   color:#fff;
   line-height:125%;
   font-size: 30px;
-  padding-left: 25px;
-  margin-left: -25px; 
+  padding-left: 10px;
   /* background: url("./images/banner_left.png") no-repeat;
   background-position-x: -25px;*/
 }
@@ -1097,7 +1105,7 @@ div.view-news-log {
 }
 
 #block-block-39 #edelstein-content {
-	margin: 5px;
+	margin: 10px 0 10px 0;
 	padding: 10px;
 	border: medium #80C944 solid;
 	overflow: auto;
