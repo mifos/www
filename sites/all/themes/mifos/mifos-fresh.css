@@ -1096,20 +1096,14 @@ div.view-news-log {
 #block-block-39 #edelstein-body {
 }
 
-#content-top {
-	overflow: visible;
-}
-
-#block-block-39 .content-top-banner {
-    left: -35px;
-    position: absolute;
-    top: 0;
-}
-
 #block-block-39 #edelstein-content {
 	margin: 5px;
 	padding: 10px;
 	border: medium #80C944 solid;
 	overflow: auto;
   width: 88%%
+}
+
+.front #homepage-content {
+	position: static;
 }
